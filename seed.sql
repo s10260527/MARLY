@@ -53,6 +53,22 @@ CREATE TABLE Emissions (
 INSERT INTO Companies (company_name, industry_type, country, city, contact_email, contact_phone)
 VALUES ('Apple', 'Manufacturing', 'USA', 'New York', 'apple@gmail.com', '123-456-7890');
 
+-- Drop Table if it exists
+DROP TABLE IF EXISTS Users;
+
+-- Create Users Table
+CREATE TABLE Users (
+    user_id INT PRIMARY KEY IDENTITY(1,1),
+    full_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,  -- To store the hashed password
+    agreed_to_terms BIT NOT NULL,
+    created_at DATETIME DEFAULT GETDATE()
+);
+
+-- Sample Insert
+INSERT INTO Users (full_name, email, password_hash, agreed_to_terms)
+VALUES ('John Doe', 'john.doe@example.com', 'hashed_password_here', 1);
 
 
 
