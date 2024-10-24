@@ -1,0 +1,168 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2fcfb;
+  }
+  
+  header {
+    background-color: #fff;
+    padding: 20px;
+    border-bottom: 2px solid #ccc;
+  }
+  
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo img {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .nav-links {
+    display: flex;
+    list-style-type: none;
+  }
+  
+  .nav-links li {
+    margin-left: 20px;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: #000;
+  }
+  
+  .profile {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profile span {
+    margin-right: 10px;
+  }
+  
+  .profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  /* Main Content */
+  main {
+    padding: 20px;
+  }
+  
+  .leaderboard {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 40px;
+  }
+  
+  .company-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 250px;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .company-card h2 {
+    font-size: 18px;
+    color: #555;
+  }
+  
+  .company-card h3 {
+    font-size: 24px;
+    color: #000;
+  }
+  
+  .company-card img {
+    width: 100px;
+    height: auto;
+    margin: 10px 0;
+  }
+  
+  .visit-btn {
+    background-color: #ccc;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 20px;
+  }
+  
+  .rank {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #f0d878;
+    border-radius: 50%;
+    padding: 10px;
+    font-weight: bold;
+  }
+  
+  /* Different place styling */
+  .first-place .rank {
+    background-color: #ffeb3b;
+  }
+  
+  .second-place .rank {
+    background-color: #e0e0e0;
+  }
+  
+  .third-place .rank {
+    background-color: #cd7f32;
+  }
+  
+  /* Ranking List */
+  .rankings {
+    margin-bottom: 40px;
+  }
+  
+  .rank-list {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .rank-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    margin-right: 5px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .rank-item:last-child {
+    border-bottom: none;
+  }
+  
+  .empty-cards {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .empty-card {
+    background-color: #fff;
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .current-page {
+    background-color: whitesmoke;
+    border-radius: 10px;
+    padding: 10px;
+  }
