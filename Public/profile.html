@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Verdex - Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --text: #030c0a;
+            --background: #f2fcfb;
+            --primary: #38cfbf;
+            --secondary: #97a3e6;
+            --accent: #886ddc;
+        }
+
+        body {
+            color: var(--text);
+            background-color: var(--background);
+        }
+
+        .bg-white {
+            background-color: var(--background) !important;
+        }
+
+        .profile-container {
+            padding: 2rem;
+            background-color: var(--background);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-title {
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .profile-item {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .profile-card {
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-white border-bottom py-3">
+        <div class="container d-flex justify-content-between align-items-center">
+            <img src="logo.png" alt="Verdex Logo" height="40">
+            <nav>
+                <ul class="nav">
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Leaderboards</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Resources</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-user"></i> Profile</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Profile Content -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="profile-container">
+                    <div class="d-flex align-items-center mb-4">
+                        <img src="profile-pic.png" alt="Profile Picture" class="rounded-circle mr-3" height="80">
+                        <div>
+                            <h3 class="mb-0">Company Name</h3>
+                            <p>Description</p>
+                        </div>
+                    </div>
+                    <div class="profile-title">Profile</div>
+                    <div class="profile-grid">
+                        <div class="profile-card">
+                            <div class="profile-item">Business Email: <span>business@email.com</span></div>
+                        </div>
+                        <div class="profile-card">
+                            <div class="profile-item">Company Name: <span>Enter Name Here</span></div>
+                        </div>
+                        <div class="profile-card">
+                            <div class="profile-item">Carbon Emissions: <span>1,000,000 Tons</span></div>
+                        </div>
+                        <div class="profile-card">
+                            <div class="profile-item">Operational Costs: <span>$10,000,000,000,000</span></div>
+                        </div>
+                        <div class="profile-card">
+                            <div class="profile-item">Leaderboard Placing: <span>#3</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-3 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 Verdex. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
