@@ -25,31 +25,19 @@
             margin-top: 50px;
         }
 
-        .piggy-bank {
+        .piggy-bank-img {
             width: 250px;
             height: 250px;
-            background-color: #38cfbf;
-            border-radius: 50%;
-            position: relative;
-            display: inline-block;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            object-fit: cover; /* Ensures the image fits properly */
+            border-radius: 50%; /* Keep it in a circular shape */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .piggy-bank:hover {
+        .piggy-bank-img:hover {
             transform: scale(1.05);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .piggy-bank-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 28px;
-            font-weight: bold;
-            color: #fff;
         }
 
         .chart-container {
@@ -83,9 +71,7 @@
 <p class="note">Click the piggy bank to see detailed operational costs breakdown.</p>
 
 <div class="piggy-bank-container">
-    <div class="piggy-bank" onclick="showPieChart()">
-        <div class="piggy-bank-text" id="savingsText">$50,000</div>
-    </div>
+    <img src="piggybank.jpg" alt="Piggy Bank" class="piggy-bank-img" onclick="showPieChart()" />
 </div>
 
 <div class="chart-container" id="chartContainer">
@@ -101,13 +87,13 @@
     let operationalSavings = 50000; // Example number
     
     function showPieChart() {
-        // Hide piggy bank with a fade-out effect
-        const piggyBank = document.querySelector('.piggy-bank');
-        piggyBank.style.transition = 'opacity 0.5s ease';
-        piggyBank.style.opacity = '0';
+        // Hide piggy bank image with a fade-out effect
+        const piggyBankImg = document.querySelector('.piggy-bank-img');
+        piggyBankImg.style.transition = 'opacity 0.5s ease';
+        piggyBankImg.style.opacity = '0';
         
         setTimeout(() => {
-            piggyBank.style.display = 'none';
+            piggyBankImg.style.display = 'none';
             document.getElementById('chartContainer').style.display = 'block';
             renderPieChart();
         }, 500); // Wait for the opacity transition to complete
