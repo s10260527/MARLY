@@ -1,6 +1,6 @@
 module.exports = {
-    user: "FSDP", // Replace with your SQL Server login username
-    password: "FSDP", // Replace with your SQL Server login password
+    user: "user", // Replace with your SQL Server login username
+    password: "MARLY", // Replace with your SQL Server login password
     server: "localhost",
     database: "MARLY",
     trustServerCertificate: true,
