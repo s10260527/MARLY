@@ -27,3 +27,6 @@ process.on("SIGINT", async () => {
     console.log("Database connection closed");
     process.exit(0);
 });
+
+const signupRouter = require('./signup');
+app.use('/api', signupRouter);
