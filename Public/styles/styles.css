@@ -26,10 +26,11 @@ body {
   .nav-links {
     display: flex;
     list-style-type: none;
+    margin-left: 60%;
   }
   
   .nav-links li {
-    margin-left: 20px;
+    margin-left: 40px;
   }
   
   .nav-links a {
@@ -40,6 +41,7 @@ body {
   .profile {
     display: flex;
     align-items: center;
+    margin-left: 7%;
   }
   
   .profile span {
