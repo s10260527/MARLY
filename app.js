@@ -2,11 +2,17 @@ const express = require("express");
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
 
+const emissioncontroller = require("./Controllers/emission")
+
 
 require("dotenv").config()
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(express.static("Public"));
+
+app.get("/emission/:id",emissioncontroller.getEmissionById); // by company's id
 
 
 app.listen(port, async () => {
