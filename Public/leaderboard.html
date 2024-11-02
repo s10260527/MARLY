@@ -1,72 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carbon Emission Leaderboard</title>
-  <link rel="stylesheet" href="./styles/styles.css">
-</head>
-<body>
-  <header>
-    <nav>
-      <div class="logo">
-        <img src="logo.png" alt="Logo">
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap" />
+    <link href="styles/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+      /* Add margin to main content to account for the fixed navbar */
+      main {
+        margin-top: 80px; /* Adjust based on navbar height */
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="bg-white border-bottom py-3 fixed-top">
+      <div class="container d-flex justify-content-between align-items-center">
+        <img src="logo.png" alt="Verdex Logo" height="40">
+        <nav>
+          <ul class="nav">
+            <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Leaderboards</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Resources</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-user"></i> Profile</a></li>
+          </ul>
+        </nav>
       </div>
-      <ul class="nav-links">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Reports</a></li>
-        <li><a class="current-page" href="#">Leaderboards</a></li>
-        <li><a href="#">Resources</a></li>
-        <li><a href="#">Support</a></li>
-      </ul>
-      <div class="profile">
-        <span>Apple Inc.</span>
-        <img src="apple-logo.png" alt="Profile">
-      </div>
-    </nav>
-  </header>
+    </header>
 
-  <main>
-    <section class="leaderboard">
-      <div class="company-card first-place">
-        <h1>Carbon emission</h1>
-        <h2>6.5 million</h2>
-        <img class="logo" src="alibaba-logo.png" alt="Alibaba">
-        <button class="visit-btn">Visit</button>
-        <span class="rank">1st</span>
-      </div>
+    <div class="leaderboard-box">
+        <div class="user-ranking-box">
+            <h4>Your Rank</h4>
+            <p>#10 - 260.112 metric tons</p>
+          </div>
+        <div id="header" class="text-center my-4">
+          <h1>Ranking</h1>
+          <h3 class="mt-2">Least Carbon Emission produced</h3>
+          <h3 class="text-center mb-4" style="font-size: 1.5rem; color: #141a39;">
+            (in Metric Tons)
+        </h3>
+        </div>
 
-      <div class="company-card second-place">
-        <h2>Carbon emission</h2>
-        <h3>10.1 million</h3>
-        <img class="logo" src="./images/Apple_logo_grey.svg.png" alt="Apple">
-        <button class="visit-btn">Visit</button>
-        <span class="rank">2nd</span>
-      </div>
-
-      <div class="company-card third-place">
-        <h2>Carbon emission</h2>
-        <h3>12 million</h3>
-        <img src="nvidia-logo.png" alt="NVIDIA">
-        <button class="visit-btn">Visit</button>
-        <span class="rank">3rd</span>
-      </div>
-    </section>
-
-    <section class="rankings">
-      <h3>Ranked by carbon emission</h3>
-      <div class="rank-list">
-        <div class="rank-item">1st: <strong>ALIBABA</strong> - 6.5 million <button class="visit-btn">Visit</button></div>
-        <div class="rank-item">2nd: <strong>APPLE</strong> - 10.1 million <button class="visit-btn">Visit</button></div>
-        <div class="rank-item">3rd: <strong>NVIDIA</strong> - 12 million <button class="visit-btn">Visit</button></div>
-      </div>
-    </section>
-
-    <section class="empty-cards">
-      <div class="empty-card">1st</div>
-      <div class="empty-card">2nd</div>
-      <div class="empty-card">3rd</div>
-    </section>
-  </main>
-</body>
+        <div id="leaderboard">
+          <div class="ribbon"></div>
+          <table>
+            <tr>
+              <td class="number">1</td>
+              <td class="name">Lee Taeyong</td>
+              <td class="points">
+                258.244 <img class="gold-medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="number">2</td>
+              <td class="name">Mark Lee</td>
+              <td class="points">258.242</td>
+            </tr>
+            <tr>
+              <td class="number">3</td>
+              <td class="name">Xiao Dejun</td>
+              <td class="points">258.223</td>
+            </tr>
+            <tr>
+              <td class="number">4</td>
+              <td class="name">Qian Kun</td>
+              <td class="points">258.212</td>
+            </tr>
+            <tr>
+              <td class="number">5</td> 
+              <td class="name">Johnny Suh</td>
+              <td class="points">258.208</td>
+            </tr>
+          </table>
+          <!--<div id="buttons">
+            <button class="exit">Exit</button>
+            <button class="continue">Continue</button>
+          </div>-->
+        </div>
+    </div>
+      
+  </body>
 </html>
