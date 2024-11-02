@@ -38,30 +38,31 @@ class Emission {
         }
     }
 
-    static async getAllEmissionByCurrentMonth() {
+    static async getTopEmissionsByCurrentMonth() {
         try {
             await sql.connect(dbConfig);
-
-            const sqlQuery = `SELECT * FROM Emissions WHERE MONTH(created_at) = MONTH(GETDATE()) AND YEAR(created_at) = YEAR(GETDATE());`;
-
+    
+            const sqlQuery = `
+                SELECT c.company_id, c.company_name, SUM(e.emission_amount) AS total_emission
+                FROM Emissions e
+                JOIN Companies c ON e.company_id = c.company_id
+                WHERE MONTH(e.created_at) = MONTH(GETDATE()) AND YEAR(e.created_at) = YEAR(GETDATE())
+                GROUP BY c.company_id, c.company_name
+                ORDER BY total_emission ASC
+                OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY;`; // Get the top 10
+    
             const request = new sql.Request();
             const result = await request.query(sqlQuery);
-
+    
             sql.close();
-
-            // Map the result to an array of Emission instances
-            return result.recordset.map(emission => new Emission(
-                emission.emission_id,
-                emission.company_id,
-                emission.emission_year,
-                emission.emission_amount,
-                emission.created_at
-            ));
+    
+            return result.recordset; // Returns an array of companies with their emissions
         } catch (error) {
             console.error(error);
             throw new Error("Database error");
         }
     }
+    
 }
 
 module.exports = Emission;

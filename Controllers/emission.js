@@ -14,10 +14,10 @@ const getEmissionById = async (req, res) => {
     }
 };
 
-const getAllEmissionByCurrentMonth = async (req, res) => {
+const getTopEmissionsByCurrentMonth = async (req, res) => {
   const companyid = req.params.id;
   try {
-    const emission = await Emission.getAllEmissionByCurrentMonth();
+    const emission = await Emission.getTopEmissionsByCurrentMonth();
     if (!emission) {
       return res.status(404).send("Emission not found")
     }
@@ -30,5 +30,5 @@ const getAllEmissionByCurrentMonth = async (req, res) => {
 
 module.exports = {
     getEmissionById,
-    getAllEmissionByCurrentMonth
+    getTopEmissionsByCurrentMonth
 }
