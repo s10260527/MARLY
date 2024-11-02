@@ -12,7 +12,9 @@ const port = process.env.PORT || 3000;
 
 app.use(express.static("Public"));
 
-app.get("/emission/:id",emissioncontroller.getEmissionById); // by company's id
+//routes to get emissions
+//app.get("/emission/:id",emissioncontroller.getEmissionById); // by company's id
+app.get("/emission/current_month",emissioncontroller.getTopEmissionsByCurrentMonth); // by current month
 
 
 app.listen(port, async () => {
