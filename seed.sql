@@ -1,10 +1,8 @@
 -- Drop Tables if they exist
 DROP TABLE IF EXISTS Companies;
-DROP TABLE IF EXISTS Emission_Sources;
-DROP TABLE IF EXISTS Emission_Types;
-DROP TABLE IF EXISTS Reporting_Periods;
 DROP TABLE IF EXISTS Emissions;
 
+-- Create Companies Table
 CREATE TABLE Companies (
     company_id INT PRIMARY KEY IDENTITY(1,1),
     company_name VARCHAR(255) NOT NULL,
@@ -16,60 +14,71 @@ CREATE TABLE Companies (
     created_at DATETIME DEFAULT GETDATE()
 );
 
-
-CREATE TABLE Emission_Sources (
-    source_id INT PRIMARY KEY,
-    source_name VARCHAR(255) NOT NULL,  -- e.g., "Fuel Combustion", "Electricity Usage"
-    description TEXT
-);
-
-CREATE TABLE Emission_Types (
-    type_id INT PRIMARY KEY,
-    type_name VARCHAR(255) NOT NULL,  -- e.g., "CO2", "CH4", "N2O"
-    global_warming_potential DECIMAL(10, 2),  -- GWP values for conversion into CO2 equivalents
-    unit VARCHAR(50)  -- e.g., "metric tons"
-);
-
-CREATE TABLE Reporting_Periods (
-    period_id INT PRIMARY KEY,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL
-);
-
+-- Create Emissions Table
 CREATE TABLE Emissions (
-    emission_id INT PRIMARY KEY,
+    emission_id INT PRIMARY KEY IDENTITY(1,1),
     company_id INT,
-    source_id INT,
-    type_id INT,
-    period_id INT,
-    amount DECIMAL(12, 3),  -- e.g., metric tons
-    recorded_at DateTime DEFAULT GetDate()
-    FOREIGN KEY (company_id) REFERENCES Companies(company_id),
-    FOREIGN KEY (source_id) REFERENCES Emission_Sources(source_id),
-    FOREIGN KEY (type_id) REFERENCES Emission_Types(type_id),
-    FOREIGN KEY (period_id) REFERENCES Reporting_Periods(period_id)
+    emission_year INT,
+    emission_amount DECIMAL(10, 2), -- in metric tons, for example
+    created_at DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (company_id) REFERENCES Companies(company_id) ON DELETE CASCADE
 );
 
+-- Insert sample data for manufacturing companies
 INSERT INTO Companies (company_name, industry_type, country, city, contact_email, contact_phone)
-VALUES ('Apple', 'Manufacturing', 'USA', 'New York', 'apple@gmail.com', '123-456-7890');
+VALUES 
+    ('Microsoft', 'Manufacturing', 'USA', 'Seattle', 'contact@microsoft.com', '425-882-8080'),
+    ('Toyota', 'Manufacturing', 'Japan', 'Toyota City', 'contact@toyota.co.jp', '81-565-28-2121'),
+    ('Samsung', 'Manufacturing', 'South Korea', 'Seoul', 'contact@samsung.com', '82-2-2053-3000'),
+    ('Nestle', 'Manufacturing', 'Switzerland', 'Vevey', 'contact@nestle.com', '41-21-924-1111'),
+    ('Volkswagen', 'Manufacturing', 'Germany', 'Wolfsburg', 'contact@volkswagen.de', '49-5361-90'),
+    ('BP', 'Manufacturing', 'United Kingdom', 'London', 'contact@bp.com', '44-207-496-4000'),
+    ('ExxonMobil', 'Manufacturing', 'USA', 'Irving', 'contact@exxonmobil.com', '972-444-1000'),
+    ('Amazon', 'Manufacturing', 'USA', 'Seattle', 'contact@amazon.com', '206-266-1000'),
+    ('Sony', 'Manufacturing', 'Japan', 'Tokyo', 'contact@sony.jp', '81-3-6748-2111'),
+    ('L’Oréal', 'Manufacturing', 'France', 'Paris', 'contact@loreal.com', '33-1-47-56-70-00');
 
--- Drop Table if it exists
-DROP TABLE IF EXISTS Users;
+-- Insert emission data for manufacturing companies for the year 2024
+INSERT INTO Emissions (company_id, emission_year, emission_amount)
+VALUES 
+    (1, 2024, 1200.50),  -- Microsoft
+    (2, 2024, 1500.00),  -- Toyota
+    (3, 2024, 1700.75),  -- Samsung
+    (4, 2024, 1100.25),  -- Nestle
+    (5, 2024, 1250.00),  -- Volkswagen
+    (6, 2024, 980.45),   -- BP
+    (7, 2024, 1420.60),  -- ExxonMobil
+    (8, 2024, 1600.10),  -- Amazon
+    (9, 2024, 1350.30),  -- Sony
+    (10, 2024, 900.00);   -- L’Oréal
 
--- Create Users Table
-CREATE TABLE Users (
-    user_id INT PRIMARY KEY IDENTITY(1,1),
-    full_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,  -- To store the hashed password
-    agreed_to_terms BIT NOT NULL,
-    created_at DATETIME DEFAULT GETDATE()
-);
+	-- Insert additional emissions for each manufacturing company
 
--- Sample Insert
-INSERT INTO Users (full_name, email, password_hash, agreed_to_terms)
-VALUES ('John Doe', 'john.doe@example.com', 'hashed_password_here', 1);
+-- November 2024 emissions
+INSERT INTO Emissions (company_id, emission_year, emission_amount, created_at)
+VALUES 
+    (1, 2024, 1300.00, GETDATE()),  -- Microsoft
+    (2, 2024, 1600.00, GETDATE()),  -- Toyota
+    (3, 2024, 1800.00, GETDATE()),  -- Samsung
+    (4, 2024, 1200.00, GETDATE()),  -- Nestle
+    (5, 2024, 1400.00, GETDATE()),  -- Volkswagen
+    (6, 2024, 1000.00, GETDATE()),   -- BP
+    (7, 2024, 1500.00, GETDATE()),  -- ExxonMobil
+    (8, 2024, 1700.00, GETDATE()),  -- Amazon
+    (9, 2024, 1450.00, GETDATE()),  -- Sony
+    (10, 2024, 950.00, GETDATE());   -- L’Oréal
 
+-- October 2024 emissions
+INSERT INTO Emissions (company_id, emission_year, emission_amount, created_at)
+VALUES 
+    (1, 2024, 1250.00, DATEADD(MONTH, -1, GETDATE())),  -- Microsoft
+    (2, 2024, 1550.00, DATEADD(MONTH, -1, GETDATE())),  -- Toyota
+    (3, 2024, 1750.00, DATEADD(MONTH, -1, GETDATE())),  -- Samsung
+    (4, 2024, 1150.00, DATEADD(MONTH, -1, GETDATE())),  -- Nestle
+    (5, 2024, 1350.00, DATEADD(MONTH, -1, GETDATE())),  -- Volkswagen
+    (6, 2024, 980.00, DATEADD(MONTH, -1, GETDATE())),   -- BP
+    (7, 2024, 1450.00, DATEADD(MONTH, -1, GETDATE())),  -- ExxonMobil
+    (8, 2024, 1650.00, DATEADD(MONTH, -1, GETDATE())),  -- Amazon
+    (9, 2024, 1400.00, DATEADD(MONTH, -1, GETDATE())),  -- Sony
+    (10, 2024, 920.00, DATEADD(MONTH, -1, GETDATE()));   -- L’Oréal
 
-
-	
