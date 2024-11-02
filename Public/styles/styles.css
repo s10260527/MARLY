@@ -224,6 +224,7 @@ body {
     width: 73rem;
     height: 5.5rem;
     top: -0.5rem;
+    margin-top: 10px;
     background-color: #5c5be5;
     position: absolute;
     left: -1rem;
