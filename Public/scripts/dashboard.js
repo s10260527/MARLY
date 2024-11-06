@@ -2,7 +2,7 @@
   'use strict'
 
   // Configuration
-  const config = {
+  let config = {
     totalEmissions: 144,
     sustainableOffset: 36,
     creditsOffset: 24,
@@ -24,13 +24,40 @@
   };
 
   let currentChart = null;
+  let selectedDateRange = {
+    start: moment().subtract(1, 'year'),
+    end: moment()
+  };
+
+  // Calculate totals for date range
+  function calculateTotalsForDateRange(data) {
+    const totals = {
+      total: 0,
+      sustainable: 0,
+      credits: 0
+    };
+
+    data.forEach(d => {
+      totals.total += d.total;
+      totals.sustainable += d.sustainable;
+      totals.credits += d.credits;
+    });
+
+    return totals;
+  }
 
   // Initialize bus visualization
   function initializeBuses() {
     const container = document.getElementById('visualization-container');
-    const totalBuses = Math.ceil(config.totalEmissions / config.busWeight);
-    const sustainableBuses = Math.ceil(config.sustainableOffset / config.busWeight);
-    const creditsBuses = Math.ceil(config.creditsOffset / config.busWeight);
+    if (!container) return;
+    
+    const filteredData = filterDataByDateRange(config.graphData);
+    const totals = calculateTotalsForDateRange(filteredData);
+    
+    // Round to nearest whole number of buses
+    const totalBuses = Math.round(totals.total / config.busWeight);
+    const sustainableBuses = Math.round(totals.sustainable / config.busWeight);
+    const creditsBuses = Math.round(totals.credits / config.busWeight);
 
     // Clear container
     container.innerHTML = '';
@@ -55,7 +82,7 @@
 
       // Add bus image
       const img = document.createElement('img');
-      img.src = 'assets/brand/logo.png'; // Update path to your bus image
+      img.src = '../assets/brand/logo.png';
       img.alt = 'School Bus';
       bus.appendChild(img);
 
@@ -63,9 +90,19 @@
     }
   }
 
+  // Filter data based on date range
+  function filterDataByDateRange(data) {
+    return data.filter(d => {
+      const date = moment(d.month);
+      return date.isBetween(selectedDateRange.start, selectedDateRange.end, 'month', '[]');
+    });
+  }
+
   // Handle mouse movement for 3D effect
   function initialize3DEffect() {
     const container = document.getElementById('visualization-container');
+    if (!container) return;
+    
     const buses = container.getElementsByClassName('school-bus');
 
     container.addEventListener('mousemove', (e) => {
@@ -87,64 +124,45 @@
     });
   }
 
-  // Filter data based on date range
-  function filterData(range) {
-    const now = new Date();
-    const months = {
-      '1M': 1,
-      '3M': 3,
-      '6M': 6,
-      '1Y': 12,
-      'ALL': config.graphData.length
-    };
-    
-    const monthsToShow = months[range];
-    return config.graphData.slice(-monthsToShow);
-  }
-
   // Initialize emissions chart
   function initializeChart() {
     const ctx = document.getElementById('emissionsChart');
     if (!ctx) return;
 
-    // Destroy existing chart if it exists
     if (currentChart) {
       currentChart.destroy();
     }
 
-    const data = filterData(document.getElementById('dateRangeFilter').value);
-    
+    const filteredData = filterDataByDateRange(config.graphData);
+
     currentChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: data.map(d => {
-          const date = new Date(d.month);
-          return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-        }),
+        labels: filteredData.map(d => moment(d.month).format('MMM YYYY')),
         datasets: [
           {
             label: 'Total Emissions',
-            data: data.map(d => d.total),
+            data: filteredData.map(d => d.total),
             borderColor: '#0d6efd',
             backgroundColor: 'rgba(13, 110, 253, 0.1)',
             fill: true,
-            hidden: !document.getElementById('showTotal').checked
+            hidden: !document.getElementById('showTotal')?.checked
           },
           {
             label: 'Sustainable Offset',
-            data: data.map(d => d.sustainable),
+            data: filteredData.map(d => d.sustainable),
             borderColor: '#ffc107',
             backgroundColor: 'rgba(255, 193, 7, 0.1)',
             fill: true,
-            hidden: !document.getElementById('showSustainable').checked
+            hidden: !document.getElementById('showSustainable')?.checked
           },
           {
             label: 'Credits Offset',
-            data: data.map(d => d.credits),
+            data: filteredData.map(d => d.credits),
             borderColor: '#198754',
             backgroundColor: 'rgba(25, 135, 84, 0.1)',
             fill: true,
-            hidden: !document.getElementById('showCredits').checked
+            hidden: !document.getElementById('showCredits')?.checked
           }
         ]
       },
@@ -179,26 +197,24 @@
   function initializeTable() {
     const tbody = document.getElementById('emissions-table-body');
     if (!tbody) return;
-
-    const data = filterData(document.getElementById('dateRangeFilter').value);
     
-    tbody.innerHTML = data.map(d => {
-      const date = new Date(d.month);
-      const monthYear = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-      return `
-        <tr>
-          <td>${monthYear}</td>
-          <td>${d.total} tons</td>
-          <td>${d.sustainable} tons</td>
-          <td>${d.credits} tons</td>
-        </tr>
-      `;
-    }).join('');
+    const filteredData = filterDataByDateRange(config.graphData);
+    
+    tbody.innerHTML = filteredData.map(d => `
+      <tr>
+        <td>${moment(d.month).format('MMM YYYY')}</td>
+        <td>${d.total} tons</td>
+        <td>${d.sustainable} tons</td>
+        <td>${d.credits} tons</td>
+      </tr>
+    `).join('');
   }
 
   // Handle view toggle
   function initializeViewToggle() {
     const toggle = document.getElementById('viewToggle');
+    if (!toggle) return;
+
     const visualizationContainer = document.getElementById('visualization-container');
     const busLegend = document.getElementById('bus-legend');
     const advancedView = document.getElementById('advanced-view');
@@ -206,38 +222,91 @@
 
     toggle.addEventListener('change', (e) => {
       if (e.target.checked) {
-        visualizationContainer.classList.add('d-none');
-        busLegend.classList.add('d-none');
-        advancedView.classList.remove('d-none');
-        busDescription.classList.add('d-none');
+        visualizationContainer?.classList.add('d-none');
+        busLegend?.classList.add('d-none');
+        advancedView?.classList.remove('d-none');
+        busDescription.style.visibility = 'hidden';
         initializeChart();
         initializeTable();
       } else {
-        visualizationContainer.classList.remove('d-none');
-        busLegend.classList.remove('d-none');
-        advancedView.classList.add('d-none');
-        busDescription.classList.remove('d-none');
+        visualizationContainer?.classList.remove('d-none');
+        busLegend?.classList.remove('d-none');
+        advancedView?.classList.add('d-none');
+        busDescription.style.visibility = 'visible';
       }
     });
 
-    // Initialize chart filters
-    document.getElementById('dateRangeFilter').addEventListener('change', () => {
-      initializeChart();
-      initializeTable();
+    ['showTotal', 'showSustainable', 'showCredits'].forEach(id => {
+      const element = document.getElementById(id);
+      element?.addEventListener('change', initializeChart);
+    });
+  }
+
+  // Initialize date range picker
+  function initializeDateRange() {
+    const picker = document.getElementById('dateRangePicker');
+    if (!picker) return;
+    
+    $(picker).daterangepicker({
+      startDate: selectedDateRange.start,
+      endDate: selectedDateRange.end,
+      locale: {
+        format: 'DD/MM/YYYY'
+      },
+      ranges: {
+        'Last Month': [moment().subtract(1, 'month'), moment()],
+        'Last 3 Months': [moment().subtract(3, 'months'), moment()],
+        'Last 6 Months': [moment().subtract(6, 'months'), moment()],
+        'Last Year': [moment().subtract(1, 'year'), moment()],
+        'All Time': [moment('2023-01-01'), moment()]
+      }
     });
 
-    ['showTotal', 'showSustainable', 'showCredits'].forEach(id => {
-      document.getElementById(id).addEventListener('change', () => {
-        initializeChart();
-      });
+    $(picker).on('apply.daterangepicker', function(ev, picker) {
+      selectedDateRange = {
+        start: picker.startDate,
+        end: picker.endDate
+      };
+      updateDisplayForDateRange();
     });
+  }
+
+  function updateDisplayForDateRange() {
+    const filteredData = filterDataByDateRange(config.graphData);
+    const totals = calculateTotalsForDateRange(filteredData);
+    
+    // Update config with totals
+    config.totalEmissions = totals.total;
+    config.sustainableOffset = totals.sustainable;
+    config.creditsOffset = totals.credits;
+    
+    // Update displays
+    updateSummaryDisplay();
+    initializeBuses();
+    if (document.getElementById('viewToggle')?.checked) {
+      initializeChart();
+      initializeTable();
+    }
+  }
+
+  // Update summary display
+  function updateSummaryDisplay() {
+    const title = document.querySelector('.display-6');
+    const subtext = document.querySelector('.text-muted.small');
+    if (!title || !subtext) return;
+    
+    title.textContent = `${Math.round(config.totalEmissions)} Tons Total`;
+    subtext.innerHTML = `
+      <span class="text-warning">● ${Math.round(config.sustainableOffset)} Tons</span>,
+      <span class="text-success">● ${Math.round(config.creditsOffset)} Tons</span>
+    `;
   }
 
   // Initialize everything when the DOM is loaded
   document.addEventListener('DOMContentLoaded', () => {
-    initializeBuses();
+    initializeDateRange();
+    updateDisplayForDateRange(); // This will initialize everything else
     initialize3DEffect();
     initializeViewToggle();
   });
-
 })();
