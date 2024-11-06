@@ -95,7 +95,7 @@
     </style>
 
     <!-- Custom styles for this template -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Custom styles for this template -->
     <link href="styles/dashboard.css" rel="stylesheet">
 
@@ -348,28 +348,28 @@
         <!-- Carbon Emissions Section -->
         <div class="card shadow-sm">
           <div class="card-body">
-            <!-- Header section -->
             <div class="d-flex justify-content-between align-items-start mb-4">
-              <div class="d-flex align-items-center gap-4">
-                <div style="min-height: 60px"> <!-- Added min-height to prevent jumping -->
+              <div class="d-flex flex-column">
+                <div style="min-height: 60px">
                   <h2 class="card-title h3 mb-1">Total Carbon Emissions</h2>
-                  <p class="text-muted bus-description" style="visibility: visible;">In Terms of School Buses (Each Weighing 12 Tons)</p>
+                  <p class="text-muted bus-description mb-2">In Terms of School Buses (Each Weighing 12 Tons)</p>
                 </div>
+                
                 <div class="d-flex align-items-center gap-3">
-                  <!-- Date Range Picker -->
                   <div class="input-group input-group-sm" style="width: 300px;">
-                    <input type="text" class="form-control" id="dateRangePicker" placeholder="Select date range">
+                    <input type="text" class="form-control" id="dateRangePicker" placeholder="DD/MM/YYYY - DD/MM/YYYY">
                     <button class="btn btn-outline-secondary" type="button" id="applyDateRange">Apply</button>
                   </div>
-                  <!-- Advanced View Toggle -->
+                  
                   <div class="form-check form-switch d-flex align-items-center gap-2">
-                    <input class="form-check-input" type="checkbox" id="viewToggle">
-                    <label class="form-check-label" for="viewToggle">
+                    <input class="form-check-input" type="checkbox" role="switch" id="viewToggle">
+                    <label class="form-check-label d-flex align-items-center" for="viewToggle">
                       <i class="bi bi-eyeglasses"></i>
                     </label>
                   </div>
                 </div>
               </div>
+          
               <div class="text-end">
                 <h3 class="display-6 mb-0">144 Tons Total</h3>
                 <div class="text-muted small mb-2">
@@ -387,19 +387,21 @@
                 </div>
               </div>
             </div>
-
-            <!-- Visualization Container -->
-            <div id="visualization-container" class="position-relative mb-4" style="height: 300px;"></div>
+          
+            <div id="visualization-container" class="position-relative mb-2"></div>
             
-            <!-- Bus Legend -->
-            <div id="bus-legend" class="text-center mb-4 visualization-element">
-              <span class="me-4"><span class="text-warning">⬤</span> = Carbon Emissions Offset by Sustainable Energy</span>
-              <span><span class="text-success">⬤</span> = Carbon Emissions Offset by Carbon Credits</span>
+            <div id="bus-count" class="text-center mb-2">
+              <span class="me-4">Total Buses: <span id="totalBusCount">0</span></span>
+              <span class="me-4 text-warning">Sustainable Offset: <span id="sustainableBusCount">0</span></span>
+              <span class="text-success">Carbon Credits: <span id="creditsBusCount">0</span></span>
             </div>
-
-            <!-- Advanced View (Hidden by default) -->
+          
+            <div id="bus-legend" class="text-center mb-4 visualization-element">
+              <span class="me-4"><span class="text-warning">⬤</span> Carbon Emissions Offset by Sustainable Energy</span>
+              <span><span class="text-success">⬤</span> Carbon Emissions Offset by Carbon Credits</span>
+            </div>
+          
             <div id="advanced-view" class="d-none">
-              <!-- Line Visibility Controls -->
               <div class="mb-4">
                 <div class="d-flex gap-3 justify-content-center">
                   <div class="form-check form-check-inline">
@@ -416,13 +418,13 @@
                   </div>
                 </div>
               </div>
-
+          
               <div class="mb-4">
                 <canvas id="emissionsChart"></canvas>
               </div>
-              
+          
               <div class="table-responsive">
-                <table class="table table-sm">
+                <table class="table table-hover">
                   <thead>
                     <tr>
                       <th>Month</th>
@@ -431,8 +433,7 @@
                       <th>Credits Offset</th>
                     </tr>
                   </thead>
-                  <tbody id="emissions-table-body">
-                  </tbody>
+                  <tbody></tbody>
                 </table>
               </div>
             </div>
