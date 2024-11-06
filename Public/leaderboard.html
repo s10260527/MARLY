@@ -48,10 +48,10 @@
         <div class="ribbon"></div>
         <table>
           <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Name</th>
-              <th>Emissions</th>
+            <tr class="tr-spacing">
+              <th style="color: black;">Rank</th>
+              <th style="color: black;">Name</th>
+              <th style="color: black;">Emissions</th>
             </tr>
           </thead>
           <tbody id="leaderboardTableBody">
@@ -59,6 +59,31 @@
           </tbody>
         </table>
       </div>
+      <div id="header" class="text-center my-4">
+        <h1>Ranking</h1>
+        <h3 class="mt-2">Most Improved Company</h3>
+        <h3 class="text-center mb-4" style="font-size: 1.5rem; color: #141a39;">
+          (in percentage)
+        </h3>
+      </div>
+
+      <div id="mostImprovedLeaderboard">
+        <div class="ribbon"></div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="color: black;">Rank</th>
+                    <th style="color: black;">Name</th>
+                    <th style="color: black;">Improved By</th>
+                </tr>
+            </thead>
+            <tbody id="mostImprovedTableBody">
+                <!-- Rows will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+    
     </div>
     <script src="scripts/leaderboard.js"></script>
   </body>
