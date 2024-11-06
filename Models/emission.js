@@ -62,7 +62,50 @@ class Emission {
             throw new Error("Database error");
         }
     }
+    static async getMostImprovedByMonth() {
+        try {
+            await sql.connect(dbConfig);
     
+            const sqlQuery = `
+                WITH EmissionChanges AS (
+                    SELECT 
+                        e1.company_id,
+                        c.company_name,
+                        e1.emission_amount AS oct_emission,
+                        e2.emission_amount AS nov_emission,
+                        ((e1.emission_amount - e2.emission_amount) / NULLIF(e1.emission_amount, 0)) * 100 AS percentage_improvement
+                    FROM 
+                        Emissions e1
+                    JOIN 
+                        Emissions e2 ON e1.company_id = e2.company_id 
+                                     AND e1.emission_year = 2024 
+                                     AND e2.emission_year = 2024
+                                     AND MONTH(e1.created_at) = 10  -- October
+                                     AND MONTH(e2.created_at) = 11  -- November
+                    JOIN 
+                        Companies c ON e1.company_id = c.company_id
+                )
+                SELECT TOP 10 
+                    company_name,
+                    oct_emission,
+                    nov_emission,
+                    percentage_improvement
+                FROM 
+                    EmissionChanges
+                ORDER BY 
+                    percentage_improvement DESC;`; // Get the top 10
+    
+            const request = new sql.Request();
+            const result = await request.query(sqlQuery);
+    
+            sql.close();
+    
+            return result.recordset; // Returns an array of companies with their emissions
+        } catch (error) {
+            console.error(error);
+            throw new Error("Database error");
+        }
+    }
 }
 
 module.exports = Emission;

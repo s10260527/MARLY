@@ -14,7 +14,9 @@ app.use(express.static("Public"));
 
 //routes to get emissions
 //app.get("/emission/:id",emissioncontroller.getEmissionById); // by company's id
-app.get("/emission/current_month",emissioncontroller.getTopEmissionsByCurrentMonth); // by current month
+app.get("/emission/totalemission",emissioncontroller.getTopEmissionsByCurrentMonth); // by current month
+app.get("/emission/mostimproved",emissioncontroller.getMostImprovedByMonth); // by current month
+
 
 
 app.listen(port, async () => {
