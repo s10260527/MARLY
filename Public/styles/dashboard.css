@@ -513,3 +513,56 @@
   border-color: #0d6efd;
   box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
+
+.piggy-bank-container {
+  margin-top: 50px;
+  justify-content: flex-end;
+  gap: 20px;
+  align-items: left;
+}
+.operational-cost-details .total-cost {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  margin-right: 100%;
+}
+.piggy-bank-img {
+  width: 250px;
+  height: 250px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.piggy-bank-img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+.chart-container {
+  display: none;
+  display: flex;
+  align-items: center;
+}
+#pieChart {
+  width: 250px !important;
+  height: 250px !important;
+}
+.chart-legend {
+  margin-left: 20px;
+}
+.note {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: #666;
+}
+.my-container {
+  width: 550px;
+  height: 400px;
+}
+
+footer {
+  margin-top: 50px;
+  font-size: 0.9rem;
+  color: #999;
+}

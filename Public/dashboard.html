@@ -93,6 +93,7 @@
       .bd-mode-toggle .dropdown-menu .active .bi {
         display: block !important;
       }
+
     </style>
 
     <!-- Custom styles for this template -->
@@ -443,141 +444,103 @@
 
         <!-- Placeholder for other sections -->
         <div id="operational-costs" class="mt-4">
-          <!-- Operational Costs section will go here -->
 
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Piggy Bank Operational Cost Savings</title>
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <style>
-                body {
-                    font-family: 'Poppins', sans-serif;
-                    text-align: center;
-                    margin: 50px;
-                    background-color: #f4f6f9;
-                    color: #333;
-                }
-        
-                h1 {
-                    font-size: 2.5rem;
-                    color: #4CAF50;
-                }
-        
-                .piggy-bank-container {
-                    display: flex;
-                    justify-content: center;
-                    margin-top: 50px;
-                }
-        
-                .piggy-bank-img {
-                    width: 250px;
-                    height: 250px;
-                    cursor: pointer;
-                    transition: transform 0.3s ease, box-shadow 0.3s ease;
-                    object-fit: cover; /* Ensures the image fits properly */
-                    border-radius: 50%; /* Keep it in a circular shape */
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                }
-        
-                .piggy-bank-img:hover {
-                    transform: scale(1.05);
-                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-                }
-        
-                .chart-container {
-                    display: none;
-                    margin-top: 50px;
-                }
-        
-                canvas {
-                    max-width: 500px;
-                    margin: 0 auto;
-                }
-        
-                .note {
-                    margin-top: 20px;
-                    font-size: 1.1rem;
-                    color: #666;
-                }
-        
-                footer {
-                    margin-top: 50px;
-                    font-size: 0.9rem;
-                    color: #999;
-                }
-        
-            </style>
-        </head>
-        <body>
-        
-        <h1>Operational Cost Savings</h1>
-        
-        <p class="note">Click the piggy bank to see detailed operational costs breakdown.</p>
-        
-        <div class="piggy-bank-container">
-            <img src="../Public/assets/images/piggybank.jpg" alt="Piggy Bank" class="piggy-bank-img" onclick="showPieChart()" />
-        </div>
-        
-        <div class="chart-container" id="chartContainer">
-            <canvas id="pieChart"></canvas>
-        </div>
-        
-        <footer>
-            © 2024 Your Company | All Rights Reserved
-        </footer>
-        
-        <script>
-            let operationalCostsLastYear = 100000;
-            let operationalSavings = 50000; // Example number
-            
-            function showPieChart() {
-                // Hide piggy bank image with a fade-out effect
-                const piggyBankImg = document.querySelector('.piggy-bank-img');
-                piggyBankImg.style.transition = 'opacity 0.5s ease';
-                piggyBankImg.style.opacity = '0';
-                
-                setTimeout(() => {
-                    piggyBankImg.style.display = 'none';
-                    document.getElementById('chartContainer').style.display = 'block';
-                    renderPieChart();
-                }, 500); // Wait for the opacity transition to complete
-            }
-        
-            function renderPieChart() {
-                // Pie chart data
-                const data = {
-                    labels: ['Electricity', 'Services', 'Maintenance', 'Other'],
-                    datasets: [{
-                        label: 'Operational Costs Comparison',
-                        data: [30000, 20000, 15000, 10000], // Example values
-                        backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
-                        hoverOffset: 4
-                    }]
-                };
-        
-                // Create pie chart
-                const ctx = document.getElementById('pieChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'pie',
-                    data: data,
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        let value = context.raw;
-                                        let lastYearValue = operationalCostsLastYear / 4; // Example
-                                        return `${context.label}: $${value} (Last Year: $${lastYearValue})`;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        </script>
+<!-- Operational Cost Section -->
+<div class="my-container">
+  <h1>Total Operational Cost</h1>
+  <p class="note">Click the piggy bank to see detailed operational costs breakdown.</p>
+  <div class="piggy-bank-container">
+    <div class="operational-cost-details">
+      <span class="total-cost">Total Operational Cost: $100,000</span> <!-- Display the total cost here -->
+    </div>
+    <img src="../Public/assets/images/piggybank.jpg" alt="Piggy Bank" class="piggy-bank-img" onclick="togglePiggyBankView()" />
+  </div>
+  <div class="chart-container" id="chartContainer">
+    <canvas id="pieChart"></canvas>
+    <div class="chart-legend" id="chartLegend"></div>
+  </div>
+  <footer>
+    © 2024 Verdex | All Rights Reserved
+  </footer>
+</div>
+
+<script>
+  let operationalCostsLastYear = 100000;
+  let operationalSavings = 50000;
+  let isChartVisible = false;
+
+  function togglePiggyBankView() {
+      const piggyBankImg = document.querySelector('.piggy-bank-img');
+      const chartContainer = document.getElementById('chartContainer');
+
+      if (isChartVisible) {
+          chartContainer.style.display = 'none';
+          piggyBankImg.style.display = 'block';
+          piggyBankImg.style.opacity = '1';
+      } else {
+          piggyBankImg.style.transition = 'opacity 0.5s ease';
+          piggyBankImg.style.opacity = '0';
+
+          setTimeout(() => {
+              piggyBankImg.style.display = 'none';
+              chartContainer.style.display = 'flex';
+              renderPieChart();
+          }, 500);
+      }
+
+      isChartVisible = !isChartVisible;
+  }
+
+  function renderPieChart() {
+      const data = {
+          labels: ['Electricity', 'Services', 'Maintenance', 'Other'],
+          datasets: [{
+              label: 'Operational Costs Comparison',
+              data: [30000, 20000, 15000, 10000],
+              backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
+              hoverOffset: 4
+          }]
+      };
+
+      const ctx = document.getElementById('pieChart').getContext('2d');
+      const chart = new Chart(ctx, {
+          type: 'pie',
+          data: data,
+          options: {
+              responsive: false,
+              plugins: {
+                  legend: {
+                      display: false // Disable the default legend
+                  },
+                  tooltip: {
+                      callbacks: {
+                          label: function(context) {
+                              const value = context.raw;
+                              const lastYearValue = operationalCostsLastYear / 4;
+                              return `${context.label}: $${value} (Last Year: $${lastYearValue})`;
+                          }
+                      }
+                  }
+              }
+          }
+      });
+
+      // Custom legend
+      const legendContainer = document.getElementById('chartLegend');
+      legendContainer.innerHTML = data.labels.map((label, index) => {
+          const value = data.datasets[0].data[index];
+          const color = data.datasets[0].backgroundColor[index];
+          return `<div style="display: flex; align-items: center; margin-bottom: 5px;">
+                      <span style="display: inline-block; width: 16px; height: 16px; background-color: ${color}; margin-right: 8px;"></span>
+                      <span>${label}: $${value}</span>
+                  </div>`;
+      }).join('');
+  }
+
+  document.querySelector('.piggy-bank-img').onclick = togglePiggyBankView;
+  document.getElementById('chartContainer').onclick = togglePiggyBankView;
+</script>
+      
         
         </body>
         </div>
