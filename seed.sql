@@ -82,3 +82,21 @@ VALUES
     (9, 2024, 1400.00, DATEADD(MONTH, -1, GETDATE())),  -- Sony
     (10, 2024, 920.00, DATEADD(MONTH, -1, GETDATE()));   -- L’Oréal
 
+-- Drop Users table if it exists
+DROP TABLE IF EXISTS Users;
+
+-- Create Users table
+CREATE TABLE Users (
+    user_id INT PRIMARY KEY IDENTITY(1,1),
+    full_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    agreed_to_terms BIT NOT NULL,
+    created_at DATETIME DEFAULT GETDATE()
+);
+
+-- Insert sample data into Users table
+INSERT INTO Users (full_name, email, password_hash, agreed_to_terms, created_at)
+VALUES 
+    ('John Doe', 'john.doe@example.com', 'hashed_password_here', 1, '2024-10-24 15:30:56.230'),
+    ('Jason Smith', 'JasonsCompany@gmail.com', '$2a$10$0ZFEsWP3fFEqM3zkKqHVUxbls8j0fJ0V/H4TqDoV...', 1, '2024-11-07 13:14:58.287');
