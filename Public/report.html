@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Company Sustainability Report</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="styles/styles.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="bg-white border-bottom py-3 fixed-top">
+      <div class="container d-flex justify-content-between align-items-center">
+        <img src="logo.png" alt="Verdex Logo" height="40" />
+        <nav>
+          <ul class="nav">
+            <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Leaderboards</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="#">Resources</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"
+                ><i class="fas fa-user"></i> Profile</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container mt-5 pt-5">
+      <div class="text-center my-4">
+        <h2>Company Sustainability Report</h2>
+        <p class="text-muted">
+          Overview of your company’s sustainability metrics
+        </p>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3 mb-4">
+          <div class="card h-100 shadow">
+            <div class="card-body text-center">
+              <p class="card-title font-weight-bold">Products</p>
+              <h3 class="text-primary">249</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-4">
+          <div class="card h-100 shadow">
+            <div class="card-body text-center">
+              <p class="card-title font-weight-bold">Carbon Emissions</p>
+              <h3 class="text-success">342</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-4">
+          <div class="card h-100 shadow">
+            <div class="card-body text-center">
+              <p class="card-title font-weight-bold">Employees</p>
+              <h3 class="text-warning">1250</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-4">
+          <div class="card h-100 shadow">
+            <div class="card-body text-center">
+              <p class="card-title font-weight-bold">Projects</p>
+              <h3 class="text-danger">53</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 text-center my-4">
+          <h4>Select a Sector to View Data</h4>
+        </div>
+        <div class="col-md-4 mb-3">
+          <button class="btn btn-info w-100">Sector 1</button>
+        </div>
+        <div class="col-md-4 mb-3">
+          <button class="btn btn-info w-100">Sector 2</button>
+        </div>
+        <div class="col-md-4 mb-3">
+          <button class="btn btn-info w-100">Sector 3</button>
+        </div>
+      </div>
+
+      <div class="data-display bg-light p-4 rounded shadow text-center">
+        <p>Select a sector to view data</p>
+      </div>
+    </main>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
