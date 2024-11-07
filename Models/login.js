@@ -1,6 +1,7 @@
 // login.js
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const sql = require("mssql");
 const router = express.Router();
 
@@ -34,6 +35,12 @@ router.post("/login", async (req, res) => {
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid email or password" });
         }
+
+        // Generate JWT
+        const token = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        // Set the token in a cookie to be used in other pages
+        res.cookie('token', token, { httpOnly: true });
 
         res.status(200).json({ message: "Login successful", success: true, redirectUrl: "/dashboard.html" });
     } catch (error) {
