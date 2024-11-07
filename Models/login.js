@@ -35,7 +35,7 @@ router.post("/login", async (req, res) => {
             return res.status(400).json({ message: "Invalid email or password" });
         }
 
-        res.status(200).json({ message: "Login successful", redirectUrl: "/index.html" });
+        res.status(200).json({ message: "Login successful", success: true, redirectUrl: "/dashboard.html" });
     } catch (error) {
         console.error("Login error", error);
         res.status(500).json({ message: "An error occurred during login" });
