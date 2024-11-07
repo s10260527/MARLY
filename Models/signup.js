@@ -2,7 +2,6 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const sql = require("mssql");
-
 const router = express.Router();
 
 // Middleware to parse JSON data
@@ -34,8 +33,8 @@ router.post("/signup", async (req, res) => {
 
         // Insert new user into the database
         const insertUserQuery = `
-            INSERT INTO Users (full_name, email, password_hash, agreed_to_terms)
-            VALUES (@FullName, @Email, @PasswordHash, @AgreedToTerms)
+            INSERT INTO Users (full_name, email, password_hash, agreed_to_terms, created_at)
+            VALUES (@FullName, @Email, @PasswordHash, @AgreedToTerms, GETDATE())
         `;
         const insertUserRequest = new sql.Request();
         insertUserRequest.input("FullName", sql.VarChar, full_name);
