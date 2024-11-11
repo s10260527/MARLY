@@ -8,6 +8,8 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> <!-- Load jQuery here -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="styles/styles.css" />
   </head>
   <body>
@@ -77,26 +79,64 @@
         </div>
       </div>
 
+      <!-- Chart Section -->
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <div class="card h-100 shadow">
+            <div class="card-body">
+              <h5 class="card-title text-center">Top 5 Emissions by Sector</h5>
+              <!-- Ensure ID matches with JavaScript selector -->
+              <div id="bar-chart" style="height: 350px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100 shadow">
+            <div class="card-body">
+              <h5 class="card-title text-center">Current and Goals Orders</h5>
+              <!-- Ensure ID matches with JavaScript selector -->
+              <div id="area-chart" style="height: 350px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="row">
         <div class="col-12 text-center my-4">
           <h4>Select a Sector to View Data</h4>
         </div>
         <div class="col-md-4 mb-3">
-          <button class="btn btn-info w-100">Sector 1</button>
+          <button class="btn btn-info w-100">Direct Emissions</button>
         </div>
         <div class="col-md-4 mb-3">
-          <button class="btn btn-info w-100">Sector 2</button>
+          <button class="btn btn-info w-100">Product Manufacturing</button>
         </div>
         <div class="col-md-4 mb-3">
-          <button class="btn btn-info w-100">Sector 3</button>
+          <button class="btn btn-info w-100">Product Transport</button>
+        </div>
+        <div class="col-md-4 mb-3">
+          <button class="btn btn-info w-100">Business Travel</button>
         </div>
       </div>
 
-      <div class="data-display bg-light p-4 rounded shadow text-center">
-        <p>Select a sector to view data</p>
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card h-100 shadow">
+            <div class="card-body">
+              <h5 class="card-title text-center" id="pie-chart-title">Sector Data Overview</h5>
+              <div id="pie-chart" style="height: 350px;"></div>
+              <p class="text-center mt-4" id="pie-chart-description">Select a sector to see detailed data.</p>
+            </div>
+          </div>
+        </div>
       </div>
+
     </main>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <!-- ApexCharts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/4.0.0/apexcharts.min.js"></script>
+
+    <!-- Custom JS -->
+     <script src="scripts/report.js"></script>
   </body>
 </html>
