@@ -1,6 +1,6 @@
-// login.js
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const sql = require("mssql");
 const router = express.Router();
 
@@ -8,34 +8,40 @@ const router = express.Router();
 router.use(express.json());
 
 // Login route
-router.post("/login", async (req, res) => {
+router.post("/", async (req, res) => { 
     const { email, password } = req.body;
 
-    // Validate required fields
     if (!email || !password) {
         return res.status(400).json({ message: "Email and password are required" });
     }
 
     try {
-        // Check if the user exists
-        const checkUserQuery = "SELECT * FROM Users WHERE email = @Email";
-        const checkUserRequest = new sql.Request();
-        checkUserRequest.input("Email", sql.VarChar, email);
-        const userResult = await checkUserRequest.query(checkUserQuery);
+        // Check if the company exists
+        const checkCompanyQuery = "SELECT * FROM Companies WHERE contact_email = @ContactEmail";
+        const checkCompanyRequest = new sql.Request();
+        checkCompanyRequest.input("ContactEmail", sql.VarChar, email);
+        const companyResult = await checkCompanyRequest.query(checkCompanyQuery);
 
-        if (userResult.recordset.length === 0) {
+        if (companyResult.recordset.length === 0) {
             return res.status(400).json({ message: "Invalid email or password" });
         }
 
-        const user = userResult.recordset[0];
+        const company = companyResult.recordset[0];
 
         // Compare the password
-        const isMatch = await bcrypt.compare(password, user.password_hash);
+        const isMatch = await bcrypt.compare(password, company.hashed_password);
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid email or password" });
         }
 
-        res.status(200).json({ message: "Login successful", redirectUrl: "/index.html" });
+        // Generate JWT
+        const token = jwt.sign({ companyId: company.company_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        // Set the token in a cookie to be used in other pages
+        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' });
+
+        // Send back company ID to be stored in local storage
+        res.status(200).json({ message: "Login successful", success: true, redirectUrl: "/profile.html", companyId: company.company_id });
     } catch (error) {
         console.error("Login error", error);
         res.status(500).json({ message: "An error occurred during login" });

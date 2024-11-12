@@ -1,4 +1,3 @@
-// signup.js
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const sql = require("mssql");
@@ -9,42 +8,45 @@ router.use(express.json());
 
 // Signup route
 router.post("/signup", async (req, res) => {
-    const { full_name, email, password, agreed_to_terms } = req.body;
+    const { company_name, contact_email, password, industry_type, country, city, contact_phone } = req.body;
 
     // Validate required fields
-    if (!full_name || !email || !password || agreed_to_terms === undefined) {
+    if (!company_name || !contact_email || !password || !industry_type || !country || !city || !contact_phone) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
     try {
-        // Check if the user already exists
-        const checkUserQuery = "SELECT * FROM Users WHERE email = @Email";
-        const checkUserRequest = new sql.Request();
-        checkUserRequest.input("Email", sql.VarChar, email);
-        const userResult = await checkUserRequest.query(checkUserQuery);
+        // Check if the company already exists
+        const checkCompanyQuery = "SELECT * FROM Companies WHERE contact_email = @ContactEmail";
+        const checkCompanyRequest = new sql.Request();
+        checkCompanyRequest.input("ContactEmail", sql.VarChar, contact_email);
+        const companyResult = await checkCompanyRequest.query(checkCompanyQuery);
 
-        if (userResult.recordset.length > 0) {
-            return res.status(400).json({ message: "User with this email already exists" });
+        if (companyResult.recordset.length > 0) {
+            return res.status(400).json({ message: "A company with this email already exists" });
         }
 
         // Hash the password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Insert new user into the database
-        const insertUserQuery = `
-            INSERT INTO Users (full_name, email, password_hash, agreed_to_terms, created_at)
-            VALUES (@FullName, @Email, @PasswordHash, @AgreedToTerms, GETDATE())
+        // Insert new company into the database
+        const insertCompanyQuery = `
+            INSERT INTO Companies (company_name, industry_type, country, city, contact_email, contact_phone, hashed_password, created_at)
+            VALUES (@CompanyName, @IndustryType, @Country, @City, @ContactEmail, @ContactPhone, @HashedPassword, GETDATE())
         `;
-        const insertUserRequest = new sql.Request();
-        insertUserRequest.input("FullName", sql.VarChar, full_name);
-        insertUserRequest.input("Email", sql.VarChar, email);
-        insertUserRequest.input("PasswordHash", sql.VarChar, hashedPassword);
-        insertUserRequest.input("AgreedToTerms", sql.Bit, agreed_to_terms);
+        const insertCompanyRequest = new sql.Request();
+        insertCompanyRequest.input("CompanyName", sql.VarChar, company_name);
+        insertCompanyRequest.input("IndustryType", sql.VarChar, industry_type);
+        insertCompanyRequest.input("Country", sql.VarChar, country);
+        insertCompanyRequest.input("City", sql.VarChar, city);
+        insertCompanyRequest.input("ContactEmail", sql.VarChar, contact_email);
+        insertCompanyRequest.input("ContactPhone", sql.VarChar, contact_phone);
+        insertCompanyRequest.input("HashedPassword", sql.VarChar, hashedPassword);
 
-        await insertUserRequest.query(insertUserQuery);
+        await insertCompanyRequest.query(insertCompanyQuery);
 
-        res.status(201).json({ message: "User registered successfully" });
+        res.status(201).json({ message: "Company registered successfully" });
     } catch (error) {
         console.error("Signup error", error);
         res.status(500).json({ message: "An error occurred during signup" });

@@ -100,3 +100,7 @@ INSERT INTO Users (full_name, email, password_hash, agreed_to_terms, created_at)
 VALUES 
     ('John Doe', 'john.doe@example.com', 'hashed_password_here', 1, '2024-10-24 15:30:56.230'),
     ('Jason Smith', 'JasonsCompany@gmail.com', '$2a$10$0ZFEsWP3fFEqM3zkKqHVUxbls8j0fJ0V/H4TqDoV...', 1, '2024-11-07 13:14:58.287');
+
+ALTER TABLE Companies
+ADD hashed_password VARCHAR(255),
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP;
