@@ -1,4 +1,3 @@
-// login.js
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -18,26 +17,26 @@ router.post("/login", async (req, res) => {
     }
 
     try {
-        // Check if the user exists
-        const checkUserQuery = "SELECT * FROM Users WHERE email = @Email";
-        const checkUserRequest = new sql.Request();
-        checkUserRequest.input("Email", sql.VarChar, email);
-        const userResult = await checkUserRequest.query(checkUserQuery);
+        // Check if the company exists
+        const checkCompanyQuery = "SELECT * FROM Companies WHERE contact_email = @ContactEmail";
+        const checkCompanyRequest = new sql.Request();
+        checkCompanyRequest.input("ContactEmail", sql.VarChar, email);
+        const companyResult = await checkCompanyRequest.query(checkCompanyQuery);
 
-        if (userResult.recordset.length === 0) {
+        if (companyResult.recordset.length === 0) {
             return res.status(400).json({ message: "Invalid email or password" });
         }
 
-        const user = userResult.recordset[0];
+        const company = companyResult.recordset[0];
 
         // Compare the password
-        const isMatch = await bcrypt.compare(password, user.password_hash);
+        const isMatch = await bcrypt.compare(password, company.hashed_password);
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid email or password" });
         }
 
         // Generate JWT
-        const token = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ companyId: company.company_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         // Set the token in a cookie to be used in other pages
         res.cookie('token', token, { httpOnly: true });

@@ -83,7 +83,7 @@
                     <div class="d-flex align-items-center mb-4">
                         <div>
                             <h3 class="mb-0" id="companyName">Company Name</h3>
-                            <p id="industry">Industry</p>
+                            <p id="industry">Industry Type</p>
                         </div>
                     </div>
                     <div class="profile-title">Company Profile</div>
@@ -96,6 +96,15 @@
                         </div>
                         <div class="profile-card">
                             <div class="profile-item">Business Email: <span id="businessEmail">Email</span></div>
+                        </div>
+                        <div class="profile-card">
+                            <div class="profile-item">Industry Type: <span id="industryType">Industry</span></div>
+                        </div>
+                        <div class="profile-card">
+                            <div class="profile-item">Country: <span id="country">Country</span></div>
+                        </div>
+                        <div class="profile-card">
+                            <div class="profile-item">City: <span id="city">City</span></div>
                         </div>
                     </div>
                 </div>
@@ -116,19 +125,20 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-            const userId = 1; // Replace this with the actual user ID dynamically if needed
-
             // Fetch profile data from the backend
             $.ajax({
                 type: 'GET',
-                url: `http://localhost:3000/api/profile/${userId}`,
+                url: `http://localhost:3000/api/profile`,
                 success: function(response) {
                     // Populate profile data
                     $('#companyName').text(response.companyName);
-                    $('#industry').text('Technology'); // Ignoring industry as per request
+                    $('#industry').text(response.industryType);
                     $('#companyNameDetail').text(response.companyName);
                     $('#joinedDate').text(response.joined);
                     $('#businessEmail').text(response.businessEmail);
+                    $('#industryType').text(response.industryType);
+                    $('#country').text(response.country);
+                    $('#city').text(response.city);
                 },
                 error: function(xhr) {
                     alert('An error occurred while fetching profile data.');
