@@ -4,6 +4,9 @@ const dbConfig = require("./dbConfig");
 const cors = require("cors");
 const signupRouter = require('./Models/signup');
 const emissioncontroller = require("./Controllers/emission");
+const companycontroller = require("./Controllers/company");
+const inputcontroller = require("./Controllers/input");
+
 
 require("dotenv").config();
 
@@ -25,6 +28,19 @@ app.get("/signup", (req, res) => {
 app.use('/api', signupRouter);
 app.get("/emission/totalemission", emissioncontroller.getTopEmissionsByCurrentMonth);
 app.get("/emission/mostimproved", emissioncontroller.getMostImprovedByMonth);
+
+// Campaign routes
+app.get("/campaign/isParticipant/:id", companycontroller.checkIsParticipant);
+app.patch("/campaign/updateParticipationStatus/:id", companycontroller.updateCompanyParticipation);
+app.patch("/campaign/updateParticipationStatus/:id", companycontroller.updateCompanyParticipation);
+
+//input routes
+app.get("/input/getDeviceId/:device_name", inputcontroller.getDeviceIdByName);
+app.get("/input/getDeviceId/:device_name", inputcontroller.getDeviceIdByName);
+app.put('/input/updateRecycledDeviceQuantity', inputcontroller.updateRecycledDeviceQuantity);
+
+
+
 
 app.listen(port, async () => {
     try {
