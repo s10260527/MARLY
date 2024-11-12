@@ -62,25 +62,22 @@
                             label: 'Carbon Emissions (Metric tons)',
                             data: carbonEmissionsData.slice(startIdx, endIdx + 1),
                             borderColor: 'rgba(255, 99, 132, 1)',
-                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                            fill: false, // Remove area under the graph
                             yAxisID: 'yLeft',
-                            fill: true,
                         },
                         {
                             label: 'Energy Consumption (kWh)',
                             data: energyConsumptionData.slice(startIdx, endIdx + 1),
                             borderColor: 'rgba(54, 162, 235, 1)',
-                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            fill: false, // Remove area under the graph
                             yAxisID: 'yRight1',
-                            fill: true,
                         },
                         {
                             label: 'Operational Costs ($10,000)',
                             data: operationalCostsData.slice(startIdx, endIdx + 1),
                             borderColor: 'rgba(75, 192, 192, 1)',
-                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                            fill: false, // Remove area under the graph
                             yAxisID: 'yRight2',
-                            fill: true,
                         }
                     ]
                 };
