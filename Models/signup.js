@@ -1,3 +1,4 @@
+// signup.js
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const sql = require("mssql");
@@ -7,8 +8,16 @@ const router = express.Router();
 router.use(express.json());
 
 // Signup route
-router.post("/signup", async (req, res) => {
-    const { company_name, contact_email, password, industry_type, country, city, contact_phone } = req.body;
+router.post("/", async (req, res) => {
+    const {
+        company_name,
+        contact_email,
+        password,
+        industry_type,
+        country,
+        city,
+        contact_phone,
+    } = req.body;
 
     // Validate required fields
     if (!company_name || !contact_email || !password || !industry_type || !country || !city || !contact_phone) {
@@ -48,7 +57,7 @@ router.post("/signup", async (req, res) => {
 
         res.status(201).json({ message: "Company registered successfully" });
     } catch (error) {
-        console.error("Signup error", error);
+        console.error("Signup error:", error);
         res.status(500).json({ message: "An error occurred during signup" });
     }
 });
