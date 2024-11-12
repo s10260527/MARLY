@@ -11,6 +11,9 @@ const loginRouter = require("./Models/login");
 const emissionController = require("./Controllers/emission");
 const profileRouter = require("./Models/profile");
 const verifyToken = require("./Middleware/authMiddleware"); // Import the JWT verification middleware
+const companycontroller = require("./Controllers/company");
+const inputcontroller = require("./Controllers/input");
+
 
 require("dotenv").config();
 
@@ -95,6 +98,19 @@ app.post('/api/login', async (req, res) => {
 });
 
 // Start server
+// Campaign routes
+app.get("/campaign/isParticipant/:id", companycontroller.checkIsParticipant);
+app.patch("/campaign/updateParticipationStatus/:id", companycontroller.updateCompanyParticipation);
+app.patch("/campaign/updateParticipationStatus/:id", companycontroller.updateCompanyParticipation);
+
+//input routes
+app.get("/input/getDeviceId/:device_name", inputcontroller.getDeviceIdByName);
+app.get("/input/getDeviceId/:device_name", inputcontroller.getDeviceIdByName);
+app.put('/input/updateRecycledDeviceQuantity', inputcontroller.updateRecycledDeviceQuantity);
+
+
+
+
 app.listen(port, async () => {
     try {
         await sql.connect(dbConfig);

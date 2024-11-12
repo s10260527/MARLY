@@ -1,90 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap" />
-    <link href="styles/styles.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-      /* Add margin to main content to account for the fixed navbar */
-      main {
-        margin-top: 80px;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Header -->
-    <header class="bg-white border-bottom py-3 fixed-top">
-      <div class="container d-flex justify-content-between align-items-center">
-        <img src="logo.png" alt="Verdex Logo" height="40">
-        <nav>
-          <ul class="nav">
-            <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Leaderboards</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Resources</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-user"></i> Profile</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap" />
+  <link href="styles/styles.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+</head>
+<body>
 
-    <div class="leaderboard-box">
-      <div id="header" class="text-center my-4">
-        <h1>Ranking</h1>
-        <h3 class="mt-2">Least Carbon Emission produced</h3>
-        <h3 class="text-center mb-4" style="font-size: 1.5rem; color: #141a39;">
-          (in Metric Tons)
-        </h3>
-      </div>
-
-      <div id="leaderboard">
-        <div class="ribbon"></div>
-        <table>
-          <thead>
-            <tr class="tr-spacing">
-              <th style="color: black;">Rank</th>
-              <th style="color: black;">Name</th>
-              <th style="color: black;">Emissions</th>
-            </tr>
-          </thead>
-          <tbody id="leaderboardTableBody">
-            <!-- Rows will be dynamically inserted here -->
-          </tbody>
-        </table>
-      </div>
-      <div id="header" class="text-center my-4">
-        <h1>Ranking</h1>
-        <h3 class="mt-2">Most Improved Company</h3>
-        <h3 class="text-center mb-4" style="font-size: 1.5rem; color: #141a39;">
-          (in percentage)
-        </h3>
-      </div>
-
-      <div id="mostImprovedLeaderboard">
-        <div class="ribbon"></div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th style="color: black;">Rank</th>
-                    <th style="color: black;">Name</th>
-                    <th style="color: black;">Improved By</th>
-                </tr>
-            </thead>
-            <tbody id="mostImprovedTableBody">
-                <!-- Rows will be dynamically inserted here -->
-            </tbody>
-        </table>
+  <!-- Leaderboard Boxes -->
+  <div class="leaderboard-box">
+   
+    <div id="header" class="text-center my-4">
+      <h1>Ranking</h1>
+      <h3 class="mt-2">Least Carbon Emission produced</h3>
+      <h3 class="text-center mb-4" style="font-size: 1.5rem; color: #141a39;">
+        (in Metric Tons)
+      </h3>
     </div>
-    
+
+    <div id="leaderboard">
+      <div class="ribbon"></div>
+      <table>
+        <thead>
+          <tr class="tr-spacing">
+            <th style="color: black;">Rank</th>
+            <th style="color: black;">Name</th>
+            <th style="color: black;">Emissions</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardTableBody">
+          <!-- Rows will be dynamically inserted here -->
+        </tbody>
+      </table>
     </div>
-    <script src="scripts/leaderboard.js"></script>
-  </body>
+
+    <div id="header" class="text-center my-4">
+      <h1>Ranking</h1>
+      <h3 class="mt-2">Most Improved Company</h3>
+      <h3 class="text-center mb-4" style="font-size: 1.5rem; color: #141a39;">
+        (in percentage)
+      </h3>
+    </div>
+
+    <div id="mostImprovedLeaderboard">
+      <div class="ribbon"></div>
+      <table>
+        <thead>
+          <tr>
+            <th style="color: black;">Rank</th>
+            <th style="color: black;">Name</th>
+            <th style="color: black;">Improved By</th>
+          </tr>
+        </thead>
+        <tbody id="mostImprovedTableBody">
+          <!-- Rows will be dynamically inserted here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="scripts/leaderboard.js"></script>
+</body>
 </html>

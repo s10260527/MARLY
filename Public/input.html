@@ -1,66 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Emission Report Input</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles/styles.css" />
-  </head>
-  <body>
-    <header>
-      <h1>Enter Company Emission Data</h1>
-    </header>
-    <main>
-      <form id="emissionForm">
-        <div class="form-group">
-          <label for="company_id">Company ID:</label>
-          <input type="number" id="company_id" name="company_id" required />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Device Recycling Input</title>
+  <link rel="stylesheet" href="styles/input.css">
+  
+  <!-- Add Font Awesome CDN link for the icon -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body class="input-body">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+  <div class="bg">
+  </div>
+
+  <main class="form-signin">
+
+    <div class="form-background">
+      <!-- Cross button in the top-right corner -->
+           <!-- Back Button (Added at the top-left) -->
+    <a href="campaign.html" class="btn btn-link" id="back-btn" style="position: absolute; top: 10px; left: 10px;">
+      <i class="fas fa-arrow-left"></i> Back
+    </a>
+      <button type="button" class="btn-close" aria-label="Close" id="close-btn"></button>
+
+      <h1 class="h3">Login</h1>
+    
+      <form id="device-form">
+        <!-- Dropdown for selecting device type -->
+        <div class="form-floating">
+          <select class="form-control" id="deviceDropdown" required>
+            <option value="Smartphone">Smartphone</option>
+            <option value="Laptop">Laptop</option>
+            <option value="Tablet">Tablet</option>
+          </select>
+          <label for="deviceDropdown">Device Type</label>
         </div>
 
-        <div class="form-group">
-          <label for="emission_year">Emission Year:</label>
-          <input
-            type="number"
-            id="emission_year"
-            name="emission_year"
-            required
-          />
+        <!-- Quantity input -->
+        <div class="form-floating">
+          <input type="number" class="form-control" id="floatingPassword" placeholder="Quantity" min="1" required>
+          <label for="floatingPassword">Quantity</label>
         </div>
 
-        <div class="form-group">
-          <label for="emission_amount">Emission Amount (in tons):</label>
-          <input
-            type="number"
-            id="emission_amount"
-            name="emission_amount"
-            step="0.01"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="project_count">Number of Projects:</label>
-          <input type="number" id="project_count" name="project_count" />
-        </div>
-
-        <div class="form-group">
-          <label for="employee_count">Employee Count:</label>
-          <input type="number" id="employee_count" name="employee_count" />
-        </div>
-
-        <div class="form-group">
-          <label for="comments">Additional Comments:</label>
-          <textarea id="comments" name="comments" rows="4"></textarea>
-        </div>
-
-        <button type="submit">Submit Report</button>
+        <button class="w-100 btn btn-lg" id="submit-btn" type="submit">Submit</button>
       </form>
-    </main>
 
-    <script src="input.js"></script>
-  </body>
+      <!-- Plus Icon below the submit button -->
+      <div class="plus-icon-container">
+        <button type="button" class="btn btn-link" id="add-form-btn">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Container to hold dynamically added forms -->
+    <div id="forms-container"></div>
+  </main>
+
+  <script src="scripts/input.js"></script>
+</body>
 </html>
