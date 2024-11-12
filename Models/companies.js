@@ -7,6 +7,7 @@ class Company {
         this.company_id = company_id;
         this.company_name = company_name;
         this.industry_type = industry_type;
+        this.campaign_participant = campaign_participant,
         this.country = country;
         this.city = city;
         this.contact_email = contact_email;
@@ -25,217 +26,65 @@ class Company {
         connection.close();
 
         return result.recordset.map(
-            (row) => new Volunteer(row.company_id, row.company_name, row.industry_type, row.country, row.city, row.contact_email, row.contact_phone )
+            (row) => new Volunteer(row.company_id, row.company_name, row.industry_type, row.campaign_participant ,row.country, row.city, row.contact_email, row.contact_phone )
         ) 
     }
 
-    static async getVolunteerById(id) {
-        const connection = await sql.connect(dbConfig);
-
-        const sqlQuery = `SELECT * FROM Volunteers WHERE volunteerid = @volunteerid`; //params
-
-        const request = connection.request();
-        request.input("volunteerid", id)
-        const result = await request.query(sqlQuery);
-
-        connection.close();
-
-        return result.recordset[0]
-            ? new Volunteer(result.recordset[0].volunteerid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].passwordHash, result.recordset[0].bio, result.recordset[0].dateofbirth, result.recordset[0].profilepicture)
-            : null; // not found
-    }
-
-    static async getVolunteerByName(username) {
-        const connection = await sql.connect(dbConfig);
-
-        const sqlQuery = `SELECT * FROM Volunteers WHERE name = @name`; //params
-
-        const request = connection.request();
-        request.input("name", username)
-        const result = await request.query(sqlQuery);
-
-        connection.close();
-
-        return result.recordset[0]
-            ? new Volunteer(result.recordset[0].volunteerid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].passwordHash, result.recordset[0].bio, result.recordset[0].dateofbirth, result.recordset[0].profilepicture)
-            : null; // not found
-    }
-
-    static async getVolunteerByEmail(email) {
-        const connection = await sql.connect(dbConfig);
-
-        const sqlQuery = `SELECT * FROM Volunteers WHERE email = @email`; //params
-
-        const request = connection.request();
-        request.input("email", email)
-        const result = await request.query(sqlQuery);
-
-        connection.close();
-
-        return result.recordset[0]
-            ? new Volunteer(result.recordset[0].volunteerid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].passwordHash, result.recordset[0].bio, result.recordset[0].dateofbirth, result.recordset[0].profilepicture)
-            : null; // not found
-    }
-
-    static async deleteVolunteer(id) {
-        const connection = await sql.connect(dbConfig)
-        const sqlQuery = `DELETE FROM Volunteers WHERE volunteerid = @volunteerid`
-        const request = connection.request()
-        request.input("volunteerid", id)
-        const result = await request.query(sqlQuery);
-        connection.close()
-
-        return result.rowsAffected > 0; // Indicate success based on affected rows
-    }
-
-    //brandon
-    //this method gets all the volunteer's skills
-    static async getVolunteerSkills(id) {
-        const connection = await sql.connect(dbConfig);
+    static async isCompanyParticipant(company_id) {
         try {
-            const query = `
-          SELECT s.skillname
-          FROM Skills s
-          INNER JOIN VolunteerSkills vs ON vs.skillid = s.skillid
-          WHERE vs.volunteerid = @volunteerid;
-          `;
-            const request = connection.request();
-            request.input("volunteerid", id)
-            const result = await request.query(query);
-
-            return result.recordset.map(row => row.skillname)
+            await sql.connect(dbConfig);
+    
+            const sqlQuery = `
+                SELECT campaign_participant
+                FROM Companies
+                WHERE company_id = @company_id;`;
+    
+            const request = new sql.Request();
+            request.input("company_id", sql.Int, company_id);
+    
+            const result = await request.query(sqlQuery);
+            sql.close();
+    
+            // Check if campaign_participant is 1 (true) for the company
+            return result.recordset[0].campaign_participant;
         } catch (error) {
-            console.log(error)
-            throw new Error("Error fetching volunteer's skill");
-
-        } finally {
-            await connection.close();
+            console.error(error);
+            throw new Error("Database error");
         }
     }
-    //To check if there is an existing email when volunteers are signing up
-    static async getVolunteerByEmail(email) {
-        const connection = await sql.connect(dbConfig);
     
-        const sqlQuery = `SELECT * FROM Volunteers WHERE email = @email`; 
-    
-        const request = connection.request();
-        request.input("email", email)
-        const result = await request.query(sqlQuery);
-    
-        connection.close();
-    
-        return result.recordset[0]
-            ? new Volunteer(result.recordset[0].volunteerid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].passwordHash, result.recordset[0].bio, result.recordset[0].dateofbirth, result.recordset[0].profilepicture)
-            : null; // not found
-    }
+    static async updateCompanyParticipation(company_id, isParticipating = true) {
+        try {
+            await sql.connect(dbConfig);
 
-    static async createVolunteer(newVolunteerData) {
-        if (!newVolunteerData.profilepicture) {
-            try {
-                newVolunteerData.profilepicture = await fetchRandomImage();
-            } catch (error) {
-                console.error('Error fetching image data:', error);
-                throw new Error('Error fetching image data');
+            const sqlQuery = `
+                UPDATE Companies
+                SET campaign_participant = @campaign_participant
+                WHERE company_id = @company_id;`;
+
+            const request = new sql.Request();
+            request.input("company_id", sql.Int, company_id);
+            request.input("campaign_participant", sql.Bit, isParticipating);
+
+            const result = await request.query(sqlQuery);
+            sql.close();
+
+            if (result.rowsAffected > 0) {
+                console.log(`Successfully updated company ${company_id} participation status.`);
+                return true;
+            } else {
+                console.log(`No company found with ID ${company_id}.`);
+                return false;
             }
+        } catch (error) {
+            console.error(error);
+            throw new Error("Database error");
         }
-
-        const connection = await sql.connect(dbConfig);
-
-        const sqlQuery = `
-            INSERT INTO volunteers (name, email, passwordHash, bio, dateofbirth, profilepicture) 
-            VALUES (@name, @email, @passwordHash, @bio, @dateofbirth, @profilepicture);
-            SELECT SCOPE_IDENTITY() AS volunteerid;
-        `;
-
-        const request = connection.request();
-        request.input("name", newVolunteerData.name);
-        request.input("email", newVolunteerData.email);
-        request.input("passwordHash", newVolunteerData.passwordHash);
-        request.input("bio", newVolunteerData.bio);
-        request.input("dateofbirth", newVolunteerData.dateofbirth);
-        request.input("profilepicture", newVolunteerData.profilepicture);
-
-        const result = await request.query(sqlQuery);
-
-        connection.close();
-
-        return this.getVolunteerById(result.recordset[0].volunteerid);
     }
-
-    static async updateVolunteer(id, newVolunteerData) {
-        const connection = await sql.connect(dbConfig)
-
-        const sqlQuery = `UPDATE Volunteers SET name = @name, email = @email, passwordHash = @passwordHash, bio = @bio, dateofbirth = @dateofbirth, profilepicture = @profilepicture WHERE volunteerid = @volunteerid; SELECT SCOPE_IDENTITY() AS volunteerid;`
-
-        const request = connection.request()
-        request.input("volunteerid", id)
-        request.input("name", newVolunteerData.name)
-        request.input("email", newVolunteerData.email)
-        request.input("passwordHash", newVolunteerData.passwordHash)
-        request.input("bio", newVolunteerData.bio)
-        request.input("dateofbirth", newVolunteerData.dateofbirth)
-        request.input("profilepicture", newVolunteerData.profilepicture)
-
-        await request.query(sqlQuery)
-
-        connection.close()
-
-        return this.getVolunteerById(id)
-    }
-    
-    static async updateVolunteerProfilePicture(id, imagepath) {
-        const connection = await sql.connect(dbConfig)
-
-        const sqlQuery = `UPDATE Volunteers SET profilepicture = @profilepicture WHERE volunteerid = @volunteerid; SELECT SCOPE_IDENTITY() AS volunteerid;`
-
-        const request = connection.request()
-        request.input("volunteerid", id)
-        request.input("profilepicture", imagepath)
-
-        await request.query(sqlQuery)
-
-        connection.close()
-
-        return this.getVolunteerById(id)
-    }
-
-    static async updateVolunteerPassword(id, hash) {
-        const connection = await sql.connect(dbConfig)
-
-        const sqlQuery = `UPDATE Volunteers SET passwordHash = @passwordHash WHERE volunteerid = @volunteerid; SELECT SCOPE_IDENTITY() AS volunteerid;`
-
-        const request = connection.request()
-        request.input("volunteerid", id)
-        request.input("passwordHash", hash)
-
-        await request.query(sqlQuery)
-
-        connection.close()
-
-        return this.getVolunteerById(id)
-    }
-
-    static async searchVolunteers(searchTerm) {
-        const connection = await sql.connect(dbConfig)
-        
-        const sqlQuery = `SELECT * FROM Volunteers WHERE name LIKE '%${searchTerm}%'`
-    
-        const request = connection.request()
-        
-        const result = await request.query(sqlQuery);
-    
-        connection.close()
-    
-        return result.recordset.map(
-            (row) => new Volunteer(row.volunteerid, row.name, row.email, row.passwordHash, row.bio, row.dateofbirth, row.profilepicture)
-        ) //convert rows to volunteers
-    }
-    
-
 
 }
 
 
 
 
-module.exports = Volunteer;
+module.exports = Company;

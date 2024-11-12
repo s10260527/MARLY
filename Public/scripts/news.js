@@ -15,7 +15,7 @@ const generateUI = (articles) => { // Corrected parameter name
 
         card.innerHTML = `
   <div class="news-image-container">
-    <img src="${item.urlToImage || '../images/error page.gif'}"  />
+    <img src="${item.urlToImage || '../assets/images/error page.gif'}"  />
   </div>
   <div class="news-content">
     <div class="news-title">${item.title}</div>

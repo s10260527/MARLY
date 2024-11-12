@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Company Sustainability Report</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Load jQuery here -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="styles/report.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="bg-white border-bottom py-3 fixed-top">
+      <div class="container d-flex justify-content-between align-items-center">
+        <img src="assets/brand/logo.png" alt="Verdex Logo" height="40" />
+        <nav>
+          <ul class="nav">
+            <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Leaderboards</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="#">Resources</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"
+                ><i class="fas fa-user"></i> Profile</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container mt-5 pt-5">
+      <div class="text-center my-4">
+        <h2>Company Sustainability Report</h2>
+        <p class="text-muted">
+          Overview of your company’s sustainability metrics
+        </p>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3 mb-4">
+          <div class="card h-100 shadow">
+            <div class="card-body text-center">
+              <p class="card-title font-weight-bold">Products</p>
+              <h3 class="text-primary">249</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-4">
+          <div class="card h-100 shadow">
+            <div class="card-body text-center">
+              <p class="card-title font-weight-bold">Carbon Emissions</p>
+              <h3 class="text-success">342</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-4">
+          <div class="card h-100 shadow">
+            <div class="card-body text-center">
+              <p class="card-title font-weight-bold">Employees</p>
+              <h3 class="text-warning">1250</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-4">
+          <div class="card h-100 shadow">
+            <div class="card-body text-center">
+              <p class="card-title font-weight-bold">Projects</p>
+              <h3 class="text-danger">53</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart Section -->
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <div class="card h-100 shadow">
+            <div class="card-body">
+              <h5 class="card-title text-center">Emissions by Sector</h5>
+              <div id="pie-chart" style="height: 350px"></div>
+              <p class="text-center mt-4">
+                This chart shows the distribution of total emissions by sector.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100 shadow">
+            <div class="card-body">
+              <h5 class="card-title text-center">Current and Goals Emission</h5>
+              <!-- Ensure ID matches with JavaScript selector -->
+              <div id="area-chart" style="height: 350px"></div>
+            </div>
+          </div>
+        </div>
+        <!-- New Bar Chart for Energy Consumption by Sector -->
+        <div class="col-md-6 mt-4">
+          <div class="card h-100 shadow">
+            <div class="card-body">
+              <h5 class="card-title text-center">
+                Energy Consumption by Sector
+              </h5>
+              <div id="energy-bar-chart" style="height: 350px"></div>
+              <p class="text-center mt-4">
+                This chart shows the total energy consumption by sector. Click
+                on a sector to view monthly details.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Operational Costs -->
+        <div class="col-md-6 mt-4">
+          <div class="card h-100 shadow">
+            <div class="card-body">
+              <h5 class="card-title text-center">Operational Cost by Month</h5>
+              <div id="operational-cost-line-chart" style="height: 350px"></div>
+              <p class="text-center mt-4">
+                This line graph shows the monthly operational cost. Select a
+                sector for detailed costs.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 text-center my-4">
+          <h4>Select a Sector to View Data</h4>
+        </div>
+        <div class="col-md-4 mb-3">
+          <button class="btn btn-info w-100">Direct Emissions</button>
+        </div>
+        <div class="col-md-4 mb-3">
+          <button class="btn btn-info w-100">Product Manufacturing</button>
+        </div>
+        <div class="col-md-4 mb-3">
+          <button class="btn btn-info w-100">Product Transport</button>
+        </div>
+        <div class="col-md-4 mb-3">
+          <button class="btn btn-info w-100">Electricity</button>
+        </div>
+        <div class="col-md-4 mb-3">
+          <button class="btn btn-info w-100">Consumer Product Use</button>
+        </div>
+        <div class="col-md-4 mb-3">
+          <button class="btn btn-info w-100">End of Life Processing</button>
+        </div>
+      </div>
+
+      <!-- Individual Sector Data Section to show Emissions by Year -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card h-100 shadow">
+            <div class="card-body">
+              <h5 class="card-title text-center" id="bar-chart-title">
+                Select a Sector to View Emissions by Year
+              </h5>
+              <div id="bar-chart" style="height: 350px"></div>
+              <p class="text-center mt-4" id="bar-chart-description">
+                Click on a sector above to view yearly emissions data.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ApexCharts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/4.0.0/apexcharts.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="scripts/report.js"></script>
+  </body>
+</html>

@@ -6,12 +6,23 @@
     <title>Verdex - Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom button color */
+        .btn-dark {
+            background-color: #769ff6;
+            border-color: #769ff6;
+        }
+        .btn-dark:hover {
+            background-color: #6687d1;
+            border-color: #6687d1;
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
     <header class="bg-white border-bottom py-3">
         <div class="container d-flex justify-content-between align-items-center">
-            <img src="logo.png" alt="Verdex Logo" height="40">
+            <img src="assets/brand/logo.png" alt="Verdex Logo" height="40">
             <nav>
                 <ul class="nav">
                     <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
@@ -67,7 +78,7 @@
                     email: $('#loginEmail').val(),
                     password: $('#loginPassword').val()
                 };
-    
+
                 $.ajax({
                     type: 'POST',
                     url: 'http://localhost:3000/api/login',
@@ -78,7 +89,7 @@
                         if (response.success) {
                             // Store companyId in local storage
                             localStorage.setItem('companyId', response.companyId);
-    
+
                             // Redirect to profile page
                             window.location.href = response.redirectUrl;
                         }

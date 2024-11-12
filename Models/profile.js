@@ -12,7 +12,7 @@ router.get("/:companyId", async (req, res) => {
 
         // Query to get the company details using company ID from the request parameter
         const getCompanyQuery = `
-            SELECT company_name, industry_type, contact_email, country, city, FORMAT(created_at, 'dd/MM/yyyy') AS formatted_created_at 
+            SELECT company_name, industry_type, contact_email, country, city, contact_phone, FORMAT(created_at, 'dd/MM/yyyy') AS formatted_created_at 
             FROM Companies
             WHERE company_id = @CompanyId
         `;
@@ -32,7 +32,8 @@ router.get("/:companyId", async (req, res) => {
             joined: company.formatted_created_at,
             businessEmail: company.contact_email,
             country: company.country,
-            city: company.city
+            city: company.city,
+            contactPhone: company.contact_phone
         };
 
         res.status(200).json(profileData);
