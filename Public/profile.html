@@ -36,11 +36,25 @@
             font-weight: bold;
             margin-bottom: 2rem;
             text-align: center;
+            color: var(--primary);
         }
 
         .profile-item {
             font-size: 1.25rem;
-            margin-bottom: 1.5rem;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-value {
+            font-size: 1.5rem; /* Increased font size for values */
+            color: var(--text);
         }
 
         .profile-grid {
@@ -51,9 +65,26 @@
 
         .profile-card {
             padding: 1.5rem;
-            background-color: white;
+            background-color: var(--primary);
+            color: var(--background);
             border-radius: 8px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header, footer {
+            background-color: var(--background) !important;
+        }
+
+        .nav-link {
+            color: var(--secondary) !important;
+        }
+
+        .nav-link:hover {
+            color: var(--accent) !important;
         }
     </style>
 </head>
@@ -89,22 +120,40 @@
                     <div class="profile-title">Company Profile</div>
                     <div class="profile-grid">
                         <div class="profile-card">
-                            <div class="profile-item">Company Name: <span id="companyNameDetail">Company Name</span></div>
+                            <div class="profile-item">
+                                <div class="profile-label">Industry Type:</div>
+                                <div class="profile-value" id="industryType">Enter industry type here</div>
+                            </div>
                         </div>
                         <div class="profile-card">
-                            <div class="profile-item">Joined: <span id="joinedDate">Joined Date</span></div>
+                            <div class="profile-item">
+                                <div class="profile-label">Joined:</div>
+                                <div class="profile-value" id="joinedDate">Enter joined date here</div>
+                            </div>
                         </div>
                         <div class="profile-card">
-                            <div class="profile-item">Business Email: <span id="businessEmail">Email</span></div>
+                            <div class="profile-item">
+                                <div class="profile-label">Country:</div>
+                                <div class="profile-value" id="country">Enter country here</div>
+                            </div>
                         </div>
                         <div class="profile-card">
-                            <div class="profile-item">Industry Type: <span id="industryType">Industry</span></div>
+                            <div class="profile-item">
+                                <div class="profile-label">City:</div>
+                                <div class="profile-value" id="city">Enter city here</div>
+                            </div>
                         </div>
                         <div class="profile-card">
-                            <div class="profile-item">Country: <span id="country">Country</span></div>
+                            <div class="profile-item">
+                                <div class="profile-label">Contact Number:</div>
+                                <div class="profile-value" id="contactNumber">Enter contact number here</div>
+                            </div>
                         </div>
                         <div class="profile-card">
-                            <div class="profile-item">City: <span id="city">City</span></div>
+                            <div class="profile-item">
+                                <div class="profile-label">Business Email:</div>
+                                <div class="profile-value" id="businessEmail">Enter email here</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -141,12 +190,12 @@
                     // Populate profile data
                     $('#companyName').text(response.companyName);
                     $('#industry').text(response.industryType);
-                    $('#companyNameDetail').text(response.companyName);
-                    $('#joinedDate').text(response.joined);
-                    $('#businessEmail').text(response.businessEmail);
                     $('#industryType').text(response.industryType);
+                    $('#joinedDate').text(response.joined);
                     $('#country').text(response.country);
                     $('#city').text(response.city);
+                    $('#contactNumber').text(response.contactPhone);
+                    $('#businessEmail').text(response.businessEmail);
                 },
                 error: function(xhr) {
                     alert('An error occurred while fetching profile data.');
