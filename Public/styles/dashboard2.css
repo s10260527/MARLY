@@ -20,14 +20,6 @@ a {
     text-decoration: none;
 }
 
-
-.main {
-    min-height: 100vh;
-    width: 100%;
-    overflow: hidden;
-    background-color: #f9f9f9;
-}
-
 #sidebar {
     max-width: 264px;
     min-width: 264px;
@@ -35,7 +27,7 @@ a {
     background-color: #6453f3;
     display: flex;
     flex-direction: column;
-    border-radius: 0px 10px 10px 0px;
+    border-radius: 0px 25px 25px 0px;
 }
 
 #sidebar.collapsed {
@@ -103,10 +95,9 @@ a.sidebar-link:hover {
 
 .progress-net .sidebar-link {
     color: white;
-    width: 85%;
+    width: 75%;
     margin: auto;
 }
-
 
 .sidebar-link[data-bs-toggle="collapse"]::after {
     border: solid;
@@ -150,6 +141,7 @@ a.sidebar-link:hover {
     height: 50px;
     border-radius: 500px;
     margin-right: 10px;
+    object-fit: cover;
 }
 
 .user {
@@ -158,10 +150,130 @@ a.sidebar-link:hover {
     padding-top: 15px;
 }
 
-.main {
-    background-color: #f7fefa;
-}
-
 .sidebar-footer {
     margin-bottom: 15px;
+}
+
+
+
+
+
+/* Dashboard Page */
+.main {
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background-color: #f7fefa;
+
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 1fr 3fr 5fr 5fr;
+}
+
+.month-picker {
+    display: grid;
+    border: red 1px solid;
+    justify-content: center;
+    align-items: center;
+
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+}
+
+.data-glance {
+    display: flex;
+    flex-direction: row;
+
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    gap: 50px;
+    padding: 0px 60px;
+}
+
+.card-title {
+    display: flex;
+    flex-direction: row;
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: #011209;
+    gap: 10px;
+}
+
+.card-text {
+    font-size: 0.9rem;
+    color: whitesmoke;
+}
+
+.card-subtitle {
+    font-size: 1.7rem;
+}
+
+.card .card-subtitle:last-child {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -75px;
+    margin-right: 10px;
+}
+
+.tce {
+    background-color: #28f07d;
+}
+
+.tec {
+    background-color: rgb(254, 74, 74);
+}
+
+.toc {
+    background-color: rgb(254, 74, 74);
+}
+
+.data-glance .card {
+    height: 200px;
+    box-shadow: 7px 7px 10px 0px #7e7e7e;
+}
+
+/* Suggestions Facts Sidebar */
+.suggest-facts {
+    display: flex;
+    flex-direction: column;
+    background-color: #cfe0f9;
+    margin: 30px 30px 30px 0px;
+    padding: 30px;
+    border-radius: 15px;
+    gap: 15px;
+
+    grid-column: 2 / 3;
+    grid-row: 1 / 4;
+}
+
+.suggest-facts .card-text {
+    color: black;
+}
+
+.suggest-facts .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.multiply {
+    font-size: 35px;
+    font-weight: bolder;
+}
+
+.multiply-info {
+    margin-top: -20px;
+    font-size: 10px;
+    text-align: center;
+}
+
+.suggest-facts .card {
+    background: #6453f3;
+    border-radius: 15px;
+}
+
+.suggest-facts .card-text {
+    color: white;
 }
