@@ -186,6 +186,7 @@ td {
 
 .gold-medal {
     height: 2rem; /* Reduced icon size */
+    width: 2rem;
     margin-left: 0.5rem; /* Reduced spacing */
 }
 
@@ -281,6 +282,89 @@ td {
         font-size: 45%;
       }
   }
+
+  /*podium*/
+    /* Add margin to main content to account for the fixed navbar */
+    main {
+        margin-top: 80px;
+      }
+      /* Center the podium and add some spacing */
+      .podium {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 50px;
+      }
+      .podium__item {
+        text-align: center;
+      }
+    
+    
+    .container {
+      display: flex;
+      align-items: flex-end;
+    }
+    
+    .podium__item {
+      width: 200px;
+    }
+    
+    .podium__rank {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 35px;
+      color: #fff;
+    }
+    
+    .podium__city {
+      text-align: center;
+      padding: 0 .5rem;
+    }
+    
+    .podium__number {
+      width: 27px;
+      height: 75px;
+    }
+    
+    .podium .first {
+      min-height: 300px;
+      background: rgb(255,172,37);
+    background: 
+      linear-gradient(333deg, 
+      rgba(255,172,37,1) 0%, 
+      rgba(254,207,51,1) 13%, 
+      rgba(254,224,51,1) 53%, 
+      rgba(255,172,37,1) 100%);
+    }
+    
+    .podium .second {
+      min-height: 200px;
+      background: blue;
+    }
+    
+    .podium .third {
+      min-height: 100px;
+      background: green;
+    }
+    .grass-pane {
+        width: 100%;
+        height: 40px; /* Adjust height as needed */
+        background: linear-gradient(
+          180deg,
+          #7ec850 20%, /* Top grass color */
+          #4a9f2c 80%   /* Bottom grass color */
+        );
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        border-top: 3px solid #3d8f25;
+        box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2); /* Optional shadow for depth */
+    }
+    .leaderboard-box {
+        position: relative; /* Allows for absolute positioning of grass pane */
+        padding-bottom: 40px; /* To accommodate grass pane height */
+    }
 
   /* News Pages css */
 
@@ -402,6 +486,122 @@ td {
         grid-template-columns: repeat(1, 1fr);
     }
   }
+
+  
+/*Campaign page*/
+/* Reset some default styles */
+/* Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9fafb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Campaign Page Container */
+.campaign-page {
+    width: 90%;
+    max-width: 700px;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Title and Description */
+.campaign-title {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.campaign-description {
+    color: #666;
+    font-size: 1em;
+    margin-bottom: 30px;
+}
+
+/* Campaign Form */
+.campaign-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.campaign-form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.campaign-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.campaign-input,
+.campaign-textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+}
+
+.campaign-input:focus,
+.campaign-textarea:focus {
+    border-color: #4CAF50;
+}
+
+.campaign-textarea {
+    resize: vertical;
+}
+
+/* Submit Button */
+.campaign-submit-btn {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 15px;
+    border-radius: 6px;
+    font-size: 1.2em;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.campaign-submit-btn:hover {
+    background-color: #45a049;
+    transform: translateY(-3px);
+}
+
+.campaign-submit-btn:active {
+    background-color: #3e9443;
+    transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+    .campaign-title {
+        font-size: 1.8em;
+    }
+    .campaign-submit-btn {
+        font-size: 1em;
+        padding: 12px;
+    }
+}
+
 
 
   
