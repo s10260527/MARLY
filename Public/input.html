@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emission Report Input</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Enter Company Emission Data</h1>
+    </header>
+    <main>
+      <form id="emissionForm">
+        <div class="form-group">
+          <label for="company_id">Company ID:</label>
+          <input type="number" id="company_id" name="company_id" required />
+        </div>
+
+        <div class="form-group">
+          <label for="emission_year">Emission Year:</label>
+          <input
+            type="number"
+            id="emission_year"
+            name="emission_year"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="emission_amount">Emission Amount (in tons):</label>
+          <input
+            type="number"
+            id="emission_amount"
+            name="emission_amount"
+            step="0.01"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="project_count">Number of Projects:</label>
+          <input type="number" id="project_count" name="project_count" />
+        </div>
+
+        <div class="form-group">
+          <label for="employee_count">Employee Count:</label>
+          <input type="number" id="employee_count" name="employee_count" />
+        </div>
+
+        <div class="form-group">
+          <label for="comments">Additional Comments:</label>
+          <textarea id="comments" name="comments" rows="4"></textarea>
+        </div>
+
+        <button type="submit">Submit Report</button>
+      </form>
+    </main>
+
+    <script src="input.js"></script>
+  </body>
+</html>
