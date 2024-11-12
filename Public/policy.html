@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign Participation Agreement</title>
+    <link rel="stylesheet" href="styles/policy.css">
+</head>
+<body class="policy-body">
+
+    <div class="container">
+        <h1>Campaign Participation Agreement</h1>
+
+        <p>By participating in this campaign, you agree to the following terms and conditions:</p>
+
+        <div class="terms">
+            <h3>Data Sharing Agreement</h3>
+            <p>As a participant in this campaign, any data collected from your company, including but not limited to emissions data, campaign participation, and progress, will be shared with relevant parties for the purposes of promoting transparency and advancing the goals of this campaign.</p>
+            <p>We respect your privacy, and any shared data will be handled in accordance with applicable privacy regulations.</p>
+        </div>
+
+        <div class="terms">
+            <h3>Terms and Conditions</h3>
+            <ul>
+                <li>You confirm that your company is eligible to participate in this campaign.</li>
+                <li>You acknowledge that the data collected will be shared as per the campaign’s objectives.</li>
+                <li>You agree to allow the campaign organizers to use the data for reporting, analysis, and promotional purposes.</li>
+            </ul>
+        </div>
+
+        <div class="terms">
+            <label>
+                <input type="checkbox" id="agreeToTerms" />
+                I agree to the terms and conditions mentioned above.
+            </label>
+        </div>
+
+        <div class="form-actions">
+            <button id="submitButton" disabled>Sign Agreement</button>
+        </div>
+    </div>
+
+    <script>
+        // Enable the submit button when the checkbox is checked
+        document.getElementById("agreeToTerms").addEventListener("change", function() {
+            const submitButton = document.getElementById("submitButton");
+            submitButton.disabled = !this.checked;
+        });
+
+        // Form submission handler
+        document.getElementById("submitButton").addEventListener("click", function() {
+            const isAgreed = document.getElementById("agreeToTerms").checked;
+            if (isAgreed) {
+                // Handle form submission here, e.g., send the agreement data to the server
+                alert("Thank you for agreeing to the terms. Your participation is confirmed.");
+                // Optionally, you can redirect the user to another page or perform other actions
+                window.location.href = "input.html";  // Redirect to the next step or form
+            } else {
+                alert("Please agree to the terms and conditions before submitting.");
+            }
+        });
+    </script>
+
+    <script src="scripts/policy.js"></script>
+
+
+</body>
+</html>
