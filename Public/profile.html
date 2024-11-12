@@ -125,10 +125,18 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Fetch profile data from the backend
+            const companyId = localStorage.getItem('companyId');
+    
+            if (!companyId) {
+                alert('Unauthorized. Please log in to access the profile page.');
+                window.location.href = '/login.html'; // Redirect to login page if unauthorized
+                return;
+            }
+    
+            // Fetch profile data using the company ID
             $.ajax({
                 type: 'GET',
-                url: `http://localhost:3000/api/profile`,
+                url: `http://localhost:3000/api/profile/${companyId}`,
                 success: function(response) {
                     // Populate profile data
                     $('#companyName').text(response.companyName);
@@ -146,5 +154,6 @@
             });
         });
     </script>
+    
 </body>
 </html>

@@ -8,10 +8,9 @@ const router = express.Router();
 router.use(express.json());
 
 // Login route
-router.post("/login", async (req, res) => {
+router.post("/", async (req, res) => { 
     const { email, password } = req.body;
 
-    // Validate required fields
     if (!email || !password) {
         return res.status(400).json({ message: "Email and password are required" });
     }
@@ -39,9 +38,10 @@ router.post("/login", async (req, res) => {
         const token = jwt.sign({ companyId: company.company_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         // Set the token in a cookie to be used in other pages
-        res.cookie('token', token, { httpOnly: true });
+        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' });
 
-        res.status(200).json({ message: "Login successful", success: true, redirectUrl: "/dashboard.html" });
+        // Send back company ID to be stored in local storage
+        res.status(200).json({ message: "Login successful", success: true, redirectUrl: "/profile.html", companyId: company.company_id });
     } catch (error) {
         console.error("Login error", error);
         res.status(500).json({ message: "An error occurred during login" });

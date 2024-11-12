@@ -67,15 +67,19 @@
                     email: $('#loginEmail').val(),
                     password: $('#loginPassword').val()
                 };
-
+    
                 $.ajax({
                     type: 'POST',
-                    url: 'http://localhost:3000/api/login', // Ensure this points to your backend server
+                    url: 'http://localhost:3000/api/login',
                     data: JSON.stringify(formData),
                     contentType: 'application/json',
                     success: function(response) {
                         alert(response.message);
                         if (response.success) {
+                            // Store companyId in local storage
+                            localStorage.setItem('companyId', response.companyId);
+    
+                            // Redirect to profile page
                             window.location.href = response.redirectUrl;
                         }
                     },
@@ -90,5 +94,6 @@
             });
         });
     </script>
+    
 </body>
 </html>

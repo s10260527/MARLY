@@ -5,20 +5,24 @@ const router = express.Router();
 // Middleware to parse JSON data
 router.use(express.json());
 
-// Profile route (no authentication)
-router.get("/profile", async (req, res) => {
+// Profile route
+router.get("/:companyId", async (req, res) => {
     try {
-        // Query to get the first company entry in the Companies table
+        const companyId = req.params.companyId;
+
+        // Query to get the company details using company ID from the request parameter
         const getCompanyQuery = `
-            SELECT TOP 1 company_name, industry_type, contact_email, country, city, FORMAT(created_at, 'dd/MM/yyyy') AS formatted_created_at 
+            SELECT company_name, industry_type, contact_email, country, city, FORMAT(created_at, 'dd/MM/yyyy') AS formatted_created_at 
             FROM Companies
-            ORDER BY company_id ASC
+            WHERE company_id = @CompanyId
         `;
         const request = new sql.Request();
+        request.input("CompanyId", sql.Int, companyId);
+
         const companyResult = await request.query(getCompanyQuery);
 
         if (companyResult.recordset.length === 0) {
-            return res.status(404).json({ message: "No company data found" });
+            return res.status(404).json({ message: "Company data not found" });
         }
 
         const company = companyResult.recordset[0];
