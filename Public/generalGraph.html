@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stacked Line Chart with Custom Month & Year Range Picker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .month-range-picker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .picker-display {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            width: 250px;
+            text-align: center;
+        }
+        .month-picker-container {
+            display: none;
+            position: absolute;
+            top: 50px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+        .year-row {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .months-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        .month, .year {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .month.selected, .year.selected {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .apply-button {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid py-4">
+    <h2 class="text-center">Carbon Emissions, Energy Consumption, and Operational Costs Over Months</h2>
+    
+    <!-- Custom Month & Year Range Picker -->
+    <div class="month-range-picker">
+        <div class="picker-display" id="monthRangeDisplay">Select Month & Year Range</div>
+        <div class="month-picker-container" id="monthPickerContainer">
+            <!-- Year and Month Selection -->
+            <div id="yearPickerContainer">
+                <div class="year-row">
+                    <div class="year" data-year="2022">2022</div>
+                    <div class="year" data-year="2023">2023</div>
+                    <div class="year" data-year="2024">2024</div>
+                    <div class="year" data-year="2025">2025</div>
+                    <div class="year" data-year="2026">2026</div>
+                </div>
+            </div>
+            <div id="monthPickerContainer" class="months-grid">
+                <div class="month" data-month="Jan">Jan</div>
+                <div class="month" data-month="Feb">Feb</div>
+                <div class="month" data-month="Mar">Mar</div>
+                <div class="month" data-month="Apr">Apr</div>
+                <div class="month" data-month="May">May</div>
+                <div class="month" data-month="Jun">Jun</div>
+                <div class="month" data-month="Jul">Jul</div>
+                <div class="month" data-month="Aug">Aug</div>
+                <div class="month" data-month="Sep">Sep</div>
+                <div class="month" data-month="Oct">Oct</div>
+                <div class="month" data-month="Nov">Nov</div>
+                <div class="month" data-month="Dec">Dec</div>
+            </div>
+            <div class="apply-button">
+                <button class="btn btn-primary btn-sm" id="applyButton">Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="stackedLineChart"></canvas>
+</div>
+
+<!-- Required JS Libraries -->
+<script src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+<script>
+    // Month and Year Range Picker functionality
+    let startMonth = null;
+    let endMonth = null;
+    let selectedYear = '2024';
+    
+    const monthRangeDisplay = document.getElementById('monthRangeDisplay');
+    const monthPickerContainer = document.getElementById('monthPickerContainer');
+    const months = document.querySelectorAll('.month');
+    const years = document.querySelectorAll('.year');
+    const applyButton = document.getElementById('applyButton');
+    
+    monthRangeDisplay.addEventListener('click', () => {
+        monthPickerContainer.style.display = 'block';
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!monthPickerContainer.contains(e.target) && e.target !== monthRangeDisplay) {
+            monthPickerContainer.style.display = 'none';
+        }
+    });
+
+    years.forEach(year => {
+        year.addEventListener('click', () => {
+            selectedYear = year.dataset.year;
+            years.forEach(y => y.classList.remove('selected'));
+            year.classList.add('selected');
+        });
+    });
+
+    months.forEach(month => {
+        month.addEventListener('click', () => {
+            const fullDate = `${month.dataset.month} ${selectedYear}`;
+            
+            if (!startMonth || (startMonth && endMonth)) {
+                // Reset selection
+                startMonth = fullDate;
+                endMonth = null;
+                months.forEach(m => m.classList.remove('selected'));
+                month.classList.add('selected');
+            } else {
+                // Select end month
+                endMonth = fullDate;
+                markSelectedMonths();
+            }
+        });
+    });
+
+    function markSelectedMonths() {
+        let inRange = false;
+        months.forEach(month => {
+            const fullDate = `${month.dataset.month} ${selectedYear}`;
+            if (fullDate === startMonth || fullDate === endMonth) {
+                month.classList.add('selected');
+                inRange = !inRange;
+            } else if (inRange) {
+                month.classList.add('selected');
+            } else {
+                month.classList.remove('selected');
+            }
+        });
+    }
+
+    applyButton.addEventListener('click', () => {
+        if (startMonth && endMonth) {
+            monthRangeDisplay.innerText = `${startMonth} - ${endMonth}`;
+            filterChartData(startMonth, endMonth);
+        } else if (startMonth) {
+            monthRangeDisplay.innerText = `${startMonth} - ${startMonth}`;
+            filterChartData(startMonth, startMonth);
+        } else {
+            monthRangeDisplay.innerText = 'Select Month & Year Range';
+        }
+        monthPickerContainer.style.display = 'none';
+    });
+
+    // Initial data setup
+    const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const carbonEmissionsData = [10, 12, 15, 13, 17, 19, 23, 25, 20, 18, 16, 14];
+    const energyConsumptionData = [20, 22, 18, 25, 27, 29, 33, 30, 28, 25, 22, 21];
+    const operationalCostsData = [30, 28, 26, 24, 22, 20, 18, 16, 19, 21, 23, 25];
+
+    let chart;
+
+    function renderChart(filteredLabels, filteredCarbon, filteredEnergy, filteredCosts) {
+        if (chart) chart.destroy();
+
+        const data = {
+            labels: filteredLabels,
+            datasets: [
+                { label: 'Carbon Emissions (Metric tons)', data: filteredCarbon, borderColor: 'rgba(255, 99, 132, 1)', fill: false, yAxisID: 'yLeft' },
+                { label: 'Energy Consumption (kWh)', data: filteredEnergy, borderColor: 'rgba(54, 162, 235, 1)', fill: false, yAxisID: 'yRight1' },
+                { label: 'Operational Costs ($10,000)', data: filteredCosts, borderColor: 'rgba(75, 192, 192, 1)', fill: false, yAxisID: 'yRight2' }
+            ]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'top' }, title: { display: true, text: 'Monthly Trends' } },
+                scales: { yLeft: { type: 'linear', position: 'left', title: { display: true, text: 'Carbon Emissions (Metric tons)' } },
+                          yRight1: { type: 'linear', position: 'right', title: { display: true, text: 'Energy Consumption (kWh)' }, grid: { drawOnChartArea: false } },
+                          yRight2: { type: 'linear', position: 'right', title: { display: true, text: 'Operational Costs ($10,000)' }, grid: { drawOnChartArea: false }, offset: true },
+                          x: { title: { display: true, text: 'Months' } } }
+            }
+        };
+
+        chart = new Chart(document.getElementById('stackedLineChart').getContext('2d'), config);
+    }
+
+    function filterChartData(startMonth, endMonth) {
+        const startIdx = labels.indexOf(startMonth.split(' ')[0]);
+        const endIdx = labels.indexOf(endMonth.split(' ')[0]);
+
+        const filteredLabels = labels.slice(startIdx, endIdx + 1);
+        const filteredCarbon = carbonEmissionsData.slice(startIdx, endIdx + 1);
+        const filteredEnergy = energyConsumptionData.slice(startIdx, endIdx + 1);
+        const filteredCosts = operationalCostsData.slice(startIdx, endIdx + 1);
+
+        renderChart(filteredLabels, filteredCarbon, filteredEnergy, filteredCosts);
+    }
+
+    // Initial render of the chart with the full year
+    renderChart(labels, carbonEmissionsData, energyConsumptionData, operationalCostsData);
+</script>
+
+</body>
+</html>
