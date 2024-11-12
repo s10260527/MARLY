@@ -255,4 +255,158 @@ document.addEventListener("DOMContentLoaded", function () {
     renderEnergyBarChart(sectorEnergyData);
     returnButton.style.display = "none";
   });
+
+  // Function to render modals dynamically
+  function showTableModal(title, tableHtml) {
+    let modal = document.getElementById('tableModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'tableModal';
+      modal.className = 'modal fade';
+      modal.innerHTML = `
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title"></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body"></div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+    modal.querySelector('.modal-title').textContent = title;
+    modal.querySelector('.modal-body').innerHTML = tableHtml;
+    $(modal).modal('show');
+  }
+
+  // Functions to generate table HTML for each chart
+  function generateEmissionsTable() {
+    let html = `<table class="table"><thead><tr><th>Sector</th><th>Emissions (tonnes)</th></tr></thead><tbody>`;
+    sectorEmissionsData.labels.forEach((label, i) => {
+      html += `<tr><td>${label}</td><td>${sectorEmissionsData.data[i]}</td></tr>`;
+    });
+    html += `</tbody></table>`;
+    showTableModal('Emissions by Sector', html);
+  } 
+
+  function generateEnergyConsumptionTable() {
+    let html = `<table class="table"><thead><tr><th>Sector</th><th>Energy Consumption (MWh)</th></tr></thead><tbody>`;
+    sectorEnergyData.labels.forEach((label, i) => {
+      html += `<tr><td>${label}</td><td>${sectorEnergyData.data[i]}</td></tr>`;
+    });
+    html += `</tbody></table>`;
+    showTableModal('Energy Consumption by Sector', html);
+  }
+
+  function generateOperationalCostTable() {
+    let html = `<table class="table"><thead><tr><th>Month</th><th>Cost ($)</th></tr></thead><tbody>`;
+    months.forEach((month, i) => {
+      html += `<tr><td>${month}</td><td>${totalOperationalCostByMonth[i]}</td></tr>`;
+    });
+    html += `</tbody></table>`;
+    showTableModal('Total Operational Cost by Month', html);
+  }
+
+  // Attach event listeners to each table icon
+  document.querySelectorAll('.table-icon').forEach((icon, index) => {
+    icon.addEventListener('click', () => {
+      if (index === 0) generateEmissionsTable();           // First icon for Emissions Table
+      else if (index === 2) generateEnergyConsumptionTable();  // Second icon for Energy Consumption Table
+      else if (index === 3) generateOperationalCostTable();    // Third icon for Operational Cost Table
+    });
+  });
+
+  // Main container for dynamically displaying sector data
+  const sectorDetailsContainer = document.getElementById("sector-details");
+
+  // Function to render graphs and description for a selected sector
+  function renderSectorDetails(sector) {
+    // Clear previous data
+    sectorDetailsContainer.innerHTML = '';
+
+    // Emissions Chart
+    const emissionsData = yearlyEmissionsData[sector];
+    let emissionsChartHtml = `<div id="sector-emissions-chart"></div>`;
+    let emissionsDescription = `<p>The emissions for ${sector} have been monitored over the past years. This chart shows the emissions trend from ${years[0]} to ${years[years.length - 1]}. A decrease in emissions indicates successful reduction efforts in ${sector}, contributing to the company's sustainability goals.</p>`;
+    sectorDetailsContainer.insertAdjacentHTML('beforeend', emissionsChartHtml + emissionsDescription);
+
+    // Energy Consumption Chart
+    const energyData = sectorEnergyData[sector];
+    let energyChartHtml = `<div id="sector-energy-chart"></div>`;
+    let energyDescription = `<p>Energy consumption for ${sector} reflects the energy requirements to operate and sustain activities in this sector. Tracking energy consumption trends helps in identifying efficiency improvements over time.</p>`;
+    sectorDetailsContainer.insertAdjacentHTML('beforeend', energyChartHtml + energyDescription);
+
+    // Operational Cost Chart
+    const costData = operationalCostData[sector];
+    let costChartHtml = `<div id="sector-cost-chart"></div>`;
+    let costDescription = `<p>Operational costs for ${sector} over the last year show the financial impact of energy and emissions management. Reduced costs may reflect improved efficiency or sustainable practices in the ${sector} operations.</p>`;
+    sectorDetailsContainer.insertAdjacentHTML('beforeend', costChartHtml + costDescription);
+
+    // Render Charts
+    renderSectorEmissionsChart(sector, emissionsData);
+    renderSectorEnergyChart(sector, energyData);
+    renderSectorCostChart(sector, costData);
+  }
+
+  // Functions to render specific sector charts
+  function renderSectorEmissionsChart(sector, emissionsData) {
+    const options = {
+      series: [{ name: "Emissions", data: emissionsData }],
+      chart: { type: 'bar', height: 350 },
+      xaxis: { categories: years, title: { text: "Year" }},
+      yaxis: { title: { text: "Emissions (tonnes)" }},
+      title: { text: `${sector} Emissions Over Years`, align: 'center' }
+    };
+    new ApexCharts(document.querySelector("#sector-emissions-chart"), options).render();
+  }
+
+  function renderSectorEnergyChart(sector, energyData) {
+     // Get monthly data for the selected sector
+    const monthlyData = monthlyEnergyConsumption[sector];
+
+    // Check if monthlyData exists and contains values
+    if (!monthlyData || monthlyData.length === 0) {
+      console.error(`No data available for monthly energy consumption in ${sector}.`);
+      return;
+    }
+
+    // Define the chart options
+    const monthlyEnergyBarChartOptions = {
+      series: [{ name: "Energy Consumption", data: monthlyData }],
+      chart: { type: 'bar', height: 350 },
+      colors: ['#246dec'],
+      plotOptions: { bar: { borderRadius: 4, horizontal: false, columnWidth: '40%' } },
+      xaxis: { categories: months, title: { text: "Month" } },
+      yaxis: { title: { text: "Energy Consumption (MWh)" } },
+      title: { text: `${sector} Monthly Energy Consumption`, align: 'center' }
+    };
+
+    // Destroy existing chart if present, then create a new chart
+    if (window.monthlyEnergyChart) window.monthlyEnergyChart.destroy();
+    window.monthlyEnergyChart = new ApexCharts(document.querySelector("#sector-energy-chart"), monthlyEnergyBarChartOptions);
+    window.monthlyEnergyChart.render();
+  }
+
+  function renderSectorCostChart(sector, costData) {
+    const options = {
+      series: [{ name: "Operational Cost", data: costData }],
+      chart: { type: 'area', height: 350 },
+      xaxis: { categories: months, title: { text: "Month" }},
+      yaxis: { title: { text: "Cost ($)" }},
+      title: { text: `${sector} Operational Costs Per Month`, align: 'center' }
+    };
+    new ApexCharts(document.querySelector("#sector-cost-chart"), options).render();
+  }
+
+  // Event listener for sector buttons
+  document.querySelectorAll(".btn-info").forEach((button) => {
+    button.addEventListener("click", function () {
+      const sector = button.textContent.trim();
+      renderSectorDetails(sector);
+    });
+  });
 });

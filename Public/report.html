@@ -12,6 +12,10 @@
     <!-- Load jQuery here -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="styles/report.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
   </head>
   <body>
     <!-- Header -->
@@ -85,6 +89,11 @@
         <div class="col-md-6">
           <div class="card h-100 shadow">
             <div class="card-body">
+              <!-- Table Icon Trigger -->
+              <i
+                class="fas fa-table table-icon"
+                data-target="#emissionsTableModal"
+              ></i>
               <h5 class="card-title text-center">Emissions by Sector</h5>
               <div id="pie-chart" style="height: 350px"></div>
               <p class="text-center mt-4">
@@ -96,6 +105,11 @@
         <div class="col-md-6">
           <div class="card h-100 shadow">
             <div class="card-body">
+              <!-- Table Icon Trigger -->
+              <i
+                class="fas fa-table table-icon"
+                data-target="#emissionsTableModal"
+              ></i>
               <h5 class="card-title text-center">Current and Goals Emission</h5>
               <!-- Ensure ID matches with JavaScript selector -->
               <div id="area-chart" style="height: 350px"></div>
@@ -106,6 +120,11 @@
         <div class="col-md-6 mt-4">
           <div class="card h-100 shadow">
             <div class="card-body">
+              <!-- Table Icon Trigger -->
+              <i
+                class="fas fa-table table-icon"
+                data-target="#emissionsTableModal"
+              ></i>
               <h5 class="card-title text-center">
                 Energy Consumption by Sector
               </h5>
@@ -121,6 +140,11 @@
         <div class="col-md-6 mt-4">
           <div class="card h-100 shadow">
             <div class="card-body">
+              <!-- Table Icon Trigger -->
+              <i
+                class="fas fa-table table-icon"
+                data-target="#emissionsTableModal"
+              ></i>
               <h5 class="card-title text-center">Operational Cost by Month</h5>
               <div id="operational-cost-line-chart" style="height: 350px"></div>
               <p class="text-center mt-4">
@@ -160,7 +184,7 @@
       <div class="row mt-4">
         <div class="col-12">
           <div class="card h-100 shadow">
-            <div class="card-body">
+            <div id="sector-details" class="mt-5">
               <h5 class="card-title text-center" id="bar-chart-title">
                 Select a Sector to View Emissions by Year
               </h5>
