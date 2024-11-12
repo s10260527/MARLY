@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+<head>
+  <script src="assets/js/color-modes.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.122.0">
+  <title>Verdex Dashboard</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+  <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="styles/dashboard.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* Additional styles for Piggy Bank Section */
+    .piggy-bank-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 50px;
+    }
+
+    .piggy-bank-img {
+      width: 250px;
+      height: 250px;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      object-fit: cover;
+      border-radius: 50%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .piggy-bank-img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .chart-container {
+      display: none;
+      margin-top: 50px;
+    }
+
+    .note {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <!-- Main Header and Sidebar (unchanged) -->
+  <header class="navbar navbar-expand navbar-dark bg-dark sticky-top p-0 shadow">
+    <div class="container-fluid">
+      <!-- Logo and Brand -->
+      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 d-flex align-items-center" href="#" style="background-color: transparent; box-shadow: none;">
+        <img src="assets/brand/logo.png" width="30" height="30" class="d-inline-block align-text-top me-2">
+        Verdex
+      </a>
+
+      <!-- Search Bar -->
+      <div class="d-none d-md-flex justify-content-center flex-grow-1">
+        <form class="w-auto">
+          <div class="input-group input-group-sm">
+            <input type="search" class="form-control form-control-sm form-control-dark" placeholder="Search..." aria-label="Search" style="width: 500px;">
+            <button class="btn btn-sm btn-outline-secondary" type="submit">
+              <svg class="bi" width="14" height="14"><use xlink:href="#search"/></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+        <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="sidebarMenuLabel">Verdex</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+            <!-- Sidebar content here -->
+          </div>
+        </div>
+      </div>
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="container-fluid py-4">
+          <!-- Total Carbon Emissions Section -->
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <!-- Carbon Emissions content here -->
+            </div>
+          </div>
+
+          <!-- Piggy Bank Operational Cost Savings Section -->
+          <div id="operational-costs" class="mt-4">
+            <h2>Operational Cost Savings</h2>
+            <p class="note">Click the piggy bank to see detailed operational costs breakdown.</p>
+            <div class="piggy-bank-container">
+              <img src="piggybank.jpg" alt="Piggy Bank" class="piggy-bank-img" onclick="showPieChart()" />
+            </div>
+            <div class="chart-container" id="chartContainer">
+              <canvas id="pieChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Bootstrap and Additional Scripts -->
+  <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js" integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/moment.js/2.29.1/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+  <!-- Operational Cost Savings Scripts -->
+  <script>
+    let operationalCostsLastYear = 100000;
+    let operationalSavings = 50000;
+
+    function showPieChart() {
+      const piggyBankImg = document.querySelector('.piggy-bank-img');
+      piggyBankImg.style.transition = 'opacity 0.5s ease';
+      piggyBankImg.style.opacity = '0';
+
+      setTimeout(() => {
+        piggyBankImg.style.display = 'none';
+        document.getElementById('chartContainer').style.display = 'block';
+        renderPieChart();
+      }, 500);
+    }
+
+    function renderPieChart() {
+      const data = {
+        labels: ['Electricity', 'Services', 'Maintenance', 'Other'],
+        datasets: [{
+          label: 'Operational Costs Comparison',
+          data: [30000, 20000, 15000, 10000],
+          backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
+          hoverOffset: 4
+        }]
+      };
+
+      const ctx = document.getElementById('pieChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'pie',
+        data: data,
+        options: {
+          responsive: true,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  let value = context.raw;
+                  let lastYearValue = operationalCostsLastYear / 4;
+                  return `${context.label}: $${value} (Last Year: $${lastYearValue})`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
