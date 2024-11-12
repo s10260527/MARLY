@@ -472,6 +472,16 @@
         <!-- Placeholder for other sections -->
         <div id="operational-costs" class="mt-4">
 
+
+
+
+
+
+
+
+
+
+          
 <!-- Operational Cost Section -->
 <div class="my-container">
   <h1>Total Operational Cost</h1>
@@ -571,6 +581,64 @@
         
         </body>
         </div>
+
+        <div class="row mt-4">
+          <!-- Line Chart for Emissions Over Time -->
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title h6 mb-3">Emissions Over Time</h5>
+                <div class="form-check-container mb-2">
+                  <div class="d-flex gap-3 justify-content-center">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="showTotal" checked>
+                      <label class="form-check-label small" for="showTotal">Total Emissions</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="showSustainable" checked>
+                      <label class="form-check-label small" for="showSustainable">Sustainable Offset</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="showCredits" checked>
+                      <label class="form-check-label small" for="showCredits">Credits Offset</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="chart-container">
+                  <canvas id="emissionsChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <!-- Pie Chart for Emissions by Sector -->
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title h6 mb-3">Emissions by Sector</h5>
+                <div class="chart-container">
+                  <canvas id="sectorsPieChart"></canvas>
+                </div>
+                <div id="sectorsLegend" class="mt-3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Additional section for bar chart on click (if required) -->
+        <div class="row mt-4" id="barChartSection" style="display: none;">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title h6 mb-3">Detailed Sector Breakdown</h5>
+                <div class="chart-container">
+                  <canvas id="sectorBarChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
         
         <div id="next-steps" class="mt-4">
           <!-- Next Steps section will go here -->
