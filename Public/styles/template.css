@@ -161,3 +161,7 @@ a.sidebar-link:hover {
 .main {
     background-color: #f7fefa;
 }
+
+.sidebar-footer {
+    margin-bottom: 15px;
+}
