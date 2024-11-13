@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="styles/dashboard2.css">
   <!-- Month Picker CSS -->
    <link rel="stylesheet" href="styles/month-picker.css">
+  <link rel="stylesheet" href="styles/general-graph.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 
   <!-- Poppins Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -156,29 +158,29 @@
         </div>
         <!-- Data Glance Here -->
         <div class="data-glance">
-            <div class="card tce" style="width: 15rem;">
+            <div class="card" style="width: 15rem;">
                 <div class="card-body">
                   <h5 class="card-title"><div>536</div>t</h5>
                   <p class="card-text">Total Carbon Emissions</p>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">-30%</h6>
+                  <h6 class="card-subtitle mb-2 text-body-secondary negative-percent">-30%</h6>
                   <p class="card-text">This month</p>
                   <h6 class="card-subtitle mb-2 text-body-secondary"><i class="bi bi-arrow-down-right"></i></h6>
                 </div>
             </div>
-            <div class="card tec" style="width: 15rem;">
+            <div class="card" style="width: 15rem;">
                 <div class="card-body">
                   <h5 class="card-title"><div>243,584</div>kWh</h5>
                   <p class="card-text">Total Energy Consumption</p>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">+21%</h6>
+                  <h6 class="card-subtitle mb-2 text-body-secondary positive-percent">+21%</h6>
                   <p class="card-text">This month</p>
                   <h6 class="card-subtitle mb-2 text-body-secondary"><i class="bi bi-arrow-up-right"></i></h6>
                 </div>
             </div>
-            <div class="card toc" style="width: 15rem;">
+            <div class="card" style="width: 15rem;">
                 <div class="card-body">
                   <h5 class="card-title">$<div>1.3</div>Mil</h5>
                   <p class="card-text">Total Operational Costs</p>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">+16%</h6>
+                  <h6 class="card-subtitle mb-2 text-body-secondary positive-percent">+16%</h6>
                   <p class="card-text">This month</p>
                   <h6 class="card-subtitle mb-2 text-body-secondary"><i class="bi bi-arrow-up-right"></i></h6>
                 </div>
@@ -212,7 +214,9 @@
             <h6>General Graph</h6>
             <div class="card">
                 <div class="card-body">
-                    <canvas id="general-graph"></canvas>
+                    <div class="chart-container">
+                        <canvas id="general-graph"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -282,5 +286,6 @@
   <script src="scripts/dashboard2.js"></script>
   <!-- Month Picker Script -->
   <script src="scripts/month-picker.js"></script>
+  <script src="scripts/general-graph.js"></script>
 </body>
 </html>

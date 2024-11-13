@@ -198,28 +198,27 @@ a.sidebar-link:hover {
     margin-right: 10px;
 }
 
-.tce {
-    background-color: rgb(90, 210, 90);
+/* Add these new styles for percentage colors */
+.card-subtitle.negative-percent {
+    color: #1fff80 !important;
 }
 
-.tec {
-    background-color: rgb(254, 74, 74);
-}
-
-.toc {
-    background-color: rgb(254, 74, 74);
+.card-subtitle.positive-percent {
+    color: #ff5050 !important;
 }
 
 .data-glance .card {
-    height: 115px; 
+    height: 160px; 
     width: 18rem !important; 
     border-radius: 20px;
     padding: 0px 10px;
-    box-shadow: 5px  5px 20px 0px rgb(167, 167, 167);
+    box-shadow: 5px 5px 20px 0px rgb(167, 167, 167);
+    background-color: #6453f3;
 }
 
-.data-glance .card-body {
-    padding: 0.6rem;
+.card-title div {
+    font-size: 1.8em;
+    display: inline;
 }
 
 /* Suggestions Facts Sidebar */
@@ -280,7 +279,11 @@ a.sidebar-link:hover {
 }
 
 .general-graph .card {
-    height: 273px;
+    height: 300px;
+    padding: 10px;
+    background-color: #eff6f2;
+    border-radius: 15px;
+    border: none;
 }
 
 /* Detailed Graph */

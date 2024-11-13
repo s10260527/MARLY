@@ -353,3 +353,40 @@ CREATE TABLE monthly_summaries (
     FOREIGN KEY (sub_sector_id) REFERENCES sub_sectors(sub_sector_id),
     FOREIGN KEY (company_id) REFERENCES Companies(company_id)
 );
+
+-- -- Sample data for sub_sectors
+-- INSERT INTO sub_sectors (sub_sector_id, sector_id, sub_sector_name) VALUES
+-- -- Maintenance Sub-sectors
+-- (101, 1, 'Building & Facility Maintenance'),
+-- (102, 1, 'Production Equipment Maintenance'),
+-- (103, 1, 'Infrastructure Maintenance'),
+-- (104, 1, 'Preventive Maintenance Operations'),
+-- (105, 1, 'Emergency Repair Services'),
+
+-- -- Electricity Sub-sectors
+-- (201, 2, 'Production Line Power Consumption'),
+-- (202, 2, 'Facility Climate Control'),
+-- (203, 2, 'Office & Administrative Power Usage'),
+-- (204, 2, 'Warehouse & Storage Power'),
+-- (205, 2, 'Auxiliary Power Systems'),
+
+-- -- Services Sub-sectors
+-- (301, 3, 'Quality Control Services'),
+-- (302, 3, 'Waste Management Services'),
+-- (303, 3, 'Technical Support Services'),
+-- (304, 3, 'Facility Management Services'),
+-- (305, 3, 'Resource Management Services'),
+
+-- -- Transport Sub-sectors
+-- (401, 4, 'Raw Material Logistics'),
+-- (402, 4, 'Finished Product Distribution'),
+-- (403, 4, 'Internal Transport Operations'),
+-- (404, 4, 'Fleet Management'),
+-- (405, 4, 'Employee Transport Services'),
+
+-- -- Others Sub-sectors
+-- (501, 5, 'Research & Development Operations'),
+-- (502, 5, 'Administrative Support'),
+-- (503, 5, 'Employee Facilities'),
+-- (504, 5, 'External Support Facilities'),
+-- (505, 5, 'Temporary Project Operations');
