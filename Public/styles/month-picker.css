@@ -1,0 +1,278 @@
+.picker-container {
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+}
+
+.date-input-container {
+    position: relative;
+}
+
+.date-input {
+    padding: 0.75rem 1rem;
+    padding-left: 2.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    width: 100%;
+    background-color: white;
+}
+
+.date-input:focus {
+    outline: none;
+    border-color: #6453f3;
+    box-shadow: 0 0 0 3px rgba(100, 83, 243, 0.1);
+}
+
+.calendar-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    font-size: 1rem; /* Add this line */
+    pointer-events: none; /* Add this line */
+}
+
+.picker-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 15px; /* Change from left: 0 to right: 0 */
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    width: 850px;
+    z-index: 1000;
+}
+
+.picker-dropdown.show {
+    display: block;
+}
+
+.picker-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.picker-header i {
+    font-size: 1.25rem;
+    color: #6b7280;
+}
+
+.picker-content {
+    display: flex;
+    padding: 1.5rem;
+}
+
+.calendar-section {
+    flex: 1;
+    padding-right: 2rem;
+    border-right: 1px solid #e5e7eb;
+}
+
+.years-container {
+    display: flex;
+    gap: 3rem;
+}
+
+.year-grid {
+    flex: 1;
+}
+
+.year-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+}
+
+.year-header span {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #111827;
+}
+
+.year-nav-btn {
+    border: none;
+    background: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+}
+
+.year-nav-btn:hover {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+}
+
+.month-btn {
+    padding: 0.5rem;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    background: white;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 0.95rem;
+    width: 100%;
+}
+
+.month-btn:hover {
+    background-color: #f3f4f6;
+}
+
+.month-btn.selected {
+    background-color: #1e293b;
+    color: white;
+}
+
+.month-btn.in-range {
+    background-color: #f1f5f9;
+}
+
+.presets-section {
+    width: 200px;
+    padding-left: 2rem;
+}
+
+.preset-label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #111827;
+    margin-bottom: 0.75rem;
+}
+
+.presets-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.preset-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    background: none;
+    color: #4b5563;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.preset-btn:hover {
+    background-color: #f3f4f6;
+}
+
+.picker-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.confirm-btn {
+    padding: 0.5rem 1rem;
+    background-color: #1e293b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.confirm-btn:hover {
+    background-color: #0f172a;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    z-index: 999;
+}
+
+.overlay.show {
+    display: block;
+}
+
+#selectedRange {
+    font-size: 0.95rem;
+    color: #111827;
+}
+
+/* Adjustments for dashboard layout */
+.month-picker {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 900px) {
+    .picker-dropdown {
+        width: 95vw;
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto; /* Reset right positioning */
+    }
+
+    .picker-content {
+        flex-direction: column;
+    }
+
+    .calendar-section {
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .years-container {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .presets-section {
+        width: 100%;
+        padding-left: 0;
+        padding-top: 1rem;
+    }
+
+    .presets-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .preset-btn {
+        width: auto;
+    }
+}
