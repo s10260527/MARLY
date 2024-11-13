@@ -14,6 +14,7 @@ const profileRouter = require("./Models/profile");
 const verifyToken = require("./Middleware/authMiddleware"); // Import the JWT verification middleware
 const companycontroller = require("./Controllers/company");
 const inputcontroller = require("./Controllers/input");
+const leaderboardcontroller= require("./Controllers/leaderboard");
 
 
 require("dotenv").config();
@@ -55,49 +56,6 @@ app.get("/api/emission/mostimproved", emissionController.getMostImprovedByMonth)
 // Serve static files (HTML, CSS, JS) from the "Public" directory
 app.use(express.static("Public"));
 
-// Redirect to profile after successful login (Avoid duplicate routes with loginRouter)
-app.post('/api/login/custom', async (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
-        return res.status(400).json({ message: "Email and password are required" });
-    }
-
-    try {
-        // Check if the company exists
-        const checkCompanyQuery = "SELECT * FROM Companies WHERE contact_email = @ContactEmail";
-        const checkCompanyRequest = new sql.Request();
-        checkCompanyRequest.input("ContactEmail", sql.VarChar, email);
-        const companyResult = await checkCompanyRequest.query(checkCompanyQuery);
-
-        if (companyResult.recordset.length === 0) {
-            return res.status(400).json({ message: "Invalid email or password" });
-        }
-
-        const company = companyResult.recordset[0];
-        const isMatch = await bcrypt.compare(password, company.hashed_password);
-        if (!isMatch) {
-            return res.status(400).json({ message: "Invalid email or password" });
-        }
-
-        // Generate JWT
-        const token = jwt.sign({ companyId: company.company_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-        // Set the token in a cookie to be used in other pages
-        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' });
-
-        // Return response with company ID to be saved in local storage
-        res.status(200).json({
-            message: "Login successful",
-            success: true,
-            redirectUrl: "/profile.html",
-            companyId: company.company_id
-        });
-    } catch (error) {
-        console.error("Login error:", error);
-        res.status(500).json({ message: "An error occurred during login" });
-    }
-});
-
 // Test database connection endpoint (For debugging)
 app.get('/api/test-db', async (req, res) => {
     try {
@@ -118,8 +76,10 @@ app.patch("/campaign/updateParticipationStatus/:id", companycontroller.updateCom
 
 //input routes
 app.get("/input/getDeviceId/:device_name", inputcontroller.getDeviceIdByName);
-app.get("/input/getDeviceId/:device_name", inputcontroller.getDeviceIdByName);
-app.put('/input/updateRecycledDeviceQuantity', inputcontroller.updateRecycledDeviceQuantity);
+app.post('/input/updateRecycledDeviceQuantity', inputcontroller.updateRecycledDeviceQuantity);
+
+//Leaderboard routes
+app.get("/leaderboard/top3", leaderboardcontroller.displayTop3CompaniesForCurrentMonth);
 
 
 
@@ -146,8 +106,6 @@ app.listen(port, async () => {
     console.log(`Server listening on port ${port}`);
 });
 
-// Increase server timeout to 120 seconds
-server.timeout = 120000; 
 
 // Graceful shutdown
 process.on("SIGINT", async () => {
