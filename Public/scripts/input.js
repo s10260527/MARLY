@@ -100,7 +100,7 @@ document.getElementById("device-form").addEventListener("submit", async function
 // The function that updates the recycled device quantity using the global variables
 async function updateRecycledDeviceQuantity(deviceId, quantity) {
   const campaignId = 1;  // Use your actual campaign ID
-  const companyId = 3;   // Use your actual company ID
+  const companyId = 1;   // Use your actual company ID
 
   try {
     // Send the request to update the recycled device quantity
