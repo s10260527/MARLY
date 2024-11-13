@@ -14,6 +14,7 @@ const profileRouter = require("./Models/profile");
 const verifyToken = require("./Middleware/authMiddleware"); // Import the JWT verification middleware
 const companycontroller = require("./Controllers/company");
 const inputcontroller = require("./Controllers/input");
+const leaderboardcontroller= require("./Controllers/leaderboard");
 
 
 require("dotenv").config();
@@ -118,8 +119,10 @@ app.patch("/campaign/updateParticipationStatus/:id", companycontroller.updateCom
 
 //input routes
 app.get("/input/getDeviceId/:device_name", inputcontroller.getDeviceIdByName);
-app.get("/input/getDeviceId/:device_name", inputcontroller.getDeviceIdByName);
-app.put('/input/updateRecycledDeviceQuantity', inputcontroller.updateRecycledDeviceQuantity);
+app.post('/input/updateRecycledDeviceQuantity', inputcontroller.updateRecycledDeviceQuantity);
+
+//Leaderboard routes
+app.get("/leaderboard/top3", leaderboardcontroller.displayTop3CompaniesForCurrentMonth);
 
 
 
@@ -146,8 +149,6 @@ app.listen(port, async () => {
     console.log(`Server listening on port ${port}`);
 });
 
-// Increase server timeout to 120 seconds
-server.timeout = 120000; 
 
 // Graceful shutdown
 process.on("SIGINT", async () => {
