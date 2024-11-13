@@ -1,146 +1,120 @@
-async function fetchEmissionsByCurrentMonth() {
-    try {
-        const response = await fetch(`/emission/totalemission`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-
-        if (!response.ok) throw new Error('Network response was not ok');
-        const emissions = await response.json();
-        return emissions;
-    } catch (error) {
-        console.error('Error fetching emissions:', error);
-        return []; // Return an empty array if there's an error
-    }
-}
-
-async function displayLeaderboard() {
-    const leaderboardTableBody = document.getElementById('leaderboardTableBody');
-    
-    // Clear the existing rows in the leaderboard
-    leaderboardTableBody.innerHTML = ''; // Clear previous entries
-
-    // Fetch emissions data
-    const emissions = await fetchEmissionsByCurrentMonth();
-
-    // Create and append rows to the leaderboard
-    emissions.forEach((emission, index) => {
-        const row = document.createElement('tr');
-
-        // Create number cell
-        const numberCell = document.createElement('td');
-        numberCell.className = 'number';
-        numberCell.textContent = index + 1; // Rankings start from 1
-        row.appendChild(numberCell);
-
-        // Create name cell
-        const nameCell = document.createElement('td');
-        nameCell.className = 'name';
-        nameCell.textContent = emission.company_name; // Assuming the backend returns company_name
-        row.appendChild(nameCell);
-
-        // Create points cell
-        const pointsCell = document.createElement('td');
-        pointsCell.className = 'points';
-        pointsCell.textContent = emission.total_emission; // Assuming total_emission is returned
-
-        // If rank is 1, add the gold medal icon
-        if (index === 0) {
-            const medalIcon = document.createElement('img');
-            medalIcon.src = "https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true";
-            medalIcon.alt = "gold medal";
-            medalIcon.className = "gold-medal";
-            pointsCell.appendChild(medalIcon);
-        }
-
-        row.appendChild(pointsCell);
-
-        // Append the row to the leaderboard table body
-        leaderboardTableBody.appendChild(row);
+document.addEventListener("DOMContentLoaded", () => {
+    const podiums = document.querySelectorAll(".podium");
+    podiums.forEach((podium, index) => {
+        podium.style.animationDelay = `${index * 0.3}s`;
     });
-}
+});
 
-// Call the function to display the leaderboard once the page loads
-document.addEventListener('DOMContentLoaded', displayLeaderboard);
+// Fetch data for top 3 companies
+fetch("/leaderboard/top3")
+    .then(response => response.json())
+    .then(data => {
+        const topCompanies = data.topCompanies;
 
-async function fetchMostImprovedByMonth() {
-    try {
-        const response = await fetch(`/emission/mostimproved`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
+        // Check if there are 3 companies
+        if (topCompanies.length === 3) {
+            // Assign values for 1st, 2nd, and 3rd place
+            const firstPlace = topCompanies[0];
+            const secondPlace = topCompanies[1];
+            const thirdPlace = topCompanies[2];
+
+            // Set company names and recycled devices count
+            document.getElementById("first-place-name").textContent = firstPlace.company_name;
+            document.getElementById("first-place-count").textContent = `${firstPlace.total_recycled_devices} devices`;
+
+            document.getElementById("second-place-name").textContent = secondPlace.company_name;
+            document.getElementById("second-place-count").textContent = `${secondPlace.total_recycled_devices} devices`;
+
+            document.getElementById("third-place-name").textContent = thirdPlace.company_name;
+            document.getElementById("third-place-count").textContent = `${thirdPlace.total_recycled_devices} devices`;
+
+            // Assume you get the companyId of the logged-in company, e.g., from localStorage or sessionStorage
+            const companyId = 3; // Example: replace with actual method for getting companyId
+
+            // Check if the logged-in company is the first place
+            if (companyId === firstPlace.company_id) {
+                const certificateBtnContainer = document.getElementById("certificate-btn-container");
+                certificateBtnContainer.style.display = "block";  // Show the certificate button for first place
+            } else {
+                const certificateBtnContainer = document.getElementById("certificate-btn-container");
+                certificateBtnContainer.style.display = "none";  // Hide if not first place
             }
-        });
 
-        if (!response.ok) throw new Error('Network response was not ok');
-        const emissions = await response.json();
-        return emissions;
-    } catch (error) {
-        console.error('Error fetching emissions:', error);
-        return []; // Return an empty array if there's an error
-    }
-}
+            // Handle the "Get Certificate" button click
+            document.getElementById("first-place-cert-btn").addEventListener("click", () => {
+                document.getElementById("certificate-company-name").textContent = firstPlace.company_name;
+                document.getElementById("certificate-recycled-count").textContent = firstPlace.total_recycled_devices;
 
-async function displayMostImprovedLeaderboard() {
-    const mostImprovedTableBody = document.getElementById('mostImprovedTableBody'); // Assume you have a separate table body for most improved
-    
-    // Clear the existing rows in the most improved leaderboard
-    mostImprovedTableBody.innerHTML = ''; // Clear previous entries
+                // Show the certificate modal
+                document.getElementById("certificate-modal").style.display = "block";
+            });
 
-    // Fetch most improved emissions data
-    const emissions = await fetchMostImprovedByMonth();
+            // Close modal
+            document.getElementById("close-cert-modal").addEventListener("click", () => {
+                document.getElementById("certificate-modal").style.display = "none";
+            });
 
-    // Create and append rows to the leaderboard
-    emissions.forEach((emission, index) => {
-        const row = document.createElement('tr');
+            // Generate and download certificate
+            document.getElementById("download-cert-btn").addEventListener("click", () => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+            
+                // Set certificate background and border
+                doc.setFillColor(255, 255, 255); // White background
+                doc.rect(10, 10, 190, 277, 'F'); // Full background area
+            
+                // Add border for the certificate
+                doc.setLineWidth(3);
+                doc.setDrawColor(0, 0, 0); // Black border
+                doc.rect(5, 5, 200, 285); // Outer border
+            
+                // Add decorative lines
+                doc.setLineWidth(1);
+                doc.line(10, 70, 200, 70); // Top line
+                doc.line(10, 220, 200, 220); // Bottom line
+            
+                // Logo (replace with actual logo URL or base64-encoded string)
+                const logoUrl = '../assets/brand/logo.png'; // Replace with your logo URL or base64 image string
+                doc.addImage(logoUrl, 'PNG', 20, 25, 20, 20); // Adjust position and size as needed
+            
+                // Title
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(24);
+                doc.text("Certificate of Achievement", 105, 40, null, null, "center");
+            
+                // Company Name
+                doc.setFontSize(18);
+                doc.text(`Presented to ${firstPlace.company_name}`, 105, 90, null, null, "center");
+            
+                // Achievement
+                doc.setFontSize(14);
+                const month = new Date().toLocaleString('default', { month: 'long' });
 
-        
-        // Create number cell
-        const numberCell = document.createElement('td');
-        numberCell.className = 'number';
-        numberCell.textContent = index + 1; // Rankings start from 1
-        row.appendChild(numberCell);
-
-        // Create name cell
-        const nameCell = document.createElement('td');
-        nameCell.className = 'name';
-        nameCell.textContent = emission.company_name; // Assuming the backend returns company_name
-        row.appendChild(nameCell);
-
-        // Create points cell
-        const pointsCell = document.createElement('td');
-        pointsCell.className = 'points';
-        pointsCell.textContent = emission.percentage_improvement.toFixed(2) + '%'; // Display the improvement percentage
-
-        // Set color based on improvement or decrease
-        if (emission.percentage_improvement > 0) {
-            pointsCell.style.color = 'green'; // Positive improvement
-            if (index === 0) {
-                pointsCell.style.color = 'white'
-            }
-        } else if (emission.percentage_improvement < 0) {
-            pointsCell.style.color = 'red'; // Decrease in performance
-        } else {
-            pointsCell.style.color = 'black'; // No change
+                doc.text(`For recycling a total of ${firstPlace.total_recycled_devices} devices in the month of ${month} ${new Date().getFullYear()}`, 105, 110, null, null, "center");
+            
+                // Month and Year
+                doc.setFontSize(12);            
+                // Signature Section
+                doc.setFontSize(16);
+                doc.text("Signed by:", 105, 170, null, null, "center");
+                doc.setFont("courier", "italic");
+                doc.setFontSize(22);
+                doc.text("Verdex", 105, 190, null, null, "center");
+            
+                // Date (optional)
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(12);
+                doc.text(`Issued on: ${new Date().toLocaleDateString()}`, 105, 210, null, null, "center");
+            
+                // Save the PDF
+                doc.save(`${firstPlace.company_name}_certificate.pdf`);
+            
+                // Close the modal after download
+                document.getElementById("certificate-modal").style.display = "none";
+            });
+            
         }
-
-        // If rank is 1, add the gold medal icon
-        if (index === 0) {
-            const medalIcon = document.createElement('img');
-            medalIcon.src = "https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true";
-            medalIcon.alt = "gold medal";
-            medalIcon.className = "gold-medal";
-            pointsCell.appendChild(medalIcon);
-        }
-
-        row.appendChild(pointsCell);
-        // Append the row to the most improved leaderboard table body
-        mostImprovedTableBody.appendChild(row);
+    })
+    .catch(error => {
+        console.error("Error fetching top companies:", error);
     });
-}
-
-
-// Call the function to display the most improved leaderboard once the page loads
-document.addEventListener('DOMContentLoaded', displayMostImprovedLeaderboard);
