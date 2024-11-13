@@ -1,71 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap" />
-  <link href="styles/styles.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top 3 Best Performing Companies</title>
+    <link rel="stylesheet" href="styles/leaderboard.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
+    <!-- Headline Section -->
+    <header class="headline">
+        <h1>Top 3 Companies with the Highest Recycled Devices of the Month</h1>
+    </header>
 
-  <!-- Leaderboard Boxes -->
-  <div class="leaderboard-box">
-   
-    <div id="header" class="text-center my-4">
-      <h1>Ranking</h1>
-      <h3 class="mt-2">Least Carbon Emission produced</h3>
-      <h3 class="text-center mb-4" style="font-size: 1.5rem; color: #141a39;">
-        (in Metric Tons)
-      </h3>
+    <!-- "Get Certificate" Button Section (only visible for the 1st place) -->
+    <div id="certificate-btn-container" style="display: none;">
+        <button class="certificate-btn" id="first-place-cert-btn" href="certificate.html">Get Certificate</button>
     </div>
 
-    <div id="leaderboard">
-      <div class="ribbon"></div>
-      <table>
-        <thead>
-          <tr class="tr-spacing">
-            <th style="color: black;">Rank</th>
-            <th style="color: black;">Name</th>
-            <th style="color: black;">Emissions</th>
-          </tr>
-        </thead>
-        <tbody id="leaderboardTableBody">
-          <!-- Rows will be dynamically inserted here -->
-        </tbody>
-      </table>
+    <!-- Podium Container -->
+    <div class="podium-container">
+        <!-- Second Place Podium -->
+        <div class="podium podium-2">
+            <span class="company-name" id="second-place-name">Company B</span>
+            <span class="recycled-count" id="second-place-count">820 devices</span>
+        </div>
+
+        <!-- First Place Podium with Golden Medal -->
+        <div class="podium podium-1">
+            <a href="#" class="gold-medal" title="1st Place" id="first-place-medal">
+                🏅
+            </a>
+            <span class="company-name" id="first-place-name">Company A</span>
+            <span class="recycled-count" id="first-place-count">1500 devices</span>
+        </div>
+
+        <!-- Third Place Podium -->
+        <div class="podium podium-3">
+            <span class="company-name" id="third-place-name">Company C</span>
+            <span class="recycled-count" id="third-place-count">540 devices</span>
+        </div>
     </div>
 
-    <div id="header" class="text-center my-4">
-      <h1>Ranking</h1>
-      <h3 class="mt-2">Most Improved Company</h3>
-      <h3 class="text-center mb-4" style="font-size: 1.5rem; color: #141a39;">
-        (in percentage)
-      </h3>
-    </div>
-
-    <div id="mostImprovedLeaderboard">
-      <div class="ribbon"></div>
-      <table>
-        <thead>
-          <tr>
-            <th style="color: black;">Rank</th>
-            <th style="color: black;">Name</th>
-            <th style="color: black;">Improved By</th>
-          </tr>
-        </thead>
-        <tbody id="mostImprovedTableBody">
-          <!-- Rows will be dynamically inserted here -->
-        </tbody>
-      </table>
-    </div>
+    <!-- Certificate Modal -->
+<div id="certificate-modal" class="modal" style="display: none;">
+  <div class="modal-content">
+      <h2>Certificate of Achievement</h2>
+      <p>Congratulations, <span id="certificate-company-name">Company A</span>!</p>
+      <p>You have successfully recycled <span id="certificate-recycled-count">1500</span> devices!</p>
+      <button id="download-cert-btn" class="download-btn">Download Certificate</button>
+      <button id="close-cert-modal" class="close-btn">Close</button>
   </div>
+</div>
 
-  <script src="scripts/leaderboard.js"></script>
+
+    <script src="scripts/leaderboard.js"></script>
 </body>
 </html>

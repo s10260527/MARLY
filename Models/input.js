@@ -42,27 +42,10 @@ class RecyclableDevice {
         try {
             await sql.connect(dbConfig);
     
-            // First, check if the record exists
-            const checkQuery = `
-                SELECT COUNT(*) AS count
-                FROM Campaign_participants
-                WHERE campaign_id = @campaign_id AND company_id = @company_id AND device_id = @device_id;
-            `;
-            const checkRequest = new sql.Request();
-            checkRequest.input("campaign_id", sql.Int, campaign_id);
-            checkRequest.input("company_id", sql.Int, company_id);
-            checkRequest.input("device_id", sql.Int, device_id);
-    
-            const checkResult = await checkRequest.query(checkQuery);
-            if (checkResult.recordset[0].count === 0) {
-                return { success: false, message: "No matching record found for the specified parameters." };
-            }
-    
-            // Update the quantity if record exists
-            const sqlQuery = `
-                UPDATE Campaign_participants
-                SET quantity = quantity + @new_quantity
-                WHERE campaign_id = @campaign_id AND company_id = @company_id AND device_id = @device_id;
+            // Insert a new row into the Campaign_participants table
+            const insertQuery = `
+                INSERT INTO Campaign_participants (campaign_id, company_id, device_id, quantity)
+                VALUES (@campaign_id, @company_id, @device_id, @new_quantity);
             `;
     
             const request = new sql.Request();
@@ -71,19 +54,20 @@ class RecyclableDevice {
             request.input("device_id", sql.Int, device_id);
             request.input("new_quantity", sql.Int, new_quantity);
     
-            const result = await request.query(sqlQuery);
+            const result = await request.query(insertQuery);
             sql.close();
     
             if (result.rowsAffected[0] > 0) {
-                return { success: true, message: "Recycled device quantity updated successfully." };
+                return { success: true, message: "New entry added to recycled device quantity successfully." };
             } else {
-                return { success: false, message: "Failed to update the quantity." };
+                return { success: false, message: "Failed to add new entry." };
             }
         } catch (error) {
             console.error(error);
             throw new Error("Database error");
         }
     }
+    
     
     
     
