@@ -143,16 +143,17 @@ a.sidebar-link:hover {
     background-color: #f7fefa;
     display: grid;
     grid-template-columns: 6fr 2fr;
-    grid-template-rows: 0.09fr 0.1fr 0.48fr 0.5fr;
+    grid-template-rows: 0.1fr 0.48fr 0.5fr;
 }
 
-.month-picker {
+.picker-container {
     display: grid;
-    border: red 1px solid;
-    justify-content: center;
-    align-items: center;
+    padding: 20px;
+    right: 10px;
+    align-self: center;
+    margin-top: 20px;
 
-    grid-column: 1 / 2;
+    grid-column: 2 / 3;
     grid-row: 1 / 2;
 }
 
@@ -160,9 +161,10 @@ a.sidebar-link:hover {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    margin-top: 20px;
 
     grid-column: 1 / 2;
-    grid-row: 2 / 3;
+    grid-row: 1 / 2;
     gap: 20px;  
     padding: 0px 20px; 
 }
@@ -196,28 +198,27 @@ a.sidebar-link:hover {
     margin-right: 10px;
 }
 
-.tce {
-    background-color: rgb(90, 210, 90);
+/* Add these new styles for percentage colors */
+.card-subtitle.negative-percent {
+    color: #1fff80 !important;
 }
 
-.tec {
-    background-color: rgb(254, 74, 74);
-}
-
-.toc {
-    background-color: rgb(254, 74, 74);
+.card-subtitle.positive-percent {
+    color: #ff5050 !important;
 }
 
 .data-glance .card {
-    height: 115px; 
+    height: 160px; 
     width: 18rem !important; 
     border-radius: 20px;
     padding: 0px 10px;
-    box-shadow: 5px  5px 20px 0px rgb(167, 167, 167);
+    box-shadow: 5px 5px 20px 0px rgb(167, 167, 167);
+    background-color: #6453f3;
 }
 
-.data-glance .card-body {
-    padding: 0.6rem;
+.card-title div {
+    font-size: 1.8em;
+    display: inline;
 }
 
 /* Suggestions Facts Sidebar */
@@ -231,7 +232,7 @@ a.sidebar-link:hover {
     gap: 10px;
 
     grid-column: 2 / 3;
-    grid-row: 1 / 5;
+    grid-row: 2 / 4;
 }
 
 .suggest-facts .card-body {
@@ -274,11 +275,15 @@ a.sidebar-link:hover {
     padding: 0px 20px;
 
     grid-column: 1 / 2;
-    grid-row: 3 / 4;
+    grid-row: 2 / 3;
 }
 
 .general-graph .card {
-    height: 273px;
+    height: 300px;
+    padding: 10px;
+    background-color: #eff6f2;
+    border-radius: 15px;
+    border: none;
 }
 
 /* Detailed Graph */
@@ -290,7 +295,7 @@ a.sidebar-link:hover {
     padding: 0px 20px;
 
     grid-column: 1 / 2;
-    grid-row: 4 / 5;
+    grid-row: 3 / 4;
 }
 
 .detailed-graph .card {
