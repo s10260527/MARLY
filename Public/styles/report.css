@@ -57,4 +57,34 @@ body {
     opacity: 1;
   }
   
+  .chart-description-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .chart {
+    width: 50%; /* Occupy half of the container */
+    padding: 10px;
+  }
+  
+  .description {
+    width: 50%; /* Occupy the other half of the container */
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+  
+  .description h5 {
+    margin-top: 0;
+  }
+  
+  @media (max-width: 768px) {
+    /* Adjust layout for smaller screens */
+    .chart-description-container {
+      flex-direction: column;
+    }
+    .chart, .description {
+      width: 100%; /* Full width on smaller screens */
+    }
+  }
   

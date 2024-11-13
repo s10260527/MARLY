@@ -327,30 +327,47 @@ document.addEventListener("DOMContentLoaded", function () {
   function renderSectorDetails(sector) {
     // Clear previous data
     sectorDetailsContainer.innerHTML = '';
-
-    // Emissions Chart
+  
+    // Emissions Chart with Description
     const emissionsData = yearlyEmissionsData[sector];
-    let emissionsChartHtml = `<div id="sector-emissions-chart"></div>`;
-    let emissionsDescription = `<p>The emissions for ${sector} have been monitored over the past years. This chart shows the emissions trend from ${years[0]} to ${years[years.length - 1]}. A decrease in emissions indicates successful reduction efforts in ${sector}, contributing to the company's sustainability goals.</p>`;
-    sectorDetailsContainer.insertAdjacentHTML('beforeend', emissionsChartHtml + emissionsDescription);
-
-    // Energy Consumption Chart
-    const energyData = sectorEnergyData[sector];
-    let energyChartHtml = `<div id="sector-energy-chart"></div>`;
-    let energyDescription = `<p>Energy consumption for ${sector} reflects the energy requirements to operate and sustain activities in this sector. Tracking energy consumption trends helps in identifying efficiency improvements over time.</p>`;
-    sectorDetailsContainer.insertAdjacentHTML('beforeend', energyChartHtml + energyDescription);
-
-    // Operational Cost Chart
-    const costData = operationalCostData[sector];
-    let costChartHtml = `<div id="sector-cost-chart"></div>`;
-    let costDescription = `<p>Operational costs for ${sector} over the last year show the financial impact of energy and emissions management. Reduced costs may reflect improved efficiency or sustainable practices in the ${sector} operations.</p>`;
-    sectorDetailsContainer.insertAdjacentHTML('beforeend', costChartHtml + costDescription);
-
-    // Render Charts
+    let emissionsHtml = `
+      <div class="chart-description-container">
+        <div class="chart" id="sector-emissions-chart"></div>
+        <div class="description">
+          <h5>${sector} Emissions Over Years</h5>
+          <p>The emissions for ${sector} have been monitored over the past years. This chart shows the emissions trend from ${years[0]} to ${years[years.length - 1]}. A decrease in emissions indicates successful reduction efforts in ${sector}, contributing to the company's sustainability goals.</p>
+        </div>
+      </div>`;
+    sectorDetailsContainer.insertAdjacentHTML('beforeend', emissionsHtml);
+  
+    // Energy Consumption Chart with Description
+    let energyHtml = `
+      <div class="chart-description-container">
+        <div class="chart" id="sector-energy-chart"></div>
+        <div class="description">
+          <h5>${sector} Monthly Energy Consumption</h5>
+          <p>Energy consumption for ${sector} reflects the energy requirements to operate and sustain activities in this sector. Tracking energy consumption trends helps in identifying efficiency improvements over time.</p>
+        </div>
+      </div>`;
+    sectorDetailsContainer.insertAdjacentHTML('beforeend', energyHtml);
+  
+    // Operational Cost Chart with Description
+    let costHtml = `
+      <div class="chart-description-container">
+        <div class="chart" id="sector-cost-chart"></div>
+        <div class="description">
+          <h5>${sector} Operational Costs Per Month</h5>
+          <p>Operational costs for ${sector} over the last year show the financial impact of energy and emissions management. Reduced costs may reflect improved efficiency or sustainable practices in the ${sector} operations.</p>
+        </div>
+      </div>`;
+    sectorDetailsContainer.insertAdjacentHTML('beforeend', costHtml);
+  
+    // Render the charts
     renderSectorEmissionsChart(sector, emissionsData);
-    renderSectorEnergyChart(sector, energyData);
-    renderSectorCostChart(sector, costData);
+    renderSectorEnergyChart(sector, monthlyEnergyConsumption[sector]);
+    renderSectorCostChart(sector, operationalCostData[sector]);
   }
+  
 
   // Functions to render specific sector charts
   function renderSectorEmissionsChart(sector, emissionsData) {
