@@ -90,8 +90,8 @@
                             // Store companyId in local storage
                             localStorage.setItem('companyId', response.companyId);
 
-                            // Redirect to profile page
-                            window.location.href = response.redirectUrl;
+                            // Redirect to dashboard page instead of profile page
+                            window.location.href = "dashboard.html";
                         }
                     },
                     error: function(xhr) {
