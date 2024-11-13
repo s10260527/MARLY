@@ -114,32 +114,3 @@ CREATE TABLE monthly_data (
     energy_consumption INT,
     operational_costs DECIMAL(5,2)
 );
-
---Insert sample data into monthly_data table--
--- Data for 2023
-INSERT INTO monthly_data (month, year, carbon_emissions, energy_consumption, operational_costs) VALUES
-('Jan', 2023, 10.00, 2000, 30.00),
-('Feb', 2023, 11.00, 2100, 28.00),
-('Mar', 2023, 13.00, 2200, 27.00),
-('Apr', 2023, 12.00, 2150, 26.00),
-('May', 2023, 15.00, 2250, 29.00),
-('Jun', 2023, 14.00, 2300, 28.00),
-('Jul', 2023, 18.00, 2400, 30.00),
-('Aug', 2023, 17.00, 2450, 29.00),
-('Sep', 2023, 16.00, 2500, 27.00),
-('Oct', 2023, 19.00, 2550, 26.00),
-('Nov', 2023, 20.00, 2600, 25.00),
-('Dec', 2023, 21.00, 2650, 24.00);
-
--- Data for 2024
-INSERT INTO monthly_data (month, year, carbon_emissions, energy_consumption, operational_costs) VALUES
-('Jan', 2024, 22.00, 2700, 26.00),
-('Feb', 2024, 20.00, 2750, 27.00),
-('Mar', 2024, 19.00, 2800, 28.00),
-('Apr', 2024, 18.00, 2850, 29.00),
-('May', 2024, 21.00, 2900, 30.00),
-('Jun', 2024, 20.00, 2950, 29.00),
-('Jul', 2024, 23.00, 3000, 31.00),
-('Aug', 2024, 22.00, 3050, 32.00),
-('Sep', 2024, 24.00, 3100, 30.00),
-('Oct', 2024, 23.00, 3150, 31.00);
