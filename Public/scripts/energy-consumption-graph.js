@@ -1,6 +1,5 @@
-
 // Data Structures and Constants
-const SECTORS = {
+const ENERGY_SECTORS = {
     Maintenance: {
         color: '#FF6B6B',
         subSectors: {
@@ -54,7 +53,7 @@ const SECTORS = {
 };
 
 // State Management
-const state = {
+const energyState = {
     view: 'overview',
     currentSector: null,
     currentSubSector: null,
@@ -122,9 +121,9 @@ function generateEnergyConsumptionData() {
     };
 
     overviewTotal.forEach((monthData, monthIndex) => {
-        const sectorTotals = distributeTotal(monthData.value, Object.keys(SECTORS).length);
+        const sectorTotals = distributeTotal(monthData.value, Object.keys(ENERGY_SECTORS).length);
 
-        Object.entries(SECTORS).forEach(([sectorName, sectorData], sectorIndex) => {
+        Object.entries(ENERGY_SECTORS).forEach(([sectorName, sectorData], sectorIndex) => {
             if (!monthlyData[sectorName]) {
                 monthlyData[sectorName] = {
                     total: []
@@ -204,17 +203,17 @@ function formatDate(dateOrString) {
 const energyData = generateEnergyConsumptionData();
 
 // Chart Instances
-let lineChart = null;
-let pieChart = null;
+let energyLineChart = null;
+let energyPieChart = null;
 
 // Chart Configuration and Setup
-function initializeCharts() {
+function initializeEnergyCharts() {
     const lineCtx = document.getElementById('energyLineChart').getContext('2d');
-    const pieCtx = document.getElementById('sectorPieChart').getContext('2d');
+    const pieCtx = document.getElementById('energySectorPieChart').getContext('2d');
 
-    lineChart = new Chart(lineCtx, {
+    energyLineChart = new Chart(lineCtx, {
         type: 'line',
-        data: getLineChartData('overview'),
+        data: getEnergyLineChartData('overview'),
         options: {
             responsive: true,
             maintainAspectRatio: false,
@@ -233,20 +232,20 @@ function initializeCharts() {
             },
             plugins: {
                 legend: {
-                    onClick: handleLegendClick
+                    onClick: handleEnergyLegendClick
                 }
             },
-            onClick: handleLineChartClick
+            onClick: handleEnergyLineChartClick
         }
     });
 
-    pieChart = new Chart(pieCtx, {
+    energyPieChart = new Chart(pieCtx, {
         type: 'pie',
-        data: getPieChartData(),
+        data: getEnergyPieChartData(),
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            onClick: handlePieChartClick,
+            onClick: handleEnergyPieChartClick,
             plugins: {
                 legend: {
                     position: 'top'
@@ -255,10 +254,10 @@ function initializeCharts() {
         }
     });
 
-    document.getElementById('backButton').addEventListener('click', handleBackButton);
+    document.getElementById('energyBackButton').addEventListener('click', handleEnergyBackButton);
 }
 
-function getLineChartData(dataKey, isDaily = false) {
+function getEnergyLineChartData(dataKey, isDaily = false) {
     const data = isDaily ? energyData.dailyData[dataKey] : energyData.monthlyData[dataKey];
 
     return {
@@ -276,15 +275,15 @@ function getLineChartData(dataKey, isDaily = false) {
     };
 }
 
-function getPieChartData(monthIndex = null) {
+function getEnergyPieChartData(monthIndex = null) {
     let sectorData;
     
-    if ((state.view === 'sector' || state.view === 'sector-month') && state.currentSector) {
-        const sector = SECTORS[state.currentSector];
+    if ((energyState.view === 'sector' || energyState.view === 'sector-month') && energyState.currentSector) {
+        const sector = ENERGY_SECTORS[energyState.currentSector];
         sectorData = {};
         
         Object.entries(sector.subSectors).forEach(([name, data], index) => {
-            const monthlyData = energyData.monthlyData[`${state.currentSector}-${name}`];
+            const monthlyData = energyData.monthlyData[`${energyState.currentSector}-${name}`];
             let value;
             
             if (monthIndex !== null) {
@@ -300,7 +299,7 @@ function getPieChartData(monthIndex = null) {
         });
     } else {
         sectorData = {};
-        Object.entries(SECTORS).forEach(([name, sector]) => {
+        Object.entries(ENERGY_SECTORS).forEach(([name, sector]) => {
             const monthlyData = energyData.monthlyData[name];
             let value;
             
@@ -327,39 +326,39 @@ function getPieChartData(monthIndex = null) {
     };
 }
 
-function handleLineChartClick(event, elements) {
+function handleEnergyLineChartClick(event, elements) {
     if (elements.length === 0) return;
 
-    state.navStack.push({ ...state });
+    energyState.navStack.push({ ...energyState });
 
     const elementIndex = elements[0].index;
-    let dataKey = state.view === 'sector' ? state.currentSector : 'overview';
+    let dataKey = energyState.view === 'sector' ? energyState.currentSector : 'overview';
 
     const data = energyData.monthlyData[dataKey];
     const monthData = data.total[elementIndex];
     
-    state.currentMonth = monthData.isoDate;
-    state.view = state.currentSector ? 'sector-month' : 'month';
+    energyState.currentMonth = monthData.isoDate;
+    energyState.view = energyState.currentSector ? 'sector-month' : 'month';
 
-    updateCharts();
-    updateUIState();
+    updateEnergyCharts();
+    updateEnergyUIState();
 }
 
-function handlePieChartClick(evt, elements) {
+function handleEnergyPieChartClick(evt, elements) {
     if (elements.length === 0) return;
 
-    state.navStack.push({ ...state });
+    energyState.navStack.push({ ...energyState });
 
     const index = elements[0].index;
-    const labels = pieChart.data.labels;
-    state.currentSector = labels[index];
-    state.view = state.currentMonth ? 'sector-month' : 'sector';
+    const labels = energyPieChart.data.labels;
+    energyState.currentSector = labels[index];
+    energyState.view = energyState.currentMonth ? 'sector-month' : 'sector';
 
-    updateCharts();
-    updateUIState();
+    updateEnergyCharts();
+    updateEnergyUIState();
 }
 
-function handleLegendClick(e, legendItem, legend) {
+function handleEnergyLegendClick(e, legendItem, legend) {
     const index = legendItem.datasetIndex;
     const chart = legend.chart;
     const meta = chart.getDatasetMeta(index);
@@ -368,30 +367,30 @@ function handleLegendClick(e, legendItem, legend) {
     chart.update();
 }
 
-function handleBackButton() {
-    if (state.navStack.length > 0) {
-        const prevState = state.navStack.pop();
-        state.view = prevState.view;
-        state.currentSector = prevState.currentSector;
-        state.currentMonth = prevState.currentMonth;
-        updateCharts();
-        updateUIState();
+function handleEnergyBackButton() {
+    if (energyState.navStack.length > 0) {
+        const prevState = energyState.navStack.pop();
+        energyState.view = prevState.view;
+        energyState.currentSector = prevState.currentSector;
+        energyState.currentMonth = prevState.currentMonth;
+        updateEnergyCharts();
+        updateEnergyUIState();
     }
 }
 
-function updateCharts() {
+function updateEnergyCharts() {
     let dataKey;
-    if (state.view === 'sector-month') {
-        dataKey = `${state.currentSector}-${state.currentMonth}`;
-    } else if (state.view === 'month') {
-        dataKey = state.currentMonth;
-    } else if (state.view === 'sector') {
-        dataKey = state.currentSector;
+    if (energyState.view === 'sector-month') {
+        dataKey = `${energyState.currentSector}-${energyState.currentMonth}`;
+    } else if (energyState.view === 'month') {
+        dataKey = energyState.currentMonth;
+    } else if (energyState.view === 'sector') {
+        dataKey = energyState.currentSector;
     } else {
         dataKey = 'overview';
     }
 
-    let isDaily = state.view === 'month' || state.view === 'sector-month';
+    let isDaily = energyState.view === 'month' || energyState.view === 'sector-month';
     let data = isDaily ? energyData.dailyData[dataKey] : energyData.monthlyData[dataKey];
 
     let lineData = {
@@ -408,64 +407,64 @@ function updateCharts() {
         ]
     };
 
-    lineChart.data = lineData;
-    lineChart.update();
+    energyLineChart.data = lineData;
+    energyLineChart.update();
 
     let monthIndex = null;
-    if (state.currentMonth) {
+    if (energyState.currentMonth) {
         const dataOverview = energyData.monthlyData.overview;
         monthIndex = dataOverview.total.findIndex(d => 
-            d.rawDate.toISOString().slice(0, 7) === state.currentMonth);
+            d.rawDate.toISOString().slice(0, 7) === energyState.currentMonth);
     }
-    pieChart.data = getPieChartData(monthIndex);
-    pieChart.update();
+    energyPieChart.data = getEnergyPieChartData(monthIndex);
+    energyPieChart.update();
 }
 
-function updateUIState() {
-    const backButton = document.getElementById('backButton');
-    const viewIndicator = document.getElementById('viewIndicator');
+function updateEnergyUIState() {
+    const backButton = document.getElementById('energyBackButton');
+    const viewIndicator = document.getElementById('energyViewIndicator');
 
-    backButton.style.display = state.view !== 'overview' ? 'block' : 'none';
+    backButton.style.display = energyState.view !== 'overview' ? 'block' : 'none';
 
     let lineTitle = 'Energy Consumption';
     let pieTitle = 'Energy Consumption by Sector';
 
-    if (state.currentMonth) {
-        const date = new Date(state.currentMonth + '-01T00:00:00');
+    if (energyState.currentMonth) {
+        const date = new Date(energyState.currentMonth + '-01T00:00:00');
         date.setMonth(date.getMonth() + 1);
         const monthStr = formatDate(date);
         lineTitle += ` - ${monthStr}`;
         pieTitle += ` - ${monthStr}`;
     }
 
-    if (state.currentSector) {
-        lineTitle += ` - ${state.currentSector}`;
-        pieTitle = state.view === 'sector' ? `${state.currentSector} Subsector Breakdown` : pieTitle;
+    if (energyState.currentSector) {
+        lineTitle += ` - ${energyState.currentSector}`;
+        pieTitle = energyState.view === 'sector' ? `${energyState.currentSector} Subsector Breakdown` : pieTitle;
     }
 
-    document.getElementById('lineChartTitle').textContent = lineTitle;
-    document.getElementById('pieChartTitle').textContent = pieTitle;
+    document.getElementById('energyLineChartTitle').textContent = lineTitle;
+    document.getElementById('energyPieChartTitle').textContent = pieTitle;
 
     let viewText = '';
-    switch (state.view) {
+    switch (energyState.view) {
         case 'month':
-            const date = new Date(state.currentMonth + '-01T00:00:00');
+            const date = new Date(energyState.currentMonth + '-01T00:00:00');
             date.setMonth(date.getMonth() + 1);
             viewText = `Viewing: ${formatDate(date)}`;
             break;
         case 'sector':
-            viewText = `Viewing: ${state.currentSector}`;
+            viewText = `Viewing: ${energyState.currentSector}`;
             break;
         case 'sector-month':
-            const monthDate = new Date(state.currentMonth + '-01T00:00:00');
+            const monthDate = new Date(energyState.currentMonth + '-01T00:00:00');
             monthDate.setMonth(monthDate.getMonth() + 1);
-            viewText = `Viewing: ${state.currentSector} - ${formatDate(monthDate)}`;
+            viewText = `Viewing: ${energyState.currentSector} - ${formatDate(monthDate)}`;
             break;
     }
     viewIndicator.textContent = viewText;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    initializeCharts();
-    updateUIState();
+    initializeEnergyCharts();
+    updateEnergyUIState();
 });
