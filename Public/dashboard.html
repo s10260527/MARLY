@@ -39,19 +39,19 @@
                 <hr>
             </div>
             <li class="sidebar-item">
-                <a href="#" class="sidebar-link">
+                <a href="dashboard.html" class="sidebar-link">
                     <i class="bi bi-pie-chart-fill"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
             <li class="sidebar-item">
-                <a href="#" class="sidebar-link">
+                <a href="report.html" class="sidebar-link">
                     <i class="bi bi-clipboard-data-fill"></i>
                     <span>Reports</span>
                 </a>
             </li>
             <li class="sidebar-item">
-              <a href="#" class="sidebar-link">
+              <a href="campaign.html" class="sidebar-link">
                   <i class="bi bi-megaphone-fill"></i>
                   <span>Campaigns</span>
               </a>
@@ -60,7 +60,7 @@
               <hr>
             </div>
             <li class="sidebar-item user">
-              <a href="#" class="sidebar-link user-profile">
+              <a href="profile.html" class="sidebar-link user-profile">
                   <div class="user-info">
                       <img src="assets/images/apple-logo.jpeg" alt="User Avatar">
                       <p>Apple Inc.</p>
@@ -211,6 +211,49 @@
                 </div>
             </div>
             <h6>💡 AI Suggestions</h5>
+            <div class="suggestions-container">
+                <div class="suggestion-card">
+                    <h3 class="suggestion-title">Carbon Emissions</h3>
+                    <div class="suggestion-item">
+                        <div class="suggestion-number">1</div>
+                        <div class="suggestion-content">
+                            <h4>Invest in Energy Efficiency</h4>
+                            <ul class="suggestion-list">
+                                <li>Upgrade equipment: Replace outdated machinery with energy-efficient models</li>
+                                <li>Optimize lighting: Install LED lights and utilize natural light whenever possible</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="suggestion-card">
+                    <h3 class="suggestion-title">Operational Costs</h3>
+                    <div class="suggestion-item">
+                        <div class="suggestion-number">1</div>
+                        <div class="suggestion-content">
+                            <h4>Optimize Supply Chain</h4>
+                            <ul class="suggestion-list">
+                                <li>Negotiate better deals: Work with suppliers to secure competitive pricing and terms</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="suggestion-item">
+                        <div class="suggestion-number">2</div>
+                        <div class="suggestion-content">
+                            <h4>Automate Processes</h4>
+                            <ul class="suggestion-list">
+                                <li>Invest in technology: Utilize software and tools to streamline operations and reduce manual labor</li>
+                                <li>Train employees: Ensure staff is adequately trained to use new technologies effectively</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="suggestion-disclaimer">
+                    *This content was generated with the assistance of artificial intelligence. While we strive for relevance and accuracy, please note that AI-generated content may not always reflect the most current legal standards or personalized advice.
+                </div>
+            </div>
          </div>
          <!-- General Graph -->
         <div class="general-graph">
@@ -310,7 +353,39 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="costs" role="tabpanel" aria-labelledby="costs-tab">
-                            <canvas id="detailed-graph-costs"></canvas>
+                            <div class="detailed-graph-costs">
+                                <!-- Controls Row -->
+                                <div class="controls-row">
+                                    <div class="controls-left">
+                                        <button id="costsBackButton" class="btn btn-secondary back-button">
+                                            <i class="bi bi-arrow-left"></i> Back
+                                        </button>
+                                    </div>
+                                    <span id="costsViewIndicator" class="view-indicator"></span>
+                                </div>
+
+                                <!-- Charts Row -->
+                                <div class="row charts-row">
+                                    <!-- Vertical Bar Graph Section -->
+                                    <div class="col-lg-8">
+                                        <h5 class="chart-title" id="costsVerticalBarChartTitle">Operational Costs Over Time</h5>
+                                        <div class="chart-container">
+                                            <canvas id="costsVerticalBarChart"></canvas>
+                                        </div>
+                                    </div>
+
+                                    <!-- Horizontal Bar Graph Section -->
+                                    <div class="col-lg-4">
+                                        <h5 class="chart-title" id="costsHorizontalBarChartTitle">Operational Costs by Sector</h5>
+                                        <div class="chart-container">
+                                            <canvas id="costsHorizontalBarChart"></canvas>
+                                        </div>
+                                        <div class="text-center mt-3">
+                                            <p class="h5">Total: $<span id="costsHorizontalChartTotal">0</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -373,6 +448,7 @@
   <script src="scripts/dashboard.js"></script>
   <script src="scripts/emissions-graph.js"></script>
   <script src="scripts/energy-consumption-graph.js"></script>
+  <script src="scripts/operational-costs-graph.js"></script>
   <!-- Month Picker Script -->
   <script src="scripts/month-picker.js"></script>
   <script src="scripts/general-graph.js"></script>

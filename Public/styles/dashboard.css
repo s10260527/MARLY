@@ -230,6 +230,7 @@ a.sidebar-link:hover {
     padding: 20px;
     border-radius: 15px;
     gap: 10px;
+    height: 1310px;
 
     grid-column: 2 / 3;
     grid-row: 2 / 4;
@@ -289,7 +290,7 @@ a.sidebar-link:hover {
 /* Detailed Graph */
 .detailed-graph {
     display: flex;
-    margin-top: 20px;
+    margin-top: -290px;
     margin-bottom: 20px;
     flex-direction: column;
     padding: 0px 20px;
@@ -299,7 +300,7 @@ a.sidebar-link:hover {
 }
 
 .detailed-graph .card {
-    height: 400px;
+    height: 480px; /* Ensure consistent height */
     border-radius: 0px 15px 15px 15px;
     border: none;
     background-color: #eff6f2;
@@ -341,7 +342,7 @@ a.sidebar-link:hover {
 /* Competing Company */
 .competing-company {
     display: flex;
-    margin-top: 10px;
+    margin-top: -400px;
     margin-bottom: 20px;
     flex-direction: row;
     padding: 0px 20px;
@@ -407,4 +408,82 @@ a.sidebar-link:hover {
 
 .competing-company .company-desc {
     width: 50%;
+}
+
+.suggest-facts .card-text {
+    color: white;
+}
+
+.suggest-facts h6 {
+    margin-top: 10px;
+}
+
+/* AI Suggestions Styles */
+.suggestion-card {
+    background: #6453f3;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.suggestion-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.suggestion-item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.suggestion-number {
+    background: white;
+    color: #6453f3;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.suggestion-content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.suggestion-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.suggestion-list li {
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+    line-height: 1.4;
+    position: relative;
+    padding-left: 15px;
+}
+
+.suggestion-list li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: white;
+}
+
+.suggestion-disclaimer {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 15px;
+    font-style: italic;
+    line-height: 1.4;
+    margin-top: 30px;
 }

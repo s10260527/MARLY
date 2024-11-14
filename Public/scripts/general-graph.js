@@ -31,13 +31,13 @@ function initGeneralChart() {
             labels: months,
             datasets: [
                 {
-                    label: 'Carbon Emissions (tonnes)',
+                    label: 'Carbon Emissions (metric tons)',
                     data: carbonData,
                     borderColor: '#16b65b',
                     backgroundColor: 'rgba(22, 182, 91, 0.1)',
                     yAxisID: 'y-carbon',
                     tension: 0.4,
-                    fill: false,  // Change this line
+                    fill: false,
                     borderWidth: 2.5
                 },
                 {
@@ -47,7 +47,7 @@ function initGeneralChart() {
                     backgroundColor: 'rgba(12, 69, 192, 0.1)',
                     yAxisID: 'y-energy',
                     tension: 0.4,
-                    fill: false,  // Change this line
+                    fill: false,
                     borderWidth: 2.5
                 },
                 {
@@ -57,7 +57,7 @@ function initGeneralChart() {
                     backgroundColor: 'rgba(125, 112, 245, 0.1)',
                     yAxisID: 'y-cost',
                     tension: 0.4,
-                    fill: false,  // Change this line
+                    fill: false,
                     borderWidth: 2.5
                 }
             ]
@@ -75,7 +75,15 @@ function initGeneralChart() {
                 },
                 legend: {
                     display: true,
-                    onClick: null,
+                    onClick: function(e, legendItem) {
+                        const index = legendItem.datasetIndex;
+                        const ci = this.chart;
+                        const meta = ci.getDatasetMeta(index);
+
+                        // Toggle visibility
+                        meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
+                        ci.update();
+                    },
                     labels: {
                         color: '#000000',
                         usePointStyle: true,
@@ -123,7 +131,7 @@ function initGeneralChart() {
                             weight: '500'
                         }
                     },
-                    backgroundColor: '#eff6f2'  // Add this line
+                    backgroundColor: '#eff6f2'
                 },
                 'y-carbon': {
                     type: 'linear',
@@ -131,7 +139,7 @@ function initGeneralChart() {
                     position: 'left',
                     title: {
                         display: true,
-                        text: 'Carbon Emissions (tonnes)',
+                        text: 'Carbon Emissions (metric tons)',
                         color: '#000000',
                         font: {
                             weight: '500'
@@ -146,7 +154,7 @@ function initGeneralChart() {
                     grid: {
                         color: 'rgba(0, 0, 0, 0.05)'
                     },
-                    backgroundColor: '#eff6f2'  // Add this line
+                    backgroundColor: '#eff6f2'
                 },
                 'y-energy': {
                     type: 'linear',
@@ -170,7 +178,7 @@ function initGeneralChart() {
                         drawOnChartArea: false,
                         color: 'rgba(0, 0, 0, 0.05)'
                     },
-                    backgroundColor: '#eff6f2'  // Add this line
+                    backgroundColor: '#eff6f2'
                 },
                 'y-cost': {
                     type: 'linear',
@@ -194,7 +202,7 @@ function initGeneralChart() {
                         drawOnChartArea: false,
                         color: 'rgba(0, 0, 0, 0.05)'
                     },
-                    backgroundColor: '#eff6f2'  // Add this line
+                    backgroundColor: '#eff6f2'
                 }
             }
         }
