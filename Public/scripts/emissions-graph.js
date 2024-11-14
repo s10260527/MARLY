@@ -363,8 +363,8 @@ function getLineChartData(dataKey, isDaily = false) {
             {
                 label: 'Total Emissions',
                 data: data.total.map(d => d.value),
-                borderColor: '#FF6384',
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: '#16b65b',
+                backgroundColor: 'rgba(22, 182, 91, 0.1)',
                 tension: 0.4,
                 fill: true
             },
@@ -379,8 +379,8 @@ function getLineChartData(dataKey, isDaily = false) {
             {
                 label: 'Carbon Credits',
                 data: data.credits.map(d => d.value),
-                borderColor: '#4BC0C0',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: '#FF6384',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 tension: 0.4,
                 fill: true
             }
@@ -563,8 +563,8 @@ function updateCharts() {
                 {
                     label: 'Total Emissions',
                     data: data.total.map(d => d.value),
-                    borderColor: '#FF6384',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: '#16b65b',
+                    backgroundColor: 'rgba(22, 182, 91, 0.1)',
                     tension: 0.4,
                     fill: true
                 },
@@ -579,8 +579,8 @@ function updateCharts() {
                 {
                     label: 'Carbon Credits',
                     data: data.credits.map(d => d.value),
-                    borderColor: '#4BC0C0',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: '#FF6384',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     tension: 0.4,
                     fill: true
                 }
