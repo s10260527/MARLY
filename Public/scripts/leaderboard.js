@@ -29,10 +29,12 @@ fetch("/leaderboard/top3")
             document.getElementById("third-place-count").textContent = `${thirdPlace.total_recycled_devices} devices`;
 
             // Assume you get the companyId of the logged-in company, e.g., from localStorage or sessionStorage
-            const companyId = 1; // Example: replace with actual method for getting companyId
+            const companyId = localStorage.getItem('companyId'); // Example: replace with actual method for getting companyId
+            console.log("companyId: ", companyId)
+            console.log("First place company ID:", firstPlace.company_id);
 
             // Check if the logged-in company is the first place
-            if (companyId === firstPlace.company_id) {
+            if (String(companyId) === String(firstPlace.company_id)) {
                 const certificateBtnContainer = document.getElementById("certificate-btn-container");
                 certificateBtnContainer.style.display = "block";  // Show the certificate button for first place
             } else {
@@ -89,10 +91,12 @@ fetch("/leaderboard/top3")
                 // Achievement
                 doc.setFontSize(14);
                 const month = new Date().toLocaleString('default', { month: 'long' });
+                const achievementText = `For coming in first place in the campaign: Tech to Trash and recycling a total of ${firstPlace.total_recycled_devices} devices in the month of ${month} ${new Date().getFullYear()}.`;
 
-                doc.text(`For recycling a total of ${firstPlace.total_recycled_devices} devices in the month of ${month} ${new Date().getFullYear()}`, 105, 110, null, null, "center");
-            
-                // Month and Year
+                // Split the text into lines based on a max width (e.g., 180)
+                const achievementLines = doc.splitTextToSize(achievementText, 180);
+                doc.text(achievementLines, 105, 110, { align: "center" });
+                // Month and Year   
                 doc.setFontSize(12);            
                 // Signature Section
                 doc.setFontSize(16);
