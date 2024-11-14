@@ -1,5 +1,5 @@
 // Data Structures and Constants
-const SECTORS = {
+const COSTS_SECTORS = {
     Maintenance: {
         color: '#FF6B6B',
         subSectors: {
@@ -53,7 +53,7 @@ const SECTORS = {
 };
 
 // State Management
-const state = {
+const costsState = {
     view: 'overview', // 'overview', 'month', 'sector', 'sector-month'
     currentSector: null,
     currentMonth: null,
@@ -102,9 +102,9 @@ function generateOperationalCostsData() {
     };
 
     overviewTotal.forEach((monthData, monthIndex) => {
-        const sectorTotals = distributeTotal(monthData.value, Object.keys(SECTORS).length);
+        const sectorTotals = distributeTotal(monthData.value, Object.keys(COSTS_SECTORS).length);
 
-        Object.entries(SECTORS).forEach(([sectorName, sectorData], sectorIndex) => {
+        Object.entries(COSTS_SECTORS).forEach(([sectorName, sectorData], sectorIndex) => {
             if (!monthlyData[sectorName]) {
                 monthlyData[sectorName] = {
                     total: []
@@ -172,13 +172,13 @@ let verticalBarChart = null;
 let horizontalBarChart = null;
 
 // Chart Configuration and Setup
-function initializeCharts() {
-    const verticalBarCtx = document.getElementById('operationalCostsVerticalBarChart').getContext('2d');
-    const horizontalBarCtx = document.getElementById('operationalCostsHorizontalBarChart').getContext('2d');
+function initializeCostsCharts() {
+    const verticalBarCtx = document.getElementById('costsVerticalBarChart').getContext('2d');
+    const horizontalBarCtx = document.getElementById('costsHorizontalBarChart').getContext('2d');
 
     verticalBarChart = new Chart(verticalBarCtx, {
         type: 'bar',
-        data: getVerticalBarChartData('overview'),
+        data: getCostsVerticalBarChartData('overview'),
         options: {
             responsive: true,
             maintainAspectRatio: false,
@@ -201,13 +201,13 @@ function initializeCharts() {
                     display: false
                 }
             },
-            onClick: handleVerticalBarChartClick
+            onClick: handleCostsVerticalBarChartClick
         }
     });
 
     horizontalBarChart = new Chart(horizontalBarCtx, {
         type: 'bar',
-        data: getHorizontalBarChartData(),
+        data: getCostsHorizontalBarChartData(),
         options: {
             indexAxis: 'y',
             responsive: true,
@@ -247,22 +247,22 @@ function initializeCharts() {
                     display: false
                 }
             },
-            onClick: handleHorizontalBarChartClick
+            onClick: handleCostsHorizontalBarChartClick
         }
     });
 
-    document.getElementById('backButton').addEventListener('click', handleBackButton);
+    document.getElementById('costsBackButton').addEventListener('click', handleCostsBackButton);
 }
 
-function getVerticalBarChartData(dataKey) {
-    if (state.currentMonth) {
+function getCostsVerticalBarChartData(dataKey) {
+    if (costsState.currentMonth) {
         const monthIndex = operationalCostsData.monthlyData.overview.total.findIndex(
-            d => d.rawDate.toISOString().slice(0, 7) === state.currentMonth
+            d => d.rawDate.toISOString().slice(0, 7) === costsState.currentMonth
         );
 
         let datasets = [];
-        const baseData = state.currentSector 
-            ? operationalCostsData.monthlyData[state.currentSector]
+        const baseData = costsState.currentSector 
+            ? operationalCostsData.monthlyData[costsState.currentSector]
             : operationalCostsData.monthlyData.overview;
         
         // Add transparent bars for non-selected months
@@ -271,32 +271,32 @@ function getVerticalBarChartData(dataKey) {
             data: baseData.total.map((d, i) => 
                 i !== monthIndex ? d.value : null
             ),
-            backgroundColor: state.currentSector 
-                ? adjustBrightness(SECTORS[state.currentSector].color, 20) // Changed from 60 to 20 for less transparency
+            backgroundColor: costsState.currentSector 
+                ? adjustBrightness(COSTS_SECTORS[costsState.currentSector].color, 20) // Changed from 60 to 20 for less transparency
                 : 'rgba(12, 69, 192, 0.3)',
-            borderColor: state.currentSector 
-                ? adjustBrightness(SECTORS[state.currentSector].color, 20) // Changed from 60 to 20
+            borderColor: costsState.currentSector 
+                ? adjustBrightness(COSTS_SECTORS[costsState.currentSector].color, 20) // Changed from 60 to 20
                 : 'rgba(12, 69, 192, 0.3)',
             borderWidth: 1
             // Removed barPercentage and categoryPercentage here
         });
 
         // Add stacked bars for the selected month
-        if (state.currentSector) {
-            Object.entries(SECTORS[state.currentSector].subSectors).forEach(([name, subData], index) => {
-                const subSectorData = operationalCostsData.monthlyData[`${state.currentSector}-${name}`].total[monthIndex];
+        if (costsState.currentSector) {
+            Object.entries(COSTS_SECTORS[costsState.currentSector].subSectors).forEach(([name, subData], index) => {
+                const subSectorData = operationalCostsData.monthlyData[`${costsState.currentSector}-${name}`].total[monthIndex];
                 datasets.push({
                     label: name,
                     data: baseData.total.map((_, i) => 
                         i === monthIndex ? subSectorData.value : null
                     ),
-                    backgroundColor: adjustBrightness(SECTORS[state.currentSector].color, (index - 2) * 20),
+                    backgroundColor: adjustBrightness(COSTS_SECTORS[costsState.currentSector].color, (index - 2) * 20),
                     stack: 'selected-month'
                     // Removed barPercentage and categoryPercentage here
                 });
             });
         } else {
-            Object.entries(SECTORS).forEach(([sectorName, sectorData]) => {
+            Object.entries(COSTS_SECTORS).forEach(([sectorName, sectorData]) => {
                 const sectorMonthData = operationalCostsData.monthlyData[sectorName].total[monthIndex];
                 datasets.push({
                     label: sectorName,
@@ -317,8 +317,8 @@ function getVerticalBarChartData(dataKey) {
     }
 
     // Show single-color bars for overview or sector view
-    const data = state.currentSector 
-        ? operationalCostsData.monthlyData[state.currentSector]
+    const data = costsState.currentSector 
+        ? operationalCostsData.monthlyData[costsState.currentSector]
         : operationalCostsData.monthlyData.overview;
 
     return {
@@ -326,12 +326,12 @@ function getVerticalBarChartData(dataKey) {
         datasets: [{
             label: 'Total Operational Costs',
             data: data.total.map(d => d.value),
-            backgroundColor: state.currentSector 
-                ? SECTORS[state.currentSector].color 
-                : '#0c45c0',
-            borderColor: state.currentSector 
-                ? SECTORS[state.currentSector].color 
-                : '#0c45c0',
+            backgroundColor: costsState.currentSector 
+                ? COSTS_SECTORS[costsState.currentSector].color 
+                : '#7d70f5',
+            borderColor: costsState.currentSector 
+                ? COSTS_SECTORS[costsState.currentSector].color 
+                : '#7d70f5',
             borderWidth: 1,
             barPercentage: 0.8,
             categoryPercentage: 0.9
@@ -339,12 +339,12 @@ function getVerticalBarChartData(dataKey) {
     };
 }
 
-function getHorizontalBarChartData(monthIndex = null) {
+function getCostsHorizontalBarChartData(monthIndex = null) {
     let sectorData = {};
-    if (state.view === 'sector' || state.view === 'sector-month') {
-        const sector = SECTORS[state.currentSector];
+    if (costsState.view === 'sector' || costsState.view === 'sector-month') {
+        const sector = COSTS_SECTORS[costsState.currentSector];
         Object.entries(sector.subSectors).forEach(([name, subSector], index) => {
-            const monthlyData = operationalCostsData.monthlyData[`${state.currentSector}-${name}`];
+            const monthlyData = operationalCostsData.monthlyData[`${costsState.currentSector}-${name}`];
             let value;
             
             if (monthIndex !== null) {
@@ -359,7 +359,7 @@ function getHorizontalBarChartData(monthIndex = null) {
             };
         });
     } else {
-        Object.entries(SECTORS).forEach(([name, sector]) => {
+        Object.entries(COSTS_SECTORS).forEach(([name, sector]) => {
             const monthlyData = operationalCostsData.monthlyData[name];
             let value;
             
@@ -386,135 +386,140 @@ function getHorizontalBarChartData(monthIndex = null) {
     };
 }
 
-function handleVerticalBarChartClick(event, elements) {
+function handleCostsVerticalBarChartClick(event, elements) {
     if (elements.length === 0) return;
 
-    state.navStack.push({ ...state });
+    costsState.navStack.push({ ...costsState });
 
     const elementIndex = elements[0].index;
     const data = operationalCostsData.monthlyData.overview;
     const monthData = data.total[elementIndex];
     
-    state.currentMonth = monthData.isoDate;
-    state.view = state.currentSector ? 'sector-month' : 'month';
+    costsState.currentMonth = monthData.isoDate;
+    costsState.view = costsState.currentSector ? 'sector-month' : 'month';
 
     // Adjust opacity of unselected months
     verticalBarChart.data.datasets[0].backgroundColor = verticalBarChart.data.datasets[0].data.map((_, index) => {
-        return index === elementIndex ? '#0c45c0' : 'rgba(12, 69, 192, 0.3)';
+        return index === elementIndex ? '#7d70f5' : 'rgba(12, 69, 192, 0.3)';
     });
 
-    updateCharts();
-    updateUIState();
+    updateCostsCharts();
+    updateCostsUIState();
 }
 
-function handleHorizontalBarChartClick(evt, elements) {
+function handleCostsHorizontalBarChartClick(evt, elements) {
     if (elements.length === 0) return;
 
-    state.navStack.push({ ...state });
+    costsState.navStack.push({ ...costsState });
 
     const index = elements[0].index;
     const labels = horizontalBarChart.data.labels;
-    state.currentSector = labels[index];
-    state.view = 'sector';
+    costsState.currentSector = labels[index];
+    costsState.view = 'sector';
 
-    updateCharts();
-    updateUIState();
+    updateCostsCharts();
+    updateCostsUIState();
 }
 
-function handleBackButton() {
-    if (state.navStack.length > 0) {
-        const prevState = state.navStack.pop();
-        state.view = prevState.view;
-        state.currentSector = prevState.currentSector;
-        state.currentMonth = prevState.currentMonth;
-        updateCharts();
-        updateUIState();
+function handleCostsBackButton() {
+    if (costsState.navStack.length > 0) {
+        const prevState = costsState.navStack.pop();
+        costsState.view = prevState.view;
+        costsState.currentSector = prevState.currentSector;
+        costsState.currentMonth = prevState.currentMonth;
+        updateCostsCharts();
+        updateCostsUIState();
     }
 }
 
-function updateCharts() {
+function updateCostsCharts() {
     let dataKey;
-    if (state.view === 'sector' || state.view === 'sector-month') {
-        dataKey = state.currentSector;
-    } else if (state.view === 'month') {
-        dataKey = state.currentMonth;
+    if (costsState.view === 'sector' || costsState.view === 'sector-month') {
+        dataKey = costsState.currentSector;
+    } else if (costsState.view === 'month') {
+        dataKey = costsState.currentMonth;
     } else {
         dataKey = 'overview';
     }
 
-    verticalBarChart.data = getVerticalBarChartData('overview');
+    verticalBarChart.data = getCostsVerticalBarChartData('overview');
     verticalBarChart.update();
 
     let monthIndex = null;
-    if (state.currentMonth) {
+    if (costsState.currentMonth) {
         const dataOverview = operationalCostsData.monthlyData.overview;
         monthIndex = dataOverview.total.findIndex(d => 
-            d.rawDate.toISOString().slice(0, 7) === state.currentMonth);
+            d.rawDate.toISOString().slice(0, 7) === costsState.currentMonth);
     }
-    horizontalBarChart.data = getHorizontalBarChartData(monthIndex);
+    horizontalBarChart.data = getCostsHorizontalBarChartData(monthIndex);
     horizontalBarChart.update();
-    updateHorizontalChartTotal();
+    updateCostsHorizontalChartTotal();
 }
 
-function updateHorizontalChartTotal() {
+function updateCostsHorizontalChartTotal() {
     const total = horizontalBarChart.data.datasets[0].data.reduce((sum, value) => sum + value, 0);
-    document.getElementById('horizontalChartTotal').textContent = total.toLocaleString(undefined, {
+    document.getElementById('costsHorizontalChartTotal').textContent = total.toLocaleString(undefined, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     });
 }
 
-function updateUIState() {
-    const backButton = document.getElementById('backButton');
-    const viewIndicator = document.getElementById('viewIndicator');
+function updateCostsUIState() {
+    const backButton = document.getElementById('costsBackButton');
+    const viewIndicator = document.getElementById('costsViewIndicator');
 
-    backButton.style.display = state.view !== 'overview' ? 'block' : 'none';
+    backButton.style.display = costsState.view !== 'overview' ? 'block' : 'none';
 
     let verticalTitle = 'Operational Costs Over Time';
     let horizontalTitle = 'Operational Costs by Sector';
 
-    if (state.currentMonth) {
-        const date = new Date(state.currentMonth + '-01T00:00:00');
+    if (costsState.currentMonth) {
+        const date = new Date(costsState.currentMonth + '-01T00:00:00');
         date.setMonth(date.getMonth() + 1);
         const monthStr = formatDate(date);
         horizontalTitle += ` - ${monthStr}`;
     }
 
-    if (state.currentSector) {
-        horizontalTitle = `${state.currentSector} Subsector Breakdown`;
+    if (costsState.currentSector) {
+        horizontalTitle = `${costsState.currentSector} Subsector Breakdown`;
+        if (costsState.currentMonth) {
+            const date = new Date(costsState.currentMonth + '-01T00:00:00');
+            date.setMonth(date.getMonth() + 1);
+            const monthStr = formatDate(date);
+            horizontalTitle += ` - ${monthStr}`;
+        }
     }
 
-    document.getElementById('verticalBarChartTitle').textContent = verticalTitle;
-    document.getElementById('horizontalBarChartTitle').textContent = horizontalTitle;
+    document.getElementById('costsVerticalBarChartTitle').textContent = verticalTitle;
+    document.getElementById('costsHorizontalBarChartTitle').textContent = horizontalTitle;
 
     let viewText = '';
-    switch (state.view) {
+    switch (costsState.view) {
         case 'month':
-            const date = new Date(state.currentMonth + '-01T00:00:00');
+            const date = new Date(costsState.currentMonth + '-01T00:00:00');
             date.setMonth(date.getMonth() + 1);
             viewText = `Viewing: ${formatDate(date)}`;
             break;
         case 'sector':
-            if (state.currentMonth) {
-                // Add one month for display
-                const sectorDate = new Date(state.currentMonth + '-01T00:00:00');
+            if (costsState.currentMonth) {
+                const sectorDate = new Date(costsState.currentMonth + '-01T00:00:00');
                 sectorDate.setMonth(sectorDate.getMonth() + 1);
-                viewText = `Viewing: ${state.currentSector} - ${formatDate(sectorDate)}`;
+                viewText = `Viewing: ${costsState.currentSector} - ${formatDate(sectorDate)}`;
             } else {
-                viewText = `Viewing: ${state.currentSector}`;
+                viewText = `Viewing: ${costsState.currentSector}`;
             }
             break;
         case 'sector-month':
-            const monthDate = new Date(state.currentMonth + '-01T00:00:00');
+            const monthDate = new Date(costsState.currentMonth + '-01T00:00:00');
             monthDate.setMonth(monthDate.getMonth() + 1);
-            viewText = `Viewing: ${state.currentSector} - ${formatDate(monthDate)}`;
+            viewText = `Viewing: ${costsState.currentSector} - ${formatDate(monthDate)}`;
             break;
     }
     viewIndicator.textContent = viewText;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    initializeCharts();
-    updateUIState();
-    updateHorizontalChartTotal(); // Add this line to update total on initial load
+    initializeCostsCharts();
+    updateCostsUIState();
+    updateCostsHorizontalChartTotal(); // Add this line to update total on initial load
 });

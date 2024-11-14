@@ -299,7 +299,7 @@ a.sidebar-link:hover {
 }
 
 .detailed-graph .card {
-    height: 400px;
+    height: 480px; /* Ensure consistent height */
     border-radius: 0px 15px 15px 15px;
     border: none;
     background-color: #eff6f2;

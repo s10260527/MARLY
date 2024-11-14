@@ -310,7 +310,39 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="costs" role="tabpanel" aria-labelledby="costs-tab">
-                            <canvas id="detailed-graph-costs"></canvas>
+                            <div class="detailed-graph-costs">
+                                <!-- Controls Row -->
+                                <div class="controls-row">
+                                    <div class="controls-left">
+                                        <button id="costsBackButton" class="btn btn-secondary back-button">
+                                            <i class="bi bi-arrow-left"></i> Back
+                                        </button>
+                                    </div>
+                                    <span id="costsViewIndicator" class="view-indicator"></span>
+                                </div>
+
+                                <!-- Charts Row -->
+                                <div class="row charts-row">
+                                    <!-- Vertical Bar Graph Section -->
+                                    <div class="col-lg-8">
+                                        <h5 class="chart-title" id="costsVerticalBarChartTitle">Operational Costs Over Time</h5>
+                                        <div class="chart-container">
+                                            <canvas id="costsVerticalBarChart"></canvas>
+                                        </div>
+                                    </div>
+
+                                    <!-- Horizontal Bar Graph Section -->
+                                    <div class="col-lg-4">
+                                        <h5 class="chart-title" id="costsHorizontalBarChartTitle">Operational Costs by Sector</h5>
+                                        <div class="chart-container">
+                                            <canvas id="costsHorizontalBarChart"></canvas>
+                                        </div>
+                                        <div class="text-center mt-3">
+                                            <p class="h5">Total: $<span id="costsHorizontalChartTotal">0</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -373,6 +405,7 @@
   <script src="scripts/dashboard.js"></script>
   <script src="scripts/emissions-graph.js"></script>
   <script src="scripts/energy-consumption-graph.js"></script>
+  <script src="scripts/operational-costs-graph.js"></script>
   <!-- Month Picker Script -->
   <script src="scripts/month-picker.js"></script>
   <script src="scripts/general-graph.js"></script>
