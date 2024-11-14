@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carbon Emissions Dashboard</title>
+    <title>Energy Consumption Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <style>
@@ -76,26 +77,21 @@
                                 </button>
                             </div>
                             <span id="viewIndicator" class="view-indicator"></span>
-                            <div class="controls-right">
-                                <button id="netEmissionsToggle" class="btn btn-outline-primary">
-                                    Show Net Emissions
-                                </button>
-                            </div>
                         </div>
 
                         <!-- Charts Row -->
                         <div class="row charts-row">
                             <!-- Line Graph Section -->
                             <div class="col-lg-8">
-                                <h5 class="chart-title" id="lineChartTitle">Carbon Emissions Over Time</h5>
+                                <h5 class="chart-title" id="lineChartTitle">Energy Consumption Over Time</h5>
                                 <div class="chart-container">
-                                    <canvas id="emissionsLineChart"></canvas>
+                                    <canvas id="energyLineChart"></canvas>
                                 </div>
                             </div>
 
                             <!-- Pie Chart Section -->
                             <div class="col-lg-4">
-                                <h5 class="chart-title" id="pieChartTitle">Emissions by Sector</h5>
+                                <h5 class="chart-title" id="pieChartTitle">Energy Consumption by Sector</h5>
                                 <div class="chart-container">
                                     <canvas id="sectorPieChart"></canvas>
                                 </div>
@@ -109,6 +105,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="scripts/emissions-graph.js"></script>
+    <script src="scripts/energy-consumption-graph.js"></script>
 </body>
 </html>
