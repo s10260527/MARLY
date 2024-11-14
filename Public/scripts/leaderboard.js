@@ -29,7 +29,7 @@ fetch("/leaderboard/top3")
             document.getElementById("third-place-count").textContent = `${thirdPlace.total_recycled_devices} devices`;
 
             // Assume you get the companyId of the logged-in company, e.g., from localStorage or sessionStorage
-            const companyId = 3; // Example: replace with actual method for getting companyId
+            const companyId = 1; // Example: replace with actual method for getting companyId
 
             // Check if the logged-in company is the first place
             if (companyId === firstPlace.company_id) {

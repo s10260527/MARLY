@@ -1,300 +1,323 @@
 
--- Drop Tables if they exist
+
+-- Now drop the tables
+DROP TABLE IF EXISTS Campaigns;
+DROP TABLE IF EXISTS Recycable_device;
 DROP TABLE IF EXISTS Companies;
-DROP TABLE IF EXISTS Emissions;
--- Drop the CompanySectors table if it exists
-DROP TABLE IF EXISTS CompanySectors;
+DROP TABLE IF EXISTS Campaign_participants;
+DROP TABLE IF EXISTS Sectors;
+DROP TABLE IF EXISTS EmissionsData;
+DROP TABLE IF EXISTS Subsectors;
+DROP TABLE IF EXISTS sub_sectors;
+
+
+
+
 
 -- Create Companies Table
-CREATE TABLE Companies
-(
+CREATE TABLE Companies (
     company_id INT PRIMARY KEY IDENTITY(1,1),
     company_name VARCHAR(255) NOT NULL,
     industry_type VARCHAR(255),
-    country VARCHAR(255),
+	campaign_participant BIT,
+    country VARCHAR(255),	
     city VARCHAR(255),
     contact_email VARCHAR(255),
     contact_phone VARCHAR(20),
     created_at DATETIME DEFAULT GETDATE()
 );
 
--- Create Emissions Table
-CREATE TABLE Emissions
-(
-    emission_id INT PRIMARY KEY IDENTITY(1,1),
-    company_id INT,
-    emission_year INT,
-    emission_amount DECIMAL(10, 2),
-    -- in metric tons, for example
-    created_at DATETIME DEFAULT GETDATE(),
+CREATE TABLE Recycable_device (
+    device_id INT PRIMARY KEY IDENTITY(1,1),  -- Unique identifier for each device
+    device_name VARCHAR(255) NOT NULL,         -- Name of the recyclable device
+    carbon_offset DECIMAL(10, 2)              -- Carbon offset in metric tons
+);
+
+CREATE TABLE Campaigns (
+    campaign_id INT PRIMARY KEY IDENTITY(1,1),  -- Unique identifier for each campaign
+    company_id INT,                             -- Foreign key to link to Companies table
+    campaign_name NVARCHAR(100) NOT NULL,       -- Name of the campaign
+    description NVARCHAR(MAX) NOT NULL,         -- Detailed description of the campaign
+    start_date DATE NOT NULL,                   -- Start date of the campaign
+    end_date DATE NOT NULL,                     -- End date of the campaign
+    created_at DATETIME DEFAULT GETDATE(),      -- Timestamp for when the campaign was created
     FOREIGN KEY (company_id) REFERENCES Companies(company_id) ON DELETE CASCADE
 );
 
--- Create CompanySectors table
-CREATE TABLE CompanySectors
-(
+CREATE TABLE Campaign_participants (
+    campaign_id INT,  
+    company_id INT,                             -- Foreign key to link to Companies table
+    device_id INT,
+	quantity INT,
+    created_at DATETIME DEFAULT GETDATE(),      -- Timestamp for when the campaign was created
+    FOREIGN KEY (company_id) REFERENCES Companies(company_id) ON DELETE NO ACTION,
+    FOREIGN KEY (campaign_id) REFERENCES Campaigns(campaign_id) ON DELETE NO ACTION,
+    FOREIGN KEY (device_id) REFERENCES Recycable_device(device_id) ON DELETE NO ACTION
+);
+
+-- Step 1: Create the Sectors table
+CREATE TABLE Sectors (
     sector_id INT PRIMARY KEY IDENTITY(1,1),
+    sector_name NVARCHAR(255) NOT NULL
+);
+
+-- Step 2: Create the Subsectors table
+CREATE TABLE Subsectors (
+    subsector_id INT PRIMARY KEY IDENTITY(1,1),
+    subsector_name VARCHAR(255) NOT NULL,
+    sector_id INT,
+    FOREIGN KEY (sector_id) REFERENCES Sectors(sector_id)
+);
+
+-- Step 3: Create the EmissionsData table
+CREATE TABLE EmissionsData (
     company_id INT,
-    sector_name VARCHAR(255) NOT NULL,
-    emission_amount DECIMAL(10, 2),
-    -- emission amount in metric tons
-    fiscal_year INT NOT NULL,
-    FOREIGN KEY (company_id) REFERENCES Companies(company_id) ON DELETE CASCADE
+    sector_id INT NOT NULL,
+    subsector_id INT NOT NULL,
+    emission_date DATE NOT NULL,
+    emission_amount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (sector_id) REFERENCES Sectors(sector_id),
+    FOREIGN KEY (subsector_id) REFERENCES Subsectors(subsector_id),
+    FOREIGN KEY (company_id) REFERENCES Companies(company_id) ON DELETE NO ACTION
+
 );
 
--- Insert sample data for manufacturing companies
-INSERT INTO Companies
-    (company_name, industry_type, country, city, contact_email, contact_phone)
+-- Insert mock data into Companies
+INSERT INTO Companies (company_name, industry_type, campaign_participant, country, city, contact_email, contact_phone)
 VALUES
-    ('Microsoft', 'Manufacturing', 'USA', 'Seattle', 'contact@microsoft.com', '425-882-8080'),
-    ('Toyota', 'Manufacturing', 'Japan', 'Toyota City', 'contact@toyota.co.jp', '81-565-28-2121'),
-    ('Samsung', 'Manufacturing', 'South Korea', 'Seoul', 'contact@samsung.com', '82-2-2053-3000'),
-    ('Nestle', 'Manufacturing', 'Switzerland', 'Vevey', 'contact@nestle.com', '41-21-924-1111'),
-    ('Volkswagen', 'Manufacturing', 'Germany', 'Wolfsburg', 'contact@volkswagen.de', '49-5361-90'),
-    ('BP', 'Manufacturing', 'United Kingdom', 'London', 'contact@bp.com', '44-207-496-4000'),
-    ('ExxonMobil', 'Manufacturing', 'USA', 'Irving', 'contact@exxonmobil.com', '972-444-1000'),
-    ('Amazon', 'Manufacturing', 'USA', 'Seattle', 'contact@amazon.com', '206-266-1000'),
-    ('Sony', 'Manufacturing', 'Japan', 'Tokyo', 'contact@sony.jp', '81-3-6748-2111'),
-    ('L’Oréal', 'Manufacturing', 'France', 'Paris', 'contact@loreal.com', '33-1-47-56-70-00');
+('Apple Inc', 'Tech Manufacturing', 0, 'USA', 'New York', 'contact@Apple.com', '123-456-7890'),
+('GreenTech Solutions', 'Tech Manufacturing', 1, 'Germany', 'Berlin', 'support@greentech.com', '234-567-8901'),
+('Innovate Electronics', 'Electronics', 0, 'South Korea', 'Seoul', 'info@innovateelectronics.com', '345-678-9012'),
+('EcoTech Industries', 'Tech Manufacturing', 1, 'Japan', 'Tokyo', 'contact@ecotechindustries.com', '456-789-0123'),
+('SmartTech Corp.', 'Tech Manufacturing', 0, 'Singapore', 'Singapore', 'sales@smarttech.com', '567-890-1234');
 
--- Insert emission data for manufacturing companies for the year 2024
-INSERT INTO Emissions
-    (company_id, emission_year, emission_amount)
+-- Insert mock data into Recycable_device
+INSERT INTO Recycable_device (device_name, carbon_offset)
 VALUES
-    (1, 2024, 1200.50),
-    -- Microsoft
-    (2, 2024, 1500.00),
-    -- Toyota
-    (3, 2024, 1700.75),
-    -- Samsung
-    (4, 2024, 1100.25),
-    -- Nestle
-    (5, 2024, 1250.00),
-    -- Volkswagen
-    (6, 2024, 980.45),
-    -- BP
-    (7, 2024, 1420.60),
-    -- ExxonMobil
-    (8, 2024, 1600.10),
-    -- Amazon
-    (9, 2024, 1350.30),
-    -- Sony
-    (10, 2024, 900.00);
--- L’Oréal
+('Smartphone', 0.5),
+('Laptop', 1.2),
+('Tablet', 0.8)
 
--- Insert additional emissions for each manufacturing company
-
--- Insert sample data into CompanySectors table based on the sectors identified in the Apple report
-INSERT INTO CompanySectors
-    (company_id, sector_name, emission_amount, fiscal_year)
+-- Insert mock data into Campaigns
+-- Inserting Tech No Trash campaign for Microsoft
+INSERT INTO Campaigns (company_id, campaign_name, description, start_date, end_date)
 VALUES
-    -- Manufacturing emissions for each company
-    (1, 'Manufacturing', 950.00, 2024),
-    -- Microsoft
-    (2, 'Manufacturing', 1200.00, 2024),
-    -- Toyota
-    (3, 'Manufacturing', 1100.75, 2024),
-    -- Samsung
-    (4, 'Manufacturing', 800.50, 2024),
-    -- Nestle
-    (5, 'Manufacturing', 900.00, 2024),
-    -- Volkswagen
+    (1,  'Tech To Trash', 'Encourage the recycling of electronic waste by setting up collection points in manufacturing facilities for old devices, parts, and batteries.', '2024-11-01', '2024-11-30');
 
-    -- Transportation emissions for each company
-    (1, 'Transportation', 250.00, 2024),
-    -- Microsoft
-    (2, 'Transportation', 300.00, 2024),
-    -- Toyota
-    (3, 'Transportation', 320.50, 2024),
-    -- Samsung
-    (4, 'Transportation', 200.00, 2024),
-    -- Nestle
-    (5, 'Transportation', 280.00, 2024),
-    -- Volkswagen
-
-    -- Product Use emissions for each company
-    (1, 'Product Use', 180.00, 2024),
-    -- Microsoft
-    (2, 'Product Use', 210.00, 2024),
-    -- Toyota
-    (3, 'Product Use', 250.00, 2024),
-    -- Samsung
-    (4, 'Product Use', 170.00, 2024),
-    -- Nestle
-    (5, 'Product Use', 190.00, 2024),
-    -- Volkswagen
-
-    -- Electricity emissions for each company
-    (1, 'Electricity', 120.00, 2024),
-    -- Microsoft
-    (2, 'Electricity', 130.00, 2024),
-    -- Toyota
-    (3, 'Electricity', 145.00, 2024),
-    -- Samsung
-    (4, 'Electricity', 110.00, 2024),
-    -- Nestle
-    (5, 'Electricity', 135.00, 2024);
--- Volkswagen
-
--- Insert data for the past four years (2021 to 2024) in the CompanySectors table
--- Data for 2021
-INSERT INTO CompanySectors
-    (company_id, sector_name, emission_amount, fiscal_year)
+-- Insert mock data into Campaign_participants
+INSERT INTO Campaign_participants (campaign_id, company_id, device_id, quantity)
 VALUES
-    (1, 'Manufacturing', 940.00, 2021),
-    (1, 'Transportation', 240.00, 2021),
-    (1, 'Product Use', 170.00, 2021),
-    (1, 'Electricity', 115.00, 2021),
+(1, 1, 1, 3),
+(1, 2, 2,3),
+(1, 3, 3, 4),
+(1, 4, 2, 1),
+(1, 5, 3, 3);
 
-    (2, 'Manufacturing', 1150.00, 2021),
-    (2, 'Transportation', 290.00, 2021),
-    (2, 'Product Use', 200.00, 2021),
-    (2, 'Electricity', 125.00, 2021);
+-- Step 4: Insert mock data into Sectors
+INSERT INTO Sectors (sector_name) VALUES 
+('Electricity'),
+('Transportation'),
+('Manufacturing'),
+('Waste Management'),
+('Water Supply');
 
--- Add similar records for other companies (3 to 10) for the year 2021
+-- Step 5: Insert mock data into Subsectors
+INSERT INTO Subsectors (subsector_name, sector_id) VALUES 
+('Lighting', 1),
+('Equipment', 1),
+('Heating', 1),
+('Cooling', 1),
+('Other Electrical Uses', 1),
+('Vehicles', 2),
+('Logistics', 2),
+('Public Transport', 2),
+('Shipping', 2),
+('Air Travel', 2),
+('Machinery', 3),
+('Processing', 3),
+('Packaging', 3),
+('Assembly', 3),
+('Inspection', 3),
+('Landfill', 4),
+('Recycling', 4),
+('Composting', 4),
+('Hazardous Waste', 4),
+('Wastewater', 4),
+('Purification', 5),
+('Distribution', 5),
+('Leakage', 5),
+('Irrigation', 5),
+('Reservoir', 5);
 
--- Data for 2022
-INSERT INTO CompanySectors
-    (company_id, sector_name, emission_amount, fiscal_year)
+-- Step 6: Insert mock data for a single company into EmissionsData
+-- Generate mock data for each month from January 2024 to November 2024
+
+-- Insert mock data for EmissionsData with company_id = 1
+
+-- Insert for January 2024
+INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
 VALUES
-    (1, 'Manufacturing', 945.00, 2022),
-    (1, 'Transportation', 245.00, 2022),
-    (1, 'Product Use', 175.00, 2022),
-    (1, 'Electricity', 120.00, 2022),
+(1, 1, 1, '2024-01-01', 150.50),
+(1, 1, 2, '2024-01-01', 120.30),
+(1, 3, 11, '2024-01-01', 95.75),
+(1, 2, 6, '2024-01-01', 200.60),
+(1, 2, 7, '2024-01-01', 180.40),
+(1, 3, 11, '2024-01-01', 130.25),
+(1, 4, 16, '2024-01-01', 75.20),
+(1, 5, 21, '2024-01-01', 40.10);
 
-    (2, 'Manufacturing', 1170.00, 2022),
-    (2, 'Transportation', 295.00, 2022),
-    (2, 'Product Use', 205.00, 2022),
-    (2, 'Electricity', 130.00, 2022);
-
--- Add similar records for other companies (3 to 10) for the year 2022
-
--- Data for 2023
-INSERT INTO CompanySectors
-    (company_id, sector_name, emission_amount, fiscal_year)
+-- Insert for February 2024
+INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
 VALUES
-    (1, 'Manufacturing', 960.00, 2023),
-    (1, 'Transportation', 250.00, 2023),
-    (1, 'Product Use', 180.00, 2023),
-    (1, 'Electricity', 125.00, 2023),
+(1, 1, 1, '2024-02-01', 140.80),
+(1, 1, 2, '2024-02-01', 110.20),
+(1, 1, 3, '2024-02-01', 100.10),
+(1, 2, 6, '2024-02-01', 190.50),
+(1, 2, 7, '2024-02-01', 170.80),
+(1, 3, 11, '2024-02-01', 120.35),
+(1, 4, 16, '2024-02-01', 80.90),
+(1, 5, 21, '2024-02-01', 45.50);
 
-    (2, 'Manufacturing', 1190.00, 2023),
-    (2, 'Transportation', 300.00, 2023),
-    (2, 'Product Use', 210.00, 2023),
-    (2, 'Electricity', 135.00, 2023);
-
--- Add similar records for other companies (3 to 10) for the year 2023
-
--- November 2024 emissions
-INSERT INTO Emissions
-    (company_id, emission_year, emission_amount, created_at)
+-- Insert for March 2024
+INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
 VALUES
-    (1, 2024, 1300.00, GETDATE()),
-    -- Microsoft
-    (2, 2024, 1600.00, GETDATE()),
-    -- Toyota
-    (3, 2024, 1800.00, GETDATE()),
-    -- Samsung
-    (4, 2024, 1200.00, GETDATE()),
-    -- Nestle
-    (5, 2024, 1400.00, GETDATE()),
-    -- Volkswagen
-    (6, 2024, 1000.00, GETDATE()),
-    -- BP
-    (7, 2024, 1500.00, GETDATE()),
-    -- ExxonMobil
-    (8, 2024, 1700.00, GETDATE()),
-    -- Amazon
-    (9, 2024, 1450.00, GETDATE()),
-    -- Sony
-    (10, 2024, 950.00, GETDATE());
--- L’Oréal
+(1, 1, 1, '2024-03-01', 135.20),
+(1, 1, 2, '2024-03-01', 115.30),
+(1, 1, 3, '2024-03-01', 110.15),
+(1, 2, 6, '2024-03-01', 185.75),
+(1, 2, 7, '2024-03-01', 165.65),
+(1, 3, 11, '2024-03-01', 125.40),
+(1, 4, 16, '2024-03-01', 78.50),
+(1, 5, 21, '2024-03-01', 42.30);
 
--- October 2024 emissions
-INSERT INTO Emissions
-    (company_id, emission_year, emission_amount, created_at)
+-- Insert for April 2024
+INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
 VALUES
-    (1, 2024, 1250.00, DATEADD(MONTH, -1, GETDATE())),
-    -- Microsoft
-    (2, 2024, 1550.00, DATEADD(MONTH, -1, GETDATE())),
-    -- Toyota
-    (3, 2024, 1750.00, DATEADD(MONTH, -1, GETDATE())),
-    -- Samsung
-    (4, 2024, 1150.00, DATEADD(MONTH, -1, GETDATE())),
-    -- Nestle
-    (5, 2024, 1350.00, DATEADD(MONTH, -1, GETDATE())),
-    -- Volkswagen
-    (6, 2024, 980.00, DATEADD(MONTH, -1, GETDATE())),
-    -- BP
-    (7, 2024, 1450.00, DATEADD(MONTH, -1, GETDATE())),
-    -- ExxonMobil
-    (8, 2024, 1650.00, DATEADD(MONTH, -1, GETDATE())),
-    -- Amazon
-    (9, 2024, 1400.00, DATEADD(MONTH, -1, GETDATE())),
-    -- Sony
-    (10, 2024, 920.00, DATEADD(MONTH, -1, GETDATE()));
--- L’Oréal
+(1, 1, 1, '2024-04-01', 145.60),
+(1, 1, 2, '2024-04-01', 118.40),
+(1, 1, 3, '2024-04-01', 105.25),
+(1, 2, 6, '2024-04-01', 190.90),
+(1, 2, 7, '2024-04-01', 175.60),
+(1, 3, 11, '2024-04-01', 128.30),
+(1, 4, 16, '2024-04-01', 82.60),
+(1, 5, 21, '2024-04-01', 46.80);
 
--- Drop Users table if it exists
-DROP TABLE IF EXISTS Users;
-
--- Create Users table
-CREATE TABLE Users
-(
-    user_id INT PRIMARY KEY IDENTITY(1,1),
-    full_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
-    agreed_to_terms BIT NOT NULL,
-    created_at DATETIME DEFAULT GETDATE()
-);
-
--- Insert sample data into Users table
-INSERT INTO Users
-    (full_name, email, password_hash, agreed_to_terms, created_at)
+-- Insert for May 2024
+INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
 VALUES
-    ('John Doe', 'john.doe@example.com', 'hashed_password_here', 1, '2024-10-24 15:30:56.230'),
-    ('Jason Smith', 'JasonsCompany@gmail.com', '$2a$10$0ZFEsWP3fFEqM3zkKqHVUxbls8j0fJ0V/H4TqDoV...', 1, '2024-11-07 13:14:58.287');
+(1, 1, 1, '2024-05-01', 155.40),
+(1, 1, 2, '2024-05-01', 121.20),
+(1, 1, 3, '2024-05-01', 112.50),
+(1, 2, 6, '2024-05-01', 198.20),
+(1, 2, 7, '2024-05-01', 180.80),
+(1, 3, 11, '2024-05-01', 132.45),
+(1, 4, 16, '2024-05-01', 85.10),
+(1, 5, 21, '2024-05-01', 49.60);
 
-ALTER TABLE Companies
-ADD hashed_password VARCHAR(255),
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP;
+-- Insert for June 2024
+INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
+VALUES
+(1, 1, 1, '2024-06-01', 148.25),
+(1, 1, 2, '2024-06-01', 113.50),
+(1, 1, 3, '2024-06-01', 108.70),
+(1, 2, 6, '2024-06-01', 193.10),
+(1, 2, 7, '2024-06-01', 172.40),
+(1, 3, 11, '2024-06-01', 130.55),
+(1, 4, 16, '2024-06-01', 80.30),
+(1, 5, 21, '2024-06-01', 44.10);
 
---Create Data for Monthly data--
-CREATE TABLE monthly_data (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    month VARCHAR(3),
-    year INT,
-    carbon_emissions DECIMAL(5,2),
-    energy_consumption INT,
-    operational_costs DECIMAL(5,2)
-);
+-- Insert for July 2024
+INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
+VALUES
+(1, 1, 1, '2024-07-01', 160.75),
+(1, 1, 2, '2024-07-01', 125.10),
+(1, 1, 3, '2024-07-01', 118.60),
+(1, 2, 6, '2024-07-01', 202.30),
+(1, 2, 7, '2024-07-01', 185.40),
+(1, 3, 11, '2024-07-01', 136.25),
+(1, 4, 16, '2024-07-01', 88.10),
+(1, 5, 21, '2024-07-01', 51.50);
 
---Insert sample data into monthly_data table--
--- Data for 2023
-INSERT INTO monthly_data (month, year, carbon_emissions, energy_consumption, operational_costs) VALUES
-('Jan', 2023, 10.00, 2000, 30.00),
-('Feb', 2023, 11.00, 2100, 28.00),
-('Mar', 2023, 13.00, 2200, 27.00),
-('Apr', 2023, 12.00, 2150, 26.00),
-('May', 2023, 15.00, 2250, 29.00),
-('Jun', 2023, 14.00, 2300, 28.00),
-('Jul', 2023, 18.00, 2400, 30.00),
-('Aug', 2023, 17.00, 2450, 29.00),
-('Sep', 2023, 16.00, 2500, 27.00),
-('Oct', 2023, 19.00, 2550, 26.00),
-('Nov', 2023, 20.00, 2600, 25.00),
-('Dec', 2023, 21.00, 2650, 24.00);
+-- Insert for August 2024
+INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
+VALUES
+(1, 1, 1, '2024-08-01', 155.10),
+(1, 1, 2, '2024-08-01', 121.40),
+(1, 1, 3, '2024-08-01', 111.90),
+(1, 2, 6, '2024-08-01', 199.80),
+(1, 2, 7, '2024-08-01', 178.30),
+(1, 3, 11, '2024-08-01', 133.00),
+(1, 4, 16, '2024-08-01', 84.40),
+(1, 5, 21, '2024-08-01', 47.90);
 
--- Data for 2024
-INSERT INTO monthly_data (month, year, carbon_emissions, energy_consumption, operational_costs) VALUES
-('Jan', 2024, 22.00, 2700, 26.00),
-('Feb', 2024, 20.00, 2750, 27.00),
-('Mar', 2024, 19.00, 2800, 28.00),
-('Apr', 2024, 18.00, 2850, 29.00),
-('May', 2024, 21.00, 2900, 30.00),
-('Jun', 2024, 20.00, 2950, 29.00),
-('Jul', 2024, 23.00, 3000, 31.00),
-('Aug', 2024, 22.00, 3050, 32.00),
-('Sep', 2024, 24.00, 3100, 30.00),
-('Oct', 2024, 23.00, 3150, 31.00);
+-- Insert for September 2024
+INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
+VALUES
+(1, 1, 1, '2024-09-01', 150.00),
+(1, 1, 2, '2024-09-01', 116.60),
+(1, 1, 3, '2024-09-01', 107.30),
+(1, 2, 6, '2024-09-01', 194.10),
+(1, 2, 7, '2024-09-01', 173.50),
+(1, 3, 11, '2024-09-01', 129.80),
+(1, 4, 16, '2024-09-01', 79.90),
+(1, 5, 21, '2024-09-01', 43.40);
+
+-- Insert for October 2024
+INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
+VALUES
+(1, 1, 1, '2024-10-01', 145.90),
+(1, 1, 2, '2024-10-01', 118.30),
+(1, 1, 3, '2024-10-01', 102.75),
+(1, 2, 6, '2024-10-01', 191.40),
+(1, 2, 7, '2024-10-01', 171.20),
+(1, 3, 11, '2024-10-01', 127.00),
+(1, 4, 16, '2024-10-01', 77.60),
+(1, 5, 21, '2024-10-01', 41.20);
+
+-- Insert for November 2024
+INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
+VALUES
+(1, 1, 1, '2024-11-01', 142.70),
+(1, 1, 2, '2024-11-01', 114.50),
+(1, 1, 3, '2024-11-01', 98.10),
+(1, 2, 6, '2024-11-01', 187.50),
+(1, 2, 7, '2024-11-01', 168.40),
+(1, 3, 11, '2024-11-01', 123.90),
+(1, 4, 16, '2024-11-01', 74.80),
+(1, 5, 21, '2024-11-01', 39.70);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
