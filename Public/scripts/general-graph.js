@@ -31,7 +31,7 @@ function initGeneralChart() {
             labels: months,
             datasets: [
                 {
-                    label: 'Carbon Emissions (tonnes)',
+                    label: 'Carbon Emissions (metric tons)',
                     data: carbonData,
                     borderColor: '#16b65b',
                     backgroundColor: 'rgba(22, 182, 91, 0.1)',
@@ -139,7 +139,7 @@ function initGeneralChart() {
                     position: 'left',
                     title: {
                         display: true,
-                        text: 'Carbon Emissions (tonnes)',
+                        text: 'Carbon Emissions (metric tons)',
                         color: '#000000',
                         font: {
                             weight: '500'

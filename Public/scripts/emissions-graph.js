@@ -318,7 +318,7 @@ function initializeCharts() {
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Carbon Emissions (tonnes CO2e)'
+                        text: 'Carbon Emissions (metric tons CO2e)'
                     }
                 }
             },
