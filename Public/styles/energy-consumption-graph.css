@@ -1,0 +1,53 @@
+.detailed-graph-energy .chart-container {
+    position: relative;
+    height: 250px;  /* Reduce height */
+    width: 100%;
+    margin-top: 0.5rem;  /* Reduce margin */
+}
+
+.detailed-graph-energy .back-button {
+    display: none;
+}
+
+.detailed-graph-energy .chart-title {
+    text-align: center;
+    margin: 10px 0;  /* Reduce margin */
+    font-weight: bold;
+    font-size: 1rem;  /* Reduce font size */
+}
+
+.detailed-graph-energy .chart-card {
+    position: relative;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0;  /* Remove margin */
+    min-height: auto;  /* Remove fixed height */
+}
+
+.detailed-graph-energy .controls-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    position: relative; /* Added */
+}
+
+.detailed-graph-energy .view-indicator {
+    color: #6c757d;
+    position: absolute; /* Added */
+    left: 50%; /* Added */
+    transform: translateX(-50%); /* Added */
+}
+
+.detailed-graph-energy .charts-row {
+    margin-top: 20px;
+}
+
+/* New styles */
+.detailed-graph-energy .controls-left {
+    flex: 0 0 auto;
+}
+
+.detailed-graph-energy .controls-right {
+    flex: 0 0 auto;
+}

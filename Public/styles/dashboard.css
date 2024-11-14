@@ -299,7 +299,43 @@ a.sidebar-link:hover {
 }
 
 .detailed-graph .card {
-    height: 273px;
+    height: 400px;
+    border-radius: 0px 15px 15px 15px;
+    border: none;
+    background-color: #eff6f2;
+}
+
+.tab-content {
+    height: 100%;
+}
+
+.tab-pane {
+    height: 100%;
+}
+
+.detailed-graph .nav-tabs {
+    border-bottom: none;
+    gap: 15px;
+}
+
+.detailed-graph .nav-tabs .nav-link {
+    color: #6453f3;
+    border: none;
+    padding: 8px 16px;
+    background-color: white;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+.detailed-graph .nav-tabs .nav-link.active {
+    color: #fff;
+    background-color: #6453f3;
+    border-radius: 5px;
+}
+
+.detailed-graph .nav-tabs .nav-link:hover:not(.active) {
+    border: none;
+    background-color: #f0f0f0;
 }
 
 /* Competing Company */
