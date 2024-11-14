@@ -56,8 +56,10 @@
             </div>
             <li class="sidebar-item user">
               <a href="#" class="sidebar-link user-profile">
-                  <img src="assets/images/piggybank.jpg" alt="User Avatar">
-                  Apple Inc.
+                  <div class="user-info">
+                      <img src="assets/images/apple-logo.jpeg" alt="User Avatar">
+                      <p>Apple Inc.</p>
+                  </div>
               </a>
             </li>
             <li class="sidebar-item progress-net">
@@ -81,77 +83,143 @@
             </a>
         </div>
     </aside>
-    <!-- Sidebar Ends -->
-
-
-
-
 
     <!-- Main Component -->
     <div class="main">
-      <body>
-        <!-- Button Section -->
-      <section class="button-section">
-      </section>
-      <!-- Hero Section -->
-      <section class="hero">
-        <div class="hero-content">
-          <h1>Join Our Campaign for Change</h1>
-          <p>Help us make a difference in reaching net-zero carbon emissions.</p>
-          <a href="#" class="cta-button" id="getInvolvedBtn">Get Involved</a>
-          <a href="leaderboard.html" class="cta-button">Leaderboard</a>
-    
+        <!-- Add your content here -->
+        <body>
+            <!-- Button Section -->
+          <section class="button-section">
+          </section>
+          <!-- Featured Stories Section -->
+          <section class="stories" id="stories">
+            <h2>About the Campaign</h2>
+            <div class="story-items">
+              <div class="story-item">
+                <img src="assets/images/campain img.jpg" alt="Story 1">
+              </div>
+              <div class="story-item">
+                <h3>Tech To Trash</h3>
+                <p>Encourage the recycling of electronic waste by 
+                    setting up collection points in manufacturing facilities for old devices, parts, and batteries.</p>
+        
+              </div>
+            </div>
+        
+          <!-- Campaign Goals Section -->
+          <section class="goals" id="goals">
+            <h2>Our Campaign Goals</h2>
+            <div class="goal-items">
+              <div class="goal-item">
+                <h3>Reduce Emissions</h3>
+                <p>We aim to reduce carbon emissions by promoting sustainable practices.</p>
+              </div>
+              <div class="goal-item">
+                <h3>Increase Awareness</h3>
+                <p>Educating companies and individuals about their carbon footprint is key.</p>
+              </div>
+              <div class="goal-item">
+                <h3>Build Partnerships</h3>
+                <p>Working together with industry leaders to reach net-zero emissions.</p>
+              </div>
+            </div>
+          </section>
+        
+                    <!-- Hero Section -->
+
+            <section class="hero">
+              <div class="hero-content">
+                <h1>Join Our Campaign for Change</h1>
+                <p>Help us make a difference in reaching net-zero carbon emissions.</p>
+                <a href="#" class="cta-button" id="getInvolvedBtn">Get Involved</a>
+                <a href="leaderboard.html" class="cta-button">Leaderboard</a>
+          
+              </div>
+            </section>
+          </section>
+          <!-- Footer HTML Structure -->
+  <!-- Footer Content -->
+  <footer class="footer">
+    <div class="footer__parralax">
+      <div class="footer__parralax-trees"></div>
+      <div class="footer__parralax-moto"></div>
+      <div class="footer__parralax-secondplan"></div>
+      <div class="footer__parralax-premierplan"></div>
+      <div class="footer__parralax-voiture"></div>
+    </div>
+    <div class="container">
+      <div class="footer__columns">
+        <div class="footer__col">
+          <h3 class="footer__col-title">
+            <i data-feather="shopping-bag"></i> <span>La boutique</span></h3>
+          <nav class="footer__nav">
+            <ul class="footer__nav-list">
+              <li class="footer__nav-item">
+                <a href="" class="footer__nav-link">
+                  Mentions légales
+                </a>
+
+
+            </ul>
+          </nav>
         </div>
-      </section>
-    
-      <!-- Campaign Goals Section -->
-      <section class="goals" id="goals">
-        <h2>Our Campaign Goals</h2>
-        <div class="goal-items">
-          <div class="goal-item">
-            <h3>Reduce Emissions</h3>
-            <p>We aim to reduce carbon emissions by promoting sustainable practices.</p>
-          </div>
-          <div class="goal-item">
-            <h3>Increase Awareness</h3>
-            <p>Educating companies and individuals about their carbon footprint is key.</p>
-          </div>
-          <div class="goal-item">
-            <h3>Build Partnerships</h3>
-            <p>Working together with industry leaders to reach net-zero emissions.</p>
-          </div>
+        <div class="footer__col">
+          <h3 class="footer__col-title">
+            <i data-feather="share-2"></i> <span>Nos réseaux</span></h3>
+          <nav class="footer__nav">
+            <ul class="footer__nav-list">
+              <li class="footer__nav-item">
+                <a href="" class="footer__nav-link">
+                  <i data-feather="youtube"></i><span>Youtube</span>
+                </a>
+              </li>
+
+              <li class="footer__nav-item">
+                <a href="" class="footer__nav-link">
+                  <i data-feather="instagram"></i><span>Instagram</span>
+                  
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
-      </section>
-    
-      <!-- Featured Stories Section -->
-      <section class="stories" id="stories">
-        <h2>About the Campaign</h2>
-        <div class="story-items">
-          <div class="story-item">
-            <img src="assets/images/campain img.jpg" alt="Story 1">
-          </div>
-          <div class="story-item">
-            <h3>Tech To Trash</h3>
-            <p>Encourage the recycling of electronic waste by 
-                setting up collection points in manufacturing facilities for old devices, parts, and batteries.</p>
-    
-          </div>
+        <div class="footer__col">
+          <h3 class="footer__col-title">
+            <i data-feather="send"></i> <span>Contact</span></h3>
+          <nav class="footer__nav">
+            <ul class="footer__nav-list">
+              <li class="footer__nav-item">
+                <a href="mailto:contact.laboiserie@gmail.com" class="footer__nav-link">
+                  verdex@gmail.com
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
-      </section>
+      </div>
+    </div>
+  </footer>
+
+      
+        </body>
+        <script src="scripts/campaign.js"></script>
+        </div>
+      </div>
     
-      <!-- Call-to-Action Section -->
-      <section class="cta" id="donate">
-        <h2>Make a Difference Today</h2>
-        <p>Your contribution can help us reach net-zero emissions.</p>
-      </section>
-    </body>
-    <script src="scripts/campaign.js"></script>
+    
+    
+      
+      <!-- Boostrap Scripts -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+      <!-- External Scripts -->
+      <script src="scripts/template.js"></script>
+      <!-- Footer Section -->
+
     </div>
   </div>
 
-
-
-  
   <!-- Boostrap Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
