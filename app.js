@@ -6,6 +6,9 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+require('dotenv').config();
+
+
 
 const signupRouter = require('./Models/signup');
 const loginRouter = require("./Models/login");
