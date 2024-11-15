@@ -15,6 +15,7 @@ const verifyToken = require("./Middleware/authMiddleware"); // Import the JWT ve
 const companycontroller = require("./Controllers/company");
 const inputcontroller = require("./Controllers/input");
 const leaderboardcontroller= require("./Controllers/leaderboard");
+const reportController = require('./Controllers/report');
 
 
 require("dotenv").config();
@@ -81,7 +82,11 @@ app.post('/input/updateRecycledDeviceQuantity', inputcontroller.updateRecycledDe
 //Leaderboard routes
 app.get("/leaderboard/top3", leaderboardcontroller.displayTop3CompaniesForCurrentMonth);
 
-
+// Report-related routes
+app.get("/api/report/emissions-by-sector", reportController.getEmissionsBySector);
+app.get("/api/report/energy-consumption-by-sector", reportController.getEnergyConsumptionBySector);
+app.get("/api/report/operational-cost-by-month", reportController.getOperationalCostByMonth);
+app.get("/api/report/yearly-emissions-by-sector", reportController.getYearlyEmissionsBySector);
 
 
 app.listen(port, async () => {
