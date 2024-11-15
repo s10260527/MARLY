@@ -18,38 +18,16 @@ module.exports = {
     // Fetch energy consumption data by sector using MonthlyEnergyConsumption
     getEnergyConsumptionBySector: async () => {
         const query = `
-            SELECT 
-                S.sector_name, 
-                DATEPART(month, MEC.month) AS month,
-                SUM(MEC.total_energy) AS monthly_energy
+            SELECT S.sector_name, SUM(MEC.total_energy) AS total_energy
             FROM MonthlyEnergyConsumption MEC
             JOIN Sectors S ON MEC.sector_id = S.sector_id
-            WHERE MEC.subsector_id IS NULL
-            GROUP BY S.sector_name, DATEPART(month, MEC.month)
-            ORDER BY S.sector_name, DATEPART(month, MEC.month);
+            WHERE MEC.subsector_id IS NULL  -- Exclude subsectors if applicable
+            GROUP BY S.sector_name
         `;
         const request = new sql.Request();
         const result = await request.query(query);
-    
-        // Transform the result to match the expected structure in the frontend
-        const transformedData = result.recordset.reduce((acc, row) => {
-            const sector = acc.find(s => s.sector_name === row.sector_name);
-            if (sector) {
-                sector.monthlyData[row.month - 1] = row.monthly_energy;
-            } else {
-                const newSector = {
-                    sector_name: row.sector_name,
-                    total_energy: 0,  // Set later if needed
-                    monthlyData: new Array(12).fill(0),
-                };
-                newSector.monthlyData[row.month - 1] = row.monthly_energy;
-                acc.push(newSector);
-            }
-            return acc;
-        }, []);
-    
-        return transformedData;
-    },    
+        return result.recordset;
+    },
 
     // Fetch operational costs by month for each sector from OperationalCosts table
     getOperationalCostByMonth: async () => {

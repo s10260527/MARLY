@@ -24,10 +24,10 @@ const reportController = require('./Controllers/report');
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 1433;
+const port = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors({ credentials: true, origin: 'http://localhost:1433' }));
+app.use(cors({ credentials: true, origin: 'http://127.0.0.1:3000' }));
 app.use(express.json());
 app.use(cookieParser());
 

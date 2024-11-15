@@ -200,11 +200,12 @@ a.sidebar-link:hover {
   font-size: 1.5rem;
 }
 
-button.btn-info {
-  background-color: #17a2b8;
-  color: #fff;
-  border-radius: 5px;
-  font-weight: 500;
+#back-to-sector-chart {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000; /* Ensure it's above the charts */
+    size: 50%;
 }
 
 .table-icon {
