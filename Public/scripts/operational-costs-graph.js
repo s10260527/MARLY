@@ -518,6 +518,32 @@ function updateCostsUIState() {
     viewIndicator.textContent = viewText;
 }
 
+function filterCostsGraph(startIso, endIso) {
+    const filteredLabels = [];
+    const filteredTotalData = [];
+
+    const data = operationalCostsData.monthlyData.overview;
+    data.total.forEach((item, index) => {
+        if (item.isoDate >= startIso && item.isoDate <= endIso) {
+            filteredLabels.push(item.date);
+            filteredTotalData.push(item.value);
+        }
+    });
+
+    verticalBarChart.data.labels = filteredLabels;
+    verticalBarChart.data.datasets[0].data = filteredTotalData;
+    verticalBarChart.update();
+
+    // Update horizontal bar chart
+    updateCostsHorizontalBarChart(filteredLabels);
+}
+
+function updateCostsHorizontalBarChart(filteredLabels) {
+    const monthIndex = operationalCostsData.monthlyData.overview.total.findIndex(d => filteredLabels.includes(d.date));
+    horizontalBarChart.data = getCostsHorizontalBarChartData(monthIndex);
+    horizontalBarChart.update();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initializeCostsCharts();
     updateCostsUIState();
