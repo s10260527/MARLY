@@ -1,0 +1,15 @@
+.chart-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: #eff6f2;
+    padding: 10px;
+}
+
+.card-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2em;
+    color: #000000;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
