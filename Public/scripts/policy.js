@@ -24,7 +24,7 @@ async function updateCompanyParticipation(companyId) {
 // Event listener for the "Get Involved" button click
 document.getElementById("submitButton").addEventListener("click", async function() {
     // Get company ID from localStorage
-    const companyId = 3;  // You can also get it from localStorage, e.g., localStorage.getItem("company_id")
+    const companyId = localStorage.getItem('companyId');  // You can also get it from localStorage, e.g., localStorage.getItem("company_id")
 
     if (!companyId) {
         alert("Company ID is missing. Please ensure the company is logged in.");

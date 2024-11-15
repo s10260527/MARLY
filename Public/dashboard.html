@@ -161,43 +161,43 @@
         </div>
         <!-- Data Glance Here -->
         <div class="data-glance">
-            <div class="card" style="width: 15rem;">
+            <div class="card" style="width: 15rem;" id="carbon-emissions-card">
                 <div class="card-body">
-                  <h5 class="card-title"><div>536</div>t</h5>
-                  <p class="card-text">Total Carbon Emissions</p>
-                  <h6 class="card-subtitle mb-2 text-body-secondary negative-percent">-30%</h6>
-                  <p class="card-text">This month</p>
-                  <h6 class="card-subtitle mb-2 text-body-secondary"><i class="bi bi-arrow-down-right"></i></h6>
+                    <h5 class="card-title"><div></div>t</h5>
+                    <p class="card-text">Total Carbon Emissions</p>
+                    <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+                    <p class="card-text">This month</p>
+                    <h6 class="card-subtitle mb-2 text-body-secondary"><i class="bi"></i></h6>
                 </div>
             </div>
-            <div class="card" style="width: 15rem;">
+            <div class="card" style="width: 15rem;" id="energy-consumption-card">
                 <div class="card-body">
-                  <h5 class="card-title"><div>243,584</div>kWh</h5>
-                  <p class="card-text">Total Energy Consumption</p>
-                  <h6 class="card-subtitle mb-2 text-body-secondary positive-percent">+21%</h6>
-                  <p class="card-text">This month</p>
-                  <h6 class="card-subtitle mb-2 text-body-secondary"><i class="bi bi-arrow-up-right"></i></h6>
+                    <h5 class="card-title"><div></div>kWh</h5>
+                    <p class="card-text">Total Energy Consumption</p>
+                    <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+                    <p class="card-text">This month</p>
+                    <h6 class="card-subtitle mb-2 text-body-secondary"><i class="bi"></i></h6>
                 </div>
             </div>
-            <div class="card" style="width: 15rem;">
+            <div class="card" style="width: 15rem;" id="operational-costs-card">
                 <div class="card-body">
-                  <h5 class="card-title">$<div>1.3</div>Mil</h5>
-                  <p class="card-text">Total Operational Costs</p>
-                  <h6 class="card-subtitle mb-2 text-body-secondary positive-percent">+16%</h6>
-                  <p class="card-text">This month</p>
-                  <h6 class="card-subtitle mb-2 text-body-secondary"><i class="bi bi-arrow-up-right"></i></h6>
+                    <h5 class="card-title">$<div></div><span></span></h5>
+                    <p class="card-text">Total Operational Costs</p>
+                    <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+                    <p class="card-text">This month</p>
+                    <h6 class="card-subtitle mb-2 text-body-secondary"><i class="bi"></i></h6>
                 </div>
             </div>
         </div>
         <!-- Suggestions Facts -->
          <div class="suggest-facts">
-            <h6>🔍 Data Insights</h5>
+            <h6>🔍 Data Insights</h6>
             <div class="card">
                 <div class="card-body">
                     <p class="card-text">Your
                     <br><b>Total Carbon Emissions</b>
                     <br>is equivalent to</p>
-                    <p class="card-text multiply"><img src="assets/images/car.png" alt="Car Icon" height="40" width="40"> x44,667</p>
+                    <p class="card-text multiply"><img src="assets/images/car.png" alt="Car Icon" height="40" width="40"> <span id="car-equivalent"></span></p>
                     <p class="card-text multiply-info"><em>(4-seater car driven for 100 km)</em></p>
                 </div>
             </div>
@@ -206,11 +206,11 @@
                     <p class="card-text">Your
                     <br><b>Total Energy Consumption</b>
                     <br>is equivalent to</p>
-                    <p class="card-text multiply"><img src="assets/images/house.png" alt="House Icon" height="40" width="40"> x54</p>
+                    <p class="card-text multiply"><img src="assets/images/house.png" alt="House Icon" height="40" width="40"> <span id="hdb-equivalent"></span></p>
                     <p class="card-text multiply-info"><em>(4-room HDB flat powered for 1 year 24/7)</em></p>
                 </div>
             </div>
-            <h6>💡 AI Suggestions</h5>
+            <h6>💡 AI Suggestions</h6>
             <div class="suggestions-container">
                 <div class="suggestion-card">
                     <h3 class="suggestion-title">Carbon Emissions</h3>
@@ -442,7 +442,7 @@
   
   <!-- Boostrap Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5pNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
   <!-- External Scripts -->
   <script src="scripts/dashboard.js"></script>

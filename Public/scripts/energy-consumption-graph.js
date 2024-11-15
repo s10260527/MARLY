@@ -464,6 +464,32 @@ function updateEnergyUIState() {
     viewIndicator.textContent = viewText;
 }
 
+function filterEnergyGraph(startIso, endIso) {
+    const filteredLabels = [];
+    const filteredTotalData = [];
+
+    const data = energyData.monthlyData.overview;
+    data.total.forEach((item, index) => {
+        if (item.isoDate >= startIso && item.isoDate <= endIso) {
+            filteredLabels.push(item.date);
+            filteredTotalData.push(item.value);
+        }
+    });
+
+    energyLineChart.data.labels = filteredLabels;
+    energyLineChart.data.datasets[0].data = filteredTotalData;
+    energyLineChart.update();
+
+    // Update pie chart
+    updateEnergyPieChart(filteredLabels);
+}
+
+function updateEnergyPieChart(filteredLabels) {
+    const monthIndex = energyData.monthlyData.overview.total.findIndex(d => filteredLabels.includes(d.date));
+    energyPieChart.data = getEnergyPieChartData(monthIndex);
+    energyPieChart.update();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initializeEnergyCharts();
     updateEnergyUIState();

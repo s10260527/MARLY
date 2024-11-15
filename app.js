@@ -6,6 +6,9 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+require('dotenv').config();
+
+
 
 const signupRouter = require('./Models/signup');
 const loginRouter = require("./Models/login");
@@ -21,10 +24,10 @@ const reportController = require('./Controllers/report');
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 1433;
 
 // Middleware
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+app.use(cors({ credentials: true, origin: 'http://localhost:1433' }));
 app.use(express.json());
 app.use(cookieParser());
 
