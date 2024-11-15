@@ -1,50 +1,105 @@
 document.addEventListener("DOMContentLoaded", async function () {
   // Fetch data for emissions by sector
   async function fetchEmissionsBySector() {
-    const response = await fetch("/api/report/emissions-by-sector");
-    return response.json();
+    try {
+      const response = await fetch("/api/report/emissions-by-sector");
+      if (!response.ok) throw new Error("Failed to fetch emissions data");
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching emissions data:", error);
+      return [];
+    }
   }
 
-  // Fetch data for energy consumption by sector
   async function fetchEnergyConsumptionBySector() {
-    const response = await fetch("/api/report/energy-consumption-by-sector");
-    return response.json();
-  }
+    try {
+        const response = await fetch("http://localhost:3000/api/report/energy-consumption-by-sector");
+        if (!response.ok) throw new Error("Failed to fetch energy consumption data");
+        
+        const data = await response.json();
+
+        // Add empty monthly data if not present
+        data.forEach(sector => {
+            if (!sector.monthlyData) {
+                sector.monthlyData = new Array(12).fill(0); // Placeholder for each month
+            }
+        });
+
+        return data;
+    } catch (error) {
+        console.error("Error fetching energy consumption data:", error);
+        return [];
+    }
+}
+
 
   // Fetch data for operational costs by month
   async function fetchOperationalCostByMonth() {
-    const response = await fetch("/api/report/operational-cost-by-month");
-    return response.json();
+    try {
+        const response = await fetch("/api/report/operational-cost-by-month");
+        if (!response.ok) throw new Error("Failed to fetch operational costs data");
+        const data = await response.json();
+
+        // Transform the data into a structure that's easier for the chart
+        const transformedData = data.reduce((acc, item) => {
+            const { sector_name, month, operational_cost } = item;
+            if (!acc[sector_name]) acc[sector_name] = new Array(12).fill(0); // Initialize with 12 months
+            acc[sector_name][month - 1] = operational_cost; // Fill month index with the operational cost
+            return acc;
+        }, {});
+
+        // Add total costs for each month
+        transformedData.total = Array.from({ length: 12 }, (_, i) =>
+            Object.values(transformedData).reduce((sum, sectorCosts) => sum + sectorCosts[i], 0)
+        );
+
+        return transformedData;
+    } catch (error) {
+        console.error("Error fetching operational costs data:", error);
+        return { total: new Array(12).fill(0) }; // Return empty data if there’s an error
+    }
   }
+
 
   // Fetch data for yearly emissions by sector
   async function fetchYearlyEmissionsBySector() {
-    const response = await fetch("/api/report/yearly-emissions-by-sector");
-    return response.json();
+    try {
+      const response = await fetch("/api/report/yearly-emissions-by-sector");
+      if (!response.ok) throw new Error("Failed to fetch yearly emissions data");
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching yearly emissions data:", error);
+      return [];
+    }
   }
 
   // Data objects for charts
   const sectorEmissionsData = await fetchEmissionsBySector();
   const sectorEnergyData = await fetchEnergyConsumptionBySector();
+  // Initial data fetch and chart rendering
   const monthlyOperationalCostData = await fetchOperationalCostByMonth();
   const yearlyEmissionsData = await fetchYearlyEmissionsBySector();
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const years = Object.keys(yearlyEmissionsData[Object.keys(yearlyEmissionsData)[0]]);
+  const years = yearlyEmissionsData.length ? Object.keys(yearlyEmissionsData[0]) : [];
+
+  console.log("Emissions Data:", sectorEmissionsData);
+  console.log("Energy Consumption Data:", sectorEnergyData);
+
 
   // Render Pie Chart for Emissions by Sector
-  function renderPieChart(data) {
+  function renderPieChart(data = []) {
+    if (data.length === 0) {
+      console.warn("No data available for pie chart");
+      return;
+    }
+
     const pieChartOptions = {
-      series: data.map(d => d.value),
-      chart: {
-        type: 'pie',
-        height: 350
-      },
-      labels: data.map(d => d.label),
+      series: data.map(d => d.total_emissions || 0), // Adjust to match data key
+      chart: { type: 'pie', height: 350 },
+      labels: data.map(d => d.sector_name || "Unknown"), // Adjust to match data key
       colors: ['#246dec', '#cc3c43', '#367952', '#f5b74f', '#4f35a1', '#2ecc71'],
-      legend: {
-        position: 'bottom'
-      }
+      legend: { position: 'bottom' }
     };
 
     if (window.pieChart) window.pieChart.destroy();
@@ -52,27 +107,33 @@ document.addEventListener("DOMContentLoaded", async function () {
     window.pieChart.render();
   }
 
+
   // Render Bar Chart for Energy Consumption by Sector
-  function renderEnergyBarChart(data) {
+  function renderEnergyBarChart(data = []) {
+    if (data.length === 0) {
+        console.warn("No data available for energy bar chart");
+        return;
+    }
+
     const energyBarChartOptions = {
-      series: [{ name: "Energy Consumption", data: data.map(d => d.value) }],
-      chart: {
-        type: 'bar',
-        height: 350,
-        events: {
-          dataPointSelection: function (event, chartContext, config) {
-            const sectorName = data[config.dataPointIndex].label;
-            const monthlyData = data[config.dataPointIndex].monthlyData;
-            renderMonthlyEnergyBarChart(sectorName, monthlyData);
-          }
-        }
-      },
-      xaxis: {
-        categories: data.map(d => d.label),
-        title: { text: "Sector" }
-      },
-      yaxis: { title: { text: "Energy Consumption (MWh)" } },
-      colors: ['#f5b74f']
+        series: [{ name: "Energy Consumption", data: data.map(d => d.total_energy || 0) }],
+        chart: { 
+            type: 'bar', 
+            height: 350,
+            events: {
+                dataPointSelection: (event, chartContext, { dataPointIndex }) => {
+                    const selectedSector = data[dataPointIndex].sector_name;
+                    const monthlyData = data[dataPointIndex].monthlyData || []; // Add monthlyData to data
+                    renderMonthlyEnergyBarChart(selectedSector, monthlyData);
+                }
+            }
+        },
+        xaxis: { 
+            categories: data.map(d => d.sector_name || "Unknown"), 
+            title: { text: "Sector" } 
+        },
+        yaxis: { title: { text: "Energy Consumption (MWh)" } },
+        colors: ['#f5b74f']
     };
 
     if (window.energyBarChart) window.energyBarChart.destroy();
@@ -81,13 +142,18 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   // Render Monthly Energy Bar Chart for a specific sector
-  function renderMonthlyEnergyBarChart(sector, monthlyData) {
+  function renderMonthlyEnergyBarChart(sector, monthlyData = []) {
+    if (monthlyData.length === 0) {
+        console.warn(`No monthly data available for ${sector}`);
+        return;
+    }
+
     const monthlyEnergyBarChartOptions = {
-      series: [{ name: "Energy Consumption", data: monthlyData }],
-      chart: { type: 'bar', height: 350 },
-      xaxis: { categories: months, title: { text: "Month" } },
-      yaxis: { title: { text: "Energy Consumption (MWh)" } },
-      title: { text: `${sector} Monthly Energy Consumption`, align: 'center' }
+        series: [{ name: "Energy Consumption", data: monthlyData }],
+        chart: { type: 'bar', height: 350 },
+        xaxis: { categories: months, title: { text: "Month" } },
+        yaxis: { title: { text: "Energy Consumption (MWh)" } },
+        title: { text: `${sector} Monthly Energy Consumption`, align: 'center' }
     };
 
     if (window.energyBarChart) window.energyBarChart.destroy();
@@ -95,19 +161,25 @@ document.addEventListener("DOMContentLoaded", async function () {
     window.energyBarChart.render();
   }
 
+
   // Render Line Chart for Operational Cost by Month
   function renderOperationalCostLineChart(sector = "Total", data = monthlyOperationalCostData) {
-    const lineChartData = sector === "Total" ? data.total : data[sector];
+    const lineChartData = sector === "Total" && data.total ? data.total : (data[sector] || []);
+
+    if (lineChartData.length === 0) {
+        console.warn(`No operational cost data available for ${sector}`);
+        return; // Exit the function if no data is available
+    }
 
     const operationalCostLineChartOptions = {
-      series: [{ name: "Operational Cost", data: lineChartData }],
-      chart: { type: 'line', height: 350 },
-      xaxis: { categories: months, title: { text: "Month" } },
-      yaxis: { title: { text: "Cost ($)" } },
-      title: { text: `${sector} Monthly Operational Cost`, align: 'center' },
-      colors: ['#4f35a1'],
-      dataLabels: { enabled: false },
-      stroke: { curve: 'smooth' }
+        series: [{ name: "Operational Cost", data: lineChartData }],
+        chart: { type: 'line', height: 350 },
+        xaxis: { categories: months, title: { text: "Month" } },
+        yaxis: { title: { text: "Cost ($)" } },
+        title: { text: `${sector} Monthly Operational Cost`, align: 'center' },
+        colors: ['#4f35a1'],
+        dataLabels: { enabled: false },
+        stroke: { curve: 'smooth' }
     };
 
     if (window.operationalCostLineChart) window.operationalCostLineChart.destroy();
@@ -115,11 +187,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     window.operationalCostLineChart.render();
   }
 
+
   // Render Bar Chart for Yearly Emissions by Sector
   function renderYearlyEmissionsBarChart(sector) {
-    const yearlyData = yearlyEmissionsData[sector];
+    const yearlyData = yearlyEmissionsData.find(s => s.label === sector) || {};
+
+    if (!yearlyData.data) {
+      console.warn(`No yearly emissions data available for ${sector}`);
+      return;
+    }
+
     const options = {
-      series: [{ name: "Emissions", data: Object.values(yearlyData) }],
+      series: [{ name: "Emissions", data: yearlyData.data }],
       chart: { type: 'bar', height: 350 },
       xaxis: { categories: years, title: { text: "Year" } },
       yaxis: { title: { text: "Emissions (tonnes)" } },
@@ -250,5 +329,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Initial chart renders
   renderPieChart(sectorEmissionsData);
   renderEnergyBarChart(sectorEnergyData);
-  renderOperationalCostLineChart();
+  renderOperationalCostLineChart("Total", monthlyOperationalCostData); // Default view
+
 });

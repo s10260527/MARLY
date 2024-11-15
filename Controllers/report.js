@@ -11,7 +11,6 @@ module.exports = {
             console.error("Error fetching emissions by sector:", err);
             res.status(500).json({ error: "Failed to fetch emissions data" });
         }
-        res.json({ message: "Emissions by sector data" });
     },
 
     // Controller to get energy consumption by sector
