@@ -466,7 +466,7 @@ function handleLineChartClick(event, elements) {
     updateUIState();
 }
 
-// 8. Update handlePieChartClick to set correct view:
+// 8. Update handlePieChart to set correct view:
 function handlePieChartClick(evt, elements) {
     if (elements.length === 0) return;
 
@@ -660,3 +660,35 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeCharts();
     updateUIState();
 });
+
+function filterEmissionsGraph(startIso, endIso) {
+    const filteredLabels = [];
+    const filteredTotalData = [];
+    const filteredSustainableData = [];
+    const filteredCreditsData = [];
+
+    const data = emissionsData.monthlyData.overview;
+    data.total.forEach((item, index) => {
+        if (item.isoDate >= startIso && item.isoDate <= endIso) {
+            filteredLabels.push(item.date);
+            filteredTotalData.push(item.value);
+            filteredSustainableData.push(data.sustainable[index].value);
+            filteredCreditsData.push(data.credits[index].value);
+        }
+    });
+
+    lineChart.data.labels = filteredLabels;
+    lineChart.data.datasets[0].data = filteredTotalData;
+    lineChart.data.datasets[1].data = filteredSustainableData;
+    lineChart.data.datasets[2].data = filteredCreditsData;
+    lineChart.update();
+
+    // Update pie chart
+    updatePieChart(filteredLabels);
+}
+
+function updatePieChart(filteredLabels) {
+    const monthIndex = emissionsData.monthlyData.overview.total.findIndex(d => filteredLabels.includes(d.date));
+    pieChart.data = getPieChartData(monthIndex);
+    pieChart.update();
+}
