@@ -76,7 +76,7 @@ function initGeneralChart() {
                         }
                         if (context.parsed.y !== null) {
                             if (context.datasetIndex === 0) {
-                                label += context.parsed.y.toFixed(2) + ' tonnes';
+                                label += context.parsed.y.toFixed(2) + ' metric tons';
                             } else if (context.datasetIndex === 1) {
                                 label += context.parsed.y.toFixed(2) + ' kWh';
                             } else {
