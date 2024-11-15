@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -47,24 +48,8 @@
         }
     </style>
 </head>
-<body>
-    <!-- Header -->
-    <header class="bg-white border-bottom py-3">
-        <div class="container d-flex justify-content-between align-items-center">
-            <img src="logo.png" alt="Verdex Logo" height="40">
-            <nav>
-                <ul class="nav">
-                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Leaderboards</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Resources</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-user"></i> Profile</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
 
+<body>
     <!-- Signup Form -->
     <div class="container mt-5">
         <div class="row justify-content-center">
@@ -105,6 +90,9 @@
                     </div>
                     <button type="submit" class="btn btn-dark btn-block">Sign Up</button>
                     <div class="text-center mt-3">
+                        <span>Already have an account? <a href="login.html">Log In Here</a></span>
+                    </div>
+                    <div class="text-center mt-3">
                         <a href="#">Forgot password?</a>
                     </div>
                 </form>
@@ -124,8 +112,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#signupForm').on('submit', function(e) {
+        $(document).ready(function () {
+            $('#signupForm').on('submit', function (e) {
                 e.preventDefault();
                 const formData = {
                     company_name: $('#companyName').val(),
@@ -143,14 +131,14 @@
                     url: '/api/signup',
                     data: JSON.stringify(formData),
                     contentType: 'application/json',
-                    success: function(response) {
+                    success: function (response) {
                         alert(response.message);
                         // Redirect to login page after successful signup
                         if (response.message === "Company registered successfully") {
                             window.location.href = "login.html";
                         }
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         alert(xhr.responseJSON.message);
                     }
                 });
@@ -158,4 +146,5 @@
         });
     </script>
 </body>
+
 </html>

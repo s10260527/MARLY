@@ -1,5 +1,5 @@
 // Function to fetch whether the company is part of the campaign
-let companyId = 1
+let companyId = localStorage.getItem('companyId')
 async function checkIfCompanyIsParticipant(companyId) {
     try {
         // Fetch the data from the backend to check if the company is a participant
@@ -27,7 +27,6 @@ async function checkIfCompanyIsParticipant(companyId) {
 document.getElementById("getInvolvedBtn").addEventListener("click", async function() {
     // Get company ID from localStorage
     //const companyId = localStorage.getItem("company_id");
-    const companyId = 3
 
     if (!companyId) {
         alert("Company ID is missing. Please ensure the company is logged in.");

@@ -18,7 +18,8 @@ DROP TABLE IF EXISTS sub_sectors;
 CREATE TABLE Companies (
     company_id INT PRIMARY KEY IDENTITY(1,1),
     company_name VARCHAR(255) NOT NULL,
-    industry_type VARCHAR(255),
+	hashed_password VARCHAR(100),
+	industry_type VARCHAR(255),
 	campaign_participant BIT,
     country VARCHAR(255),	
     city VARCHAR(255),
@@ -83,13 +84,13 @@ CREATE TABLE EmissionsData (
 );
 
 -- Insert mock data into Companies
-INSERT INTO Companies (company_name, industry_type, campaign_participant, country, city, contact_email, contact_phone)
+INSERT INTO Companies (company_name, hashed_password, industry_type, campaign_participant, country, city, contact_email, contact_phone)
 VALUES
-('Apple Inc', 'Tech Manufacturing', 0, 'USA', 'New York', 'contact@Apple.com', '123-456-7890'),
-('GreenTech Solutions', 'Tech Manufacturing', 1, 'Germany', 'Berlin', 'support@greentech.com', '234-567-8901'),
-('Innovate Electronics', 'Electronics', 0, 'South Korea', 'Seoul', 'info@innovateelectronics.com', '345-678-9012'),
-('EcoTech Industries', 'Tech Manufacturing', 1, 'Japan', 'Tokyo', 'contact@ecotechindustries.com', '456-789-0123'),
-('SmartTech Corp.', 'Tech Manufacturing', 0, 'Singapore', 'Singapore', 'sales@smarttech.com', '567-890-1234');
+('Apple Inc', '$2a$10$r8V1ec90pHSZl4GjLjnqR.tHMEBtGMFQjAWnUdgin6oadESeL3fza','Tech Manufacturing', 0, 'USA', 'New York', 'contact@Apple.com', '123-456-7890'),
+('GreenTech Solutions', '$2a$10$r8V1ec90pHSZl4GjLjnqR.tHMEBtGMFQjAWnUdgin6oadESeL3fza','Tech Manufacturing', 1, 'Germany', 'Berlin', 'support@greentech.com', '234-567-8901'),
+('Innovate Electronics', '$2a$10$r8V1ec90pHSZl4GjLjnqR.tHMEBtGMFQjAWnUdgin6oadESeL3fza','Electronics', 0, 'South Korea', 'Seoul', 'info@innovateelectronics.com', '345-678-9012'),
+('EcoTech Industries', '$2a$10$r8V1ec90pHSZl4GjLjnqR.tHMEBtGMFQjAWnUdgin6oadESeL3fza','Tech Manufacturing', 1, 'Japan', 'Tokyo', 'contact@ecotechindustries.com', '456-789-0123'),
+('SmartTech Corp.', '$2a$10$r8V1ec90pHSZl4GjLjnqR.tHMEBtGMFQjAWnUdgin6oadESeL3fza','Tech Manufacturing', 0, 'Singapore', 'Singapore', 'sales@smarttech.com', '567-890-1234');
 
 -- Insert mock data into Recycable_device
 INSERT INTO Recycable_device (device_name, carbon_offset)
