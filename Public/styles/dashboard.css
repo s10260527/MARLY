@@ -174,7 +174,7 @@ a.sidebar-link:hover {
     flex-direction: row;
     font-size: 1.3rem; 
     font-weight: 500;
-    color: #011209;
+    color: white !important;
     gap: 5px;
     margin-bottom: 0.1rem;  
 }
@@ -200,11 +200,20 @@ a.sidebar-link:hover {
 
 /* Add these new styles for percentage colors */
 .card-subtitle.negative-percent {
-    color: #1fff80 !important;
+    color: #7dffb3 !important; /* Pastel green with matching intensity */
 }
 
 .card-subtitle.positive-percent {
-    color: #ff5050 !important;
+    color: #ff7d7d !important; /* Pastel red with matching intensity */
+}
+
+/* Add these new styles for arrow colors */
+.card-subtitle .bi-arrow-down-right {
+    color: #7dffb3 !important;  /* Match pastel green */
+}
+
+.card-subtitle .bi-arrow-up-right {
+    color: #ff7d7d !important;  /* Match pastel red */
 }
 
 .data-glance .card {
@@ -216,7 +225,9 @@ a.sidebar-link:hover {
     background-color: #6453f3;
 }
 
-.card-title div {
+.card-title div,
+.card-title span {
+    color: white;
     font-size: 1.8em;
     display: inline;
 }
