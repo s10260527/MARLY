@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Progress</title>
+    <link rel="stylesheet" href="styles/dashboard.css"> <!-- Adjust path -->
+    <script src="scripts/updateProgress.js" defer></script> <!-- Adjust path -->
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-primary">Update Net Zero Progress</h1>
+        
+        <form id="update-progress-form" class="card p-4 shadow">
+            <div class="mb-3">
+                <label for="energy-efficiency" class="form-label">Energy Efficiency Progress (%)</label>
+                <input type="number" id="energy-efficiency" class="form-control" min="0" max="100" required>
+            </div>
+            <div class="mb-3">
+                <label for="renewable-energy" class="form-label">Renewable Energy Progress (%)</label>
+                <input type="number" id="renewable-energy" class="form-control" min="0" max="100" required>
+            </div>
+            <div class="mb-3">
+                <label for="carbon-offsets" class="form-label">Carbon Offsets Progress (%)</label>
+                <input type="number" id="carbon-offsets" class="form-control" min="0" max="100" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

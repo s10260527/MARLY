@@ -93,8 +93,25 @@ function getCardElements(type) {
     };
 }
 
+function navigateToProgressPage() {
+    window.location.href = 'progress.html'; // Replace with the actual path of the breakdown page
+}
+
+
 // Initialize when document is loaded
 document.addEventListener('DOMContentLoaded', () => {
     updateDataGlance();
     // Add event listener for graph data changes if needed
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const savedProgress = localStorage.getItem('netZeroProgress');
+    if (savedProgress) {
+        const progressBar = document.querySelector('.progress-bar');
+        const progressText = document.querySelector('.text-muted');
+
+        progressBar.style.width = `${savedProgress}%`;
+        progressBar.setAttribute('aria-valuenow', savedProgress);
+        progressText.textContent = `Progress to Net Zero Goal ♻️ (${savedProgress}%)`;
+    }
 });

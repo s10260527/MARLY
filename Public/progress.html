@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Net Zero Progress</title>
+    <link rel="stylesheet" href="styles/dashboard.css"> <!-- Adjust path -->
+    <script src="scripts/updateProgress.js" defer></script> <!-- Adjust path -->
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-primary">Net Zero Goal Breakdown</h1>
+        
+        <!-- Current Progress -->
+        <div class="card p-4 shadow mb-4">
+            <h2>Current Progress</h2>
+            <p>Current Progress: <span id="current-progress" class="text-success">80%</span></p>
+            <p>Goal: Net Zero by 2030</p>
+        </div>
+        
+        <!-- Progress Over Time -->
+        <div class="card p-4 shadow mb-4">
+            <h2>Progress Over Time</h2>
+            <div id="progress-graph">
+                <!-- Insert graph dynamically using JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Breakdown of Progress -->
+        <div class="card p-4 shadow mb-4">
+            <h2>Breakdown of Progress</h2>
+            <ul>
+                <li>Energy efficiency: 40%</li>
+                <li>Renewable energy: 30%</li>
+                <li>Carbon offsets: 10%</li>
+            </ul>
+        </div>
+        
+        <!-- Update Progress Button -->
+        <button class="btn btn-primary" onclick="navigateToUpdatePage()">Update Progress</button>
+    </div>
+</body>
+</html>
