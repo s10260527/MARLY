@@ -2,14 +2,15 @@
 
 -- Now drop the tables
 DROP TABLE IF EXISTS Campaigns;
-DROP TABLE IF EXISTS Recycable_device;
+DROP TABLE IF EXISTS Post_Details;
 DROP TABLE IF EXISTS Companies;
-DROP TABLE IF EXISTS Campaign_participants;
 DROP TABLE IF EXISTS Sectors;
 DROP TABLE IF EXISTS EmissionsData;
 DROP TABLE IF EXISTS Subsectors;
 DROP TABLE IF EXISTS sub_sectors;
 DROP TABLE IF EXISTS MonthlyEnergyConsumption;
+DROP TABLE IF EXISTS OperationalCosts;
+
 
 
 
@@ -29,14 +30,14 @@ CREATE TABLE Companies
     created_at DATETIME DEFAULT GETDATE()
 );
 
-CREATE TABLE Recycable_device
+CREATE TABLE Post_Details
 (
-    device_id INT PRIMARY KEY IDENTITY(1,1),
-    -- Unique identifier for each device
-    device_name VARCHAR(255) NOT NULL,
-    -- Name of the recyclable device
-    carbon_offset DECIMAL(10, 2)
-    -- Carbon offset in metric tons
+    company_id INT PRIMARY KEY IDENTITY(1,1),
+    company_name VARCHAR(255) NOT NULL,
+	poster_name VARCHAR(255),
+    likes INT,
+    poster_img NVARCHAR(MAX),
+    post_date DATETIME NOT NULL
 );
 
 CREATE TABLE Campaigns
@@ -58,19 +59,6 @@ CREATE TABLE Campaigns
     FOREIGN KEY (company_id) REFERENCES Companies(company_id) ON DELETE CASCADE
 );
 
-CREATE TABLE Campaign_participants
-(
-    campaign_id INT,
-    company_id INT,
-    -- Foreign key to link to Companies table
-    device_id INT,
-    quantity INT,
-    created_at DATETIME DEFAULT GETDATE(),
-    -- Timestamp for when the campaign was created
-    FOREIGN KEY (company_id) REFERENCES Companies(company_id) ON DELETE NO ACTION,
-    FOREIGN KEY (campaign_id) REFERENCES Campaigns(campaign_id) ON DELETE NO ACTION,
-    FOREIGN KEY (device_id) REFERENCES Recycable_device(device_id) ON DELETE NO ACTION
-);
 
 -- Step 1: Create the Sectors table
 CREATE TABLE Sectors
@@ -113,12 +101,7 @@ VALUES
     ('SmartTech Corp.', '$2a$10$r8V1ec90pHSZl4GjLjnqR.tHMEBtGMFQjAWnUdgin6oadESeL3fza', 'Tech Manufacturing', 0, 'Singapore', 'Singapore', 'sales@smarttech.com', '567-890-1234');
 
 -- Insert mock data into Recycable_device
-INSERT INTO Recycable_device
-    (device_name, carbon_offset)
-VALUES
-    ('Smartphone', 0.5),
-    ('Laptop', 1.2),
-    ('Tablet', 0.8)
+
 
 -- Insert mock data into Campaigns
 -- Inserting Tech No Trash campaign for Microsoft
@@ -127,15 +110,6 @@ INSERT INTO Campaigns
 VALUES
     (1, 'Tech To Trash', 'Encourage the recycling of electronic waste by setting up collection points in manufacturing facilities for old devices, parts, and batteries.', '2024-11-01', '2024-11-30');
 
--- Insert mock data into Campaign_participants
-INSERT INTO Campaign_participants
-    (campaign_id, company_id, device_id, quantity)
-VALUES
-    (1, 1, 1, 3),
-    (1, 2, 2, 3),
-    (1, 3, 3, 4),
-    (1, 4, 2, 1),
-    (1, 5, 3, 3);
 
 -- Step 4: Insert mock data into Sectors
 INSERT INTO Sectors
