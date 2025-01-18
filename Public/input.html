@@ -13,50 +13,39 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 
-  <div class="bg">
-  </div>
+  <div class="bg"></div>
 
   <main class="form-signin">
-
     <div class="form-background">
-      <!-- Cross button in the top-right corner -->
-           <!-- Back Button (Added at the top-left) -->
-    <a href="campaign.html" class="btn btn-link" id="back-btn" style="position: absolute; top: 10px; left: 10px;">
-      <i class="fas fa-arrow-left"></i> Back
-    </a>
+      <!-- Verdex Title -->
+      <h1 class="verdex-title">VERDEX</h1>
+      <p class="verdex-title">Submit your Instagram Post URL!</p>
 
-      <h1 class="h3">Login</h1>
-    
-      <form id="device-form">
-        <!-- Dropdown for selecting device type -->
-        <div class="form-floating">
-          <select class="form-control" id="deviceDropdown" required>
-            <option value="Smartphone">Smartphone</option>
-            <option value="Laptop">Laptop</option>
-            <option value="Tablet">Tablet</option>
-          </select>
-          <label for="deviceDropdown">Device Type</label>
-        </div>
-
-        <!-- Quantity input -->
-        <div class="form-floating">
-          <input type="number" class="form-control" id="floatingPassword" placeholder="Quantity" min="1" required>
-          <label for="floatingPassword">Quantity</label>
-        </div>
-
-        <button class="w-100 btn btn-lg" id="submit-btn" type="submit">Submit</button>
-      </form>
-
-      <!-- Plus Icon below the submit button -->
-      <div class="plus-icon-container">
-        <button type="button" class="btn btn-link" id="add-form-btn">
-        </button>
+  
+      <!-- Input field for Instagram post URL -->
+      <div class="form-floating">
+        <input
+          type="url"
+          class="form-control"
+          id="instagramPostUrl"
+          placeholder="Instagram Post URL"
+          required
+        />
+        <label for="instagramPostUrl">Instagram Post URL</label>
+      </div>
+  
+      <!-- Buttons Container -->
+      <div class="button-container">
+        <button class="btn btn-lg" id="submit-btn" type="submit">Submit</button>
+        <a href="campaign.html" class="btn btn-lg btn-secondary" id="back-btn">Back</a>
       </div>
     </div>
-
+  
     <!-- Container to hold dynamically added forms -->
     <div id="forms-container"></div>
   </main>
+  
+
 
   <script src="scripts/input.js"></script>
 </body>
