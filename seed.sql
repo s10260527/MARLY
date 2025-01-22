@@ -1,324 +1,404 @@
+-- -- RESET DATABASE (Clear all schema objects)-------------------------------
+-- USE MARLY;
+-- GO
+
+-- DECLARE @sql NVARCHAR(MAX) = '';
+
+-- -- 1. Drop Foreign Keys
+-- SELECT @sql += 
+--     'ALTER TABLE ' + 
+--     QUOTENAME(SCHEMA_NAME(t.schema_id)) + '.' + QUOTENAME(t.name) + 
+--     ' DROP CONSTRAINT ' + QUOTENAME(fk.name) + ';'
+-- FROM sys.foreign_keys AS fk
+-- INNER JOIN sys.tables AS t ON fk.parent_object_id = t.object_id;
+
+-- -- 2. Drop Tables
+-- SELECT @sql += 
+--     'DROP TABLE ' + 
+--     QUOTENAME(SCHEMA_NAME(schema_id)) + '.' + QUOTENAME(name) + ';'
+-- FROM sys.tables;
+
+-- -- 3. Drop Views
+-- SELECT @sql += 
+--     'DROP VIEW ' + 
+--     QUOTENAME(SCHEMA_NAME(schema_id)) + '.' + QUOTENAME(name) + ';'
+-- FROM sys.views;
+
+-- -- 4. Drop Stored Procedures
+-- SELECT @sql += 
+--     'DROP PROCEDURE ' + 
+--     QUOTENAME(SCHEMA_NAME(schema_id)) + '.' + QUOTENAME(name) + ';'
+-- FROM sys.procedures;
+
+-- -- 5. Drop Functions
+-- SELECT @sql += 
+--     'DROP FUNCTION ' + 
+--     QUOTENAME(SCHEMA_NAME(schema_id)) + '.' + QUOTENAME(name) + ';'
+-- FROM sys.objects 
+-- WHERE type IN ('FN', 'IF', 'TF', 'FS', 'FT');  -- Scalar, inline, table-valued functions
+
+-- -- Execute all DROP statements
+-- EXEC sp_executesql @sql;
+-- -- RESET DATABASE END -------------------------------------------------------
 
 
--- Now drop the tables
-DROP TABLE IF EXISTS Campaigns;
-DROP TABLE IF EXISTS Recycable_device;
-DROP TABLE IF EXISTS Companies;
-DROP TABLE IF EXISTS Campaign_participants;
-DROP TABLE IF EXISTS Sectors;
-DROP TABLE IF EXISTS EmissionsData;
-DROP TABLE IF EXISTS Subsectors;
-DROP TABLE IF EXISTS sub_sectors;
+
+-- -- Create the database
+-- CREATE DATABASE MARLY;
+-- GO
 
 
 
+USE MARLY;
+GO
 
+-- Enable JSON support
+ALTER DATABASE MARLY SET COMPATIBILITY_LEVEL = 130;
+GO
 
--- Create Companies Table
 CREATE TABLE Companies (
-    company_id INT PRIMARY KEY IDENTITY(1,1),
-    company_name VARCHAR(255) NOT NULL,
-	hashed_password VARCHAR(100),
-	industry_type VARCHAR(255),
-	campaign_participant BIT,
-    country VARCHAR(255),	
-    city VARCHAR(255),
-    contact_email VARCHAR(255),
-    contact_phone VARCHAR(20),
-    created_at DATETIME DEFAULT GETDATE()
+    company_id INT IDENTITY(1,1) PRIMARY KEY,
+    company_name NVARCHAR(100) NOT NULL,
+    registration_number NVARCHAR(50) NOT NULL,
+    company_size NVARCHAR(20),
+    annual_revenue_range NVARCHAR(50),
+    established_date DATE,
+    headquarters_location NVARCHAR(200),
+    sustainability_commitment_level NVARCHAR(20),
+    baseline_year INT,
+    campaign_participant BIT NOT NULL DEFAULT 0, -- Added from seed.sql
+    created_at DATETIME2 DEFAULT GETDATE(),
+    updated_at DATETIME2 DEFAULT GETDATE()
 );
 
-CREATE TABLE Recycable_device (
-    device_id INT PRIMARY KEY IDENTITY(1,1),  -- Unique identifier for each device
-    device_name VARCHAR(255) NOT NULL,         -- Name of the recyclable device
-    carbon_offset DECIMAL(10, 2)              -- Carbon offset in metric tons
-);
 
+
+-- CAMPAIGN TABLES ----------------------------------
 CREATE TABLE Campaigns (
-    campaign_id INT PRIMARY KEY IDENTITY(1,1),  -- Unique identifier for each campaign
-    company_id INT,                             -- Foreign key to link to Companies table
-    campaign_name NVARCHAR(100) NOT NULL,       -- Name of the campaign
-    description NVARCHAR(MAX) NOT NULL,         -- Detailed description of the campaign
-    start_date DATE NOT NULL,                   -- Start date of the campaign
-    end_date DATE NOT NULL,                     -- End date of the campaign
-    created_at DATETIME DEFAULT GETDATE(),      -- Timestamp for when the campaign was created
+    campaign_id INT IDENTITY(1,1) PRIMARY KEY,
+    company_id INT NOT NULL,
+    campaign_name NVARCHAR(100) NOT NULL,
+    description NVARCHAR(MAX) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    created_at DATETIME2 DEFAULT GETDATE(),
     FOREIGN KEY (company_id) REFERENCES Companies(company_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Campaign_participants (
-    campaign_id INT,  
-    company_id INT,                             -- Foreign key to link to Companies table
-    device_id INT,
-	quantity INT,
-    created_at DATETIME DEFAULT GETDATE(),      -- Timestamp for when the campaign was created
-    FOREIGN KEY (company_id) REFERENCES Companies(company_id) ON DELETE NO ACTION,
-    FOREIGN KEY (campaign_id) REFERENCES Campaigns(campaign_id) ON DELETE NO ACTION,
-    FOREIGN KEY (device_id) REFERENCES Recycable_device(device_id) ON DELETE NO ACTION
+    campaign_id INT NOT NULL,
+    company_id INT NOT NULL,
+    participation_date DATE NOT NULL DEFAULT GETDATE(),
+    status NVARCHAR(20) NOT NULL DEFAULT 'Active',
+    created_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (company_id) REFERENCES Companies(company_id),
+    FOREIGN KEY (campaign_id) REFERENCES Campaigns(campaign_id),
+    PRIMARY KEY (campaign_id, company_id) -- Composite key
+);
+-- END OF CAMPAIGN TABLES -----------------------------
+
+
+
+CREATE TABLE Facilities (
+    facility_id INT IDENTITY(1,1) PRIMARY KEY,
+    company_id INT NOT NULL,
+    facility_name NVARCHAR(100) NOT NULL,
+    location_coordinates GEOGRAPHY,
+    facility_size_sqft DECIMAL(10,2),
+    facility_type NVARCHAR(50),
+    production_capacity INT,
+    operating_hours NVARCHAR(100),
+    sector_type NVARCHAR(50),
+    created_at DATETIME2 DEFAULT GETDATE(),
+    updated_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (company_id) REFERENCES Companies(company_id)
 );
 
--- Step 1: Create the Sectors table
-CREATE TABLE Sectors (
-    sector_id INT PRIMARY KEY IDENTITY(1,1),
-    sector_name NVARCHAR(255) NOT NULL
+CREATE TABLE Departments (
+    department_id INT IDENTITY(1,1) PRIMARY KEY,
+    facility_id INT NOT NULL,
+    department_name NVARCHAR(100) NOT NULL,
+    department_code NVARCHAR(20),
+    cost_center NVARCHAR(50),
+    created_at DATETIME2 DEFAULT GETDATE(),
+    updated_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (facility_id) REFERENCES Facilities(facility_id)
 );
 
--- Step 2: Create the Subsectors table
-CREATE TABLE Subsectors (
-    subsector_id INT PRIMARY KEY IDENTITY(1,1),
-    subsector_name VARCHAR(255) NOT NULL,
-    sector_id INT,
-    FOREIGN KEY (sector_id) REFERENCES Sectors(sector_id)
+CREATE TABLE Users (
+    user_id INT IDENTITY(1,1) PRIMARY KEY,
+    facility_id INT NOT NULL,
+    username NVARCHAR(50) NOT NULL,
+    email NVARCHAR(100) NOT NULL,
+    password_hash NVARCHAR(255) NOT NULL,
+    role NVARCHAR(50) NOT NULL,
+    department_id INT,
+    last_login DATETIME2,
+    created_at DATETIME2 DEFAULT GETDATE(),
+    updated_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (facility_id) REFERENCES Facilities(facility_id),
+    FOREIGN KEY (department_id) REFERENCES Departments(department_id)
 );
 
--- Step 3: Create the EmissionsData table
-CREATE TABLE EmissionsData (
-    company_id INT,
-    sector_id INT NOT NULL,
-    subsector_id INT NOT NULL,
-    emission_date DATE NOT NULL,
-    emission_amount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (sector_id) REFERENCES Sectors(sector_id),
-    FOREIGN KEY (subsector_id) REFERENCES Subsectors(subsector_id),
-    FOREIGN KEY (company_id) REFERENCES Companies(company_id) ON DELETE NO ACTION
-
+-- MANUFACTURING DATA TABLES
+CREATE TABLE Production_Lines (
+    line_id INT IDENTITY(1,1) PRIMARY KEY,
+    facility_id INT NOT NULL,
+    line_name NVARCHAR(100) NOT NULL,
+    product_type NVARCHAR(50),
+    capacity_per_hour DECIMAL(10,2),
+    energy_consumption_rate DECIMAL(10,2),
+    status NVARCHAR(20),
+    installation_date DATE,
+    created_at DATETIME2 DEFAULT GETDATE(),
+    updated_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (facility_id) REFERENCES Facilities(facility_id)
 );
 
--- Insert mock data into Companies
-INSERT INTO Companies (company_name, hashed_password, industry_type, campaign_participant, country, city, contact_email, contact_phone)
-VALUES
-('Apple Inc', '$2a$10$r8V1ec90pHSZl4GjLjnqR.tHMEBtGMFQjAWnUdgin6oadESeL3fza','Tech Manufacturing', 0, 'USA', 'New York', 'contact@Apple.com', '123-456-7890'),
-('GreenTech Solutions', '$2a$10$r8V1ec90pHSZl4GjLjnqR.tHMEBtGMFQjAWnUdgin6oadESeL3fza','Tech Manufacturing', 1, 'Germany', 'Berlin', 'support@greentech.com', '234-567-8901'),
-('Innovate Electronics', '$2a$10$r8V1ec90pHSZl4GjLjnqR.tHMEBtGMFQjAWnUdgin6oadESeL3fza','Electronics', 0, 'South Korea', 'Seoul', 'info@innovateelectronics.com', '345-678-9012'),
-('EcoTech Industries', '$2a$10$r8V1ec90pHSZl4GjLjnqR.tHMEBtGMFQjAWnUdgin6oadESeL3fza','Tech Manufacturing', 1, 'Japan', 'Tokyo', 'contact@ecotechindustries.com', '456-789-0123'),
-('SmartTech Corp.', '$2a$10$r8V1ec90pHSZl4GjLjnqR.tHMEBtGMFQjAWnUdgin6oadESeL3fza','Tech Manufacturing', 0, 'Singapore', 'Singapore', 'sales@smarttech.com', '567-890-1234');
+CREATE TABLE Equipment (
+    equipment_id INT IDENTITY(1,1) PRIMARY KEY,
+    line_id INT NOT NULL,
+    equipment_name NVARCHAR(100) NOT NULL,
+    type NVARCHAR(50),
+    manufacturer NVARCHAR(100),
+    model_number NVARCHAR(50),
+    installation_date DATE,
+    efficiency_rating DECIMAL(5,2),
+    power_rating DECIMAL(10,2),
+    operational_status NVARCHAR(20),
+    created_at DATETIME2 DEFAULT GETDATE(),
+    updated_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (line_id) REFERENCES Production_Lines(line_id)
+);
 
--- Insert mock data into Recycable_device
-INSERT INTO Recycable_device (device_name, carbon_offset)
-VALUES
-('Smartphone', 0.5),
-('Laptop', 1.2),
-('Tablet', 0.8)
+-- EMISSIONS TRACKING TABLES
+CREATE TABLE Emissions_Master (
+    emission_id INT IDENTITY(1,1) PRIMARY KEY,
+    facility_id INT NOT NULL,
+    date DATE NOT NULL,
+    total_gross_emissions DECIMAL(10,2),
+    total_net_emissions DECIMAL(10,2),
+    verification_status NVARCHAR(20),
+    reporting_period NVARCHAR(50),
+    calculation_methodology NVARCHAR(100),
+    sector_emissions_json NVARCHAR(MAX), -- Stored as JSON
+    created_at DATETIME2 DEFAULT GETDATE(),
+    updated_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (facility_id) REFERENCES Facilities(facility_id),
+    CONSTRAINT [Check_If_JSON] CHECK (ISJSON(sector_emissions_json)=1)
+);
 
--- Insert mock data into Campaigns
--- Inserting Tech No Trash campaign for Microsoft
-INSERT INTO Campaigns (company_id, campaign_name, description, start_date, end_date)
-VALUES
-    (1,  'Tech To Trash', 'Encourage the recycling of electronic waste by setting up collection points in manufacturing facilities for old devices, parts, and batteries.', '2024-11-01', '2024-11-30');
+CREATE TABLE Scope1_Emissions (
+    scope1_id INT IDENTITY(1,1) PRIMARY KEY,
+    emission_id INT NOT NULL,
+    date DATE NOT NULL,
+    source_type NVARCHAR(50),
+    fuel_type NVARCHAR(50),
+    quantity_consumed DECIMAL(10,2),
+    emission_factor DECIMAL(10,4),
+    calculated_emissions DECIMAL(10,2),
+    measurement_unit NVARCHAR(20),
+    data_quality_rating NVARCHAR(20),
+    created_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (emission_id) REFERENCES Emissions_Master(emission_id)
+);
 
--- Insert mock data into Campaign_participants
-INSERT INTO Campaign_participants (campaign_id, company_id, device_id, quantity)
-VALUES
-(1, 1, 1, 3),
-(1, 2, 2,3),
-(1, 3, 3, 4),
-(1, 4, 2, 1),
-(1, 5, 3, 3);
+CREATE TABLE Scope2_Emissions (
+    scope2_id INT IDENTITY(1,1) PRIMARY KEY,
+    emission_id INT NOT NULL,
+    date DATE NOT NULL,
+    electricity_consumption DECIMAL(10,2),
+    steam_consumption DECIMAL(10,2),
+    cooling_consumption DECIMAL(10,2),
+    heating_consumption DECIMAL(10,2),
+    grid_emission_factor DECIMAL(10,4),
+    location_based_emissions DECIMAL(10,2),
+    market_based_emissions DECIMAL(10,2),
+    department_id INT,
+    created_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (emission_id) REFERENCES Emissions_Master(emission_id),
+    FOREIGN KEY (department_id) REFERENCES Departments(department_id)
+);
 
--- Step 4: Insert mock data into Sectors
-INSERT INTO Sectors (sector_name) VALUES 
-('Electricity'),
-('Transportation'),
-('Manufacturing'),
-('Waste Management'),
-('Water Supply');
+CREATE TABLE Scope3_Emissions (
+    scope3_id INT IDENTITY(1,1) PRIMARY KEY,
+    emission_id INT NOT NULL,
+    date DATE NOT NULL,
+    category NVARCHAR(100),
+    activity_data DECIMAL(10,2),
+    emission_factor DECIMAL(10,4),
+    calculated_emissions DECIMAL(10,2),
+    data_source NVARCHAR(100),
+    uncertainty_range NVARCHAR(50),
+    created_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (emission_id) REFERENCES Emissions_Master(emission_id)
+);
 
--- Step 5: Insert mock data into Subsectors
-INSERT INTO Subsectors (subsector_name, sector_id) VALUES 
-('Lighting', 1),
-('Equipment', 1),
-('Heating', 1),
-('Cooling', 1),
-('Other Electrical Uses', 1),
-('Vehicles', 2),
-('Logistics', 2),
-('Public Transport', 2),
-('Shipping', 2),
-('Air Travel', 2),
-('Machinery', 3),
-('Processing', 3),
-('Packaging', 3),
-('Assembly', 3),
-('Inspection', 3),
-('Landfill', 4),
-('Recycling', 4),
-('Composting', 4),
-('Hazardous Waste', 4),
-('Wastewater', 4),
-('Purification', 5),
-('Distribution', 5),
-('Leakage', 5),
-('Irrigation', 5),
-('Reservoir', 5);
+-- OFFSETS AND CREDITS TABLES
+CREATE TABLE Renewable_Energy_Offsets (
+    offset_id INT IDENTITY(1,1) PRIMARY KEY,
+    facility_id INT NOT NULL,
+    date DATE NOT NULL,
+    source_type NVARCHAR(50),
+    energy_generated DECIMAL(10,2),
+    emissions_offset DECIMAL(10,2),
+    certification_type NVARCHAR(50),
+    verification_status NVARCHAR(20),
+    cost_savings DECIMAL(10,2),
+    created_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (facility_id) REFERENCES Facilities(facility_id)
+);
 
--- Step 6: Insert mock data for a single company into EmissionsData
--- Generate mock data for each month from January 2024 to November 2024
+CREATE TABLE Carbon_Credits (
+    credit_id INT IDENTITY(1,1) PRIMARY KEY,
+    company_id INT NOT NULL,
+    purchase_date DATE,
+    expiry_date DATE,
+    quantity DECIMAL(10,2),
+    price_per_unit DECIMAL(10,2),
+    total_cost DECIMAL(10,2),
+    project_type NVARCHAR(100),
+    verification_standard NVARCHAR(50),
+    retirement_status NVARCHAR(20),
+    registry_number NVARCHAR(100),
+    created_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (company_id) REFERENCES Companies(company_id)
+);
 
--- Insert mock data for EmissionsData with company_id = 1
+-- OPERATIONAL COSTS TABLES
+CREATE TABLE Operational_Costs_Master (
+    cost_id INT IDENTITY(1,1) PRIMARY KEY,
+    facility_id INT NOT NULL,
+    date DATE NOT NULL,
+    category NVARCHAR(50),
+    amount DECIMAL(10,2),
+    currency NVARCHAR(3),
+    cost_center NVARCHAR(50),
+    payment_status NVARCHAR(20),
+    billing_cycle NVARCHAR(20),
+    recurring_status NVARCHAR(20),
+    department_id INT,
+    created_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (facility_id) REFERENCES Facilities(facility_id),
+    FOREIGN KEY (department_id) REFERENCES Departments(department_id)
+);
 
--- Insert for January 2024
-INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
-VALUES
-(1, 1, 1, '2024-01-01', 150.50),
-(1, 1, 2, '2024-01-01', 120.30),
-(1, 3, 11, '2024-01-01', 95.75),
-(1, 2, 6, '2024-01-01', 200.60),
-(1, 2, 7, '2024-01-01', 180.40),
-(1, 3, 11, '2024-01-01', 130.25),
-(1, 4, 16, '2024-01-01', 75.20),
-(1, 5, 21, '2024-01-01', 40.10);
+CREATE TABLE Utility_Costs (
+    utility_cost_id INT IDENTITY(1,1) PRIMARY KEY,
+    facility_id INT NOT NULL,
+    utility_type NVARCHAR(50),
+    billing_period DATE,
+    consumption_amount DECIMAL(10,2),
+    rate_per_unit DECIMAL(10,4),
+    total_cost DECIMAL(10,2),
+    peak_usage_charges DECIMAL(10,2),
+    additional_fees DECIMAL(10,2),
+    department_id INT,
+    created_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (facility_id) REFERENCES Facilities(facility_id),
+    FOREIGN KEY (department_id) REFERENCES Departments(department_id)
+);
 
--- Insert for February 2024
-INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
-VALUES
-(1, 1, 1, '2024-02-01', 140.80),
-(1, 1, 2, '2024-02-01', 110.20),
-(1, 1, 3, '2024-02-01', 100.10),
-(1, 2, 6, '2024-02-01', 190.50),
-(1, 2, 7, '2024-02-01', 170.80),
-(1, 3, 11, '2024-02-01', 120.35),
-(1, 4, 16, '2024-02-01', 80.90),
-(1, 5, 21, '2024-02-01', 45.50);
+CREATE TABLE Labor_Costs (
+    labor_cost_id INT IDENTITY(1,1) PRIMARY KEY,
+    facility_id INT NOT NULL,
+    department_id INT NOT NULL,
+    employee_count INT,
+    regular_hours_cost DECIMAL(10,2),
+    overtime_cost DECIMAL(10,2),
+    benefits_cost DECIMAL(10,2),
+    training_cost DECIMAL(10,2),
+    period_start_date DATE,
+    period_end_date DATE,
+    created_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (facility_id) REFERENCES Facilities(facility_id),
+    FOREIGN KEY (department_id) REFERENCES Departments(department_id)
+);
 
--- Insert for March 2024
-INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
-VALUES
-(1, 1, 1, '2024-03-01', 135.20),
-(1, 1, 2, '2024-03-01', 115.30),
-(1, 1, 3, '2024-03-01', 110.15),
-(1, 2, 6, '2024-03-01', 185.75),
-(1, 2, 7, '2024-03-01', 165.65),
-(1, 3, 11, '2024-03-01', 125.40),
-(1, 4, 16, '2024-03-01', 78.50),
-(1, 5, 21, '2024-03-01', 42.30);
+CREATE TABLE Maintenance_Costs (
+    maintenance_id INT IDENTITY(1,1) PRIMARY KEY,
+    equipment_id INT NOT NULL,
+    maintenance_date DATE,
+    cost_amount DECIMAL(10,2),
+    maintenance_type NVARCHAR(50),
+    labor_hours DECIMAL(5,2),
+    parts_cost DECIMAL(10,2),
+    downtime_cost DECIMAL(10,2),
+    service_provider NVARCHAR(100),
+    created_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (equipment_id) REFERENCES Equipment(equipment_id)
+);
 
--- Insert for April 2024
-INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
-VALUES
-(1, 1, 1, '2024-04-01', 145.60),
-(1, 1, 2, '2024-04-01', 118.40),
-(1, 1, 3, '2024-04-01', 105.25),
-(1, 2, 6, '2024-04-01', 190.90),
-(1, 2, 7, '2024-04-01', 175.60),
-(1, 3, 11, '2024-04-01', 128.30),
-(1, 4, 16, '2024-04-01', 82.60),
-(1, 5, 21, '2024-04-01', 46.80);
+-- SUSTAINABILITY GOALS AND TRACKING TABLES
+CREATE TABLE Sustainability_Goals (
+    goal_id INT IDENTITY(1,1) PRIMARY KEY,
+    company_id INT NOT NULL,
+    target_description NVARCHAR(MAX),
+    target_value DECIMAL(10,2),
+    target_date DATE,
+    current_progress DECIMAL(5,2),
+    initiative_status NVARCHAR(20),
+    created_at DATETIME2 DEFAULT GETDATE(),
+    updated_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (company_id) REFERENCES Companies(company_id)
+);
 
--- Insert for May 2024
-INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
-VALUES
-(1, 1, 1, '2024-05-01', 155.40),
-(1, 1, 2, '2024-05-01', 121.20),
-(1, 1, 3, '2024-05-01', 112.50),
-(1, 2, 6, '2024-05-01', 198.20),
-(1, 2, 7, '2024-05-01', 180.80),
-(1, 3, 11, '2024-05-01', 132.45),
-(1, 4, 16, '2024-05-01', 85.10),
-(1, 5, 21, '2024-05-01', 49.60);
+CREATE TABLE Daily_Summary (
+    summary_id INT IDENTITY(1,1) PRIMARY KEY,
+    facility_id INT NOT NULL,
+    date DATE NOT NULL,
+    total_production DECIMAL(10,2),
+    total_emissions DECIMAL(10,2),
+    total_energy_consumed DECIMAL(10,2),
+    total_costs DECIMAL(10,2),
+    efficiency_metrics DECIMAL(10,2),
+    department_metrics_json NVARCHAR(MAX), -- Stored as JSON
+    created_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (facility_id) REFERENCES Facilities(facility_id),
+    CONSTRAINT [Check_Daily_Summary_JSON] CHECK (ISJSON(department_metrics_json)=1)
+);
 
--- Insert for June 2024
-INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
-VALUES
-(1, 1, 1, '2024-06-01', 148.25),
-(1, 1, 2, '2024-06-01', 113.50),
-(1, 1, 3, '2024-06-01', 108.70),
-(1, 2, 6, '2024-06-01', 193.10),
-(1, 2, 7, '2024-06-01', 172.40),
-(1, 3, 11, '2024-06-01', 130.55),
-(1, 4, 16, '2024-06-01', 80.30),
-(1, 5, 21, '2024-06-01', 44.10);
+CREATE TABLE Monthly_Reports (
+    report_id INT IDENTITY(1,1) PRIMARY KEY,
+    facility_id INT NOT NULL,
+    year_month DATE NOT NULL,
+    total_emissions DECIMAL(10,2),
+    total_costs DECIMAL(10,2),
+    total_production DECIMAL(10,2),
+    efficiency_metrics DECIMAL(10,2),
+    performance_vs_target DECIMAL(5,2),
+    department_metrics_json NVARCHAR(MAX), -- Stored as JSON
+    created_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (facility_id) REFERENCES Facilities(facility_id),
+    CONSTRAINT [Check_Monthly_Reports_JSON] CHECK (ISJSON(department_metrics_json)=1)
+);
 
--- Insert for July 2024
-INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
-VALUES
-(1, 1, 1, '2024-07-01', 160.75),
-(1, 1, 2, '2024-07-01', 125.10),
-(1, 1, 3, '2024-07-01', 118.60),
-(1, 2, 6, '2024-07-01', 202.30),
-(1, 2, 7, '2024-07-01', 185.40),
-(1, 3, 11, '2024-07-01', 136.25),
-(1, 4, 16, '2024-07-01', 88.10),
-(1, 5, 21, '2024-07-01', 51.50);
+-- REFERENCE TABLES
+CREATE TABLE Emission_Factors (
+    factor_id INT IDENTITY(1,1) PRIMARY KEY,
+    source_type NVARCHAR(50),
+    region NVARCHAR(50),
+    factor_value DECIMAL(10,4),
+    unit NVARCHAR(20),
+    valid_from DATE,
+    valid_to DATE,
+    last_updated DATETIME2 DEFAULT GETDATE()
+);
 
--- Insert for August 2024
-INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
-VALUES
-(1, 1, 1, '2024-08-01', 155.10),
-(1, 1, 2, '2024-08-01', 121.40),
-(1, 1, 3, '2024-08-01', 111.90),
-(1, 2, 6, '2024-08-01', 199.80),
-(1, 2, 7, '2024-08-01', 178.30),
-(1, 3, 11, '2024-08-01', 133.00),
-(1, 4, 16, '2024-08-01', 84.40),
-(1, 5, 21, '2024-08-01', 47.90);
+CREATE TABLE Cost_Categories (
+    category_id INT IDENTITY(1,1) PRIMARY KEY,
+    category_name NVARCHAR(50) NOT NULL,
+    description NVARCHAR(200),
+    budget_allocation DECIMAL(10,2),
+    cost_type NVARCHAR(50),
+    accounting_code NVARCHAR(20),
+    created_at DATETIME2 DEFAULT GETDATE()
+);
 
--- Insert for September 2024
-INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
-VALUES
-(1, 1, 1, '2024-09-01', 150.00),
-(1, 1, 2, '2024-09-01', 116.60),
-(1, 1, 3, '2024-09-01', 107.30),
-(1, 2, 6, '2024-09-01', 194.10),
-(1, 2, 7, '2024-09-01', 173.50),
-(1, 3, 11, '2024-09-01', 129.80),
-(1, 4, 16, '2024-09-01', 79.90),
-(1, 5, 21, '2024-09-01', 43.40);
-
--- Insert for October 2024
-INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
-VALUES
-(1, 1, 1, '2024-10-01', 145.90),
-(1, 1, 2, '2024-10-01', 118.30),
-(1, 1, 3, '2024-10-01', 102.75),
-(1, 2, 6, '2024-10-01', 191.40),
-(1, 2, 7, '2024-10-01', 171.20),
-(1, 3, 11, '2024-10-01', 127.00),
-(1, 4, 16, '2024-10-01', 77.60),
-(1, 5, 21, '2024-10-01', 41.20);
-
--- Insert for November 2024
-INSERT INTO EmissionsData (company_id, sector_id, subsector_id, emission_date, emission_amount)
-VALUES
-(1, 1, 1, '2024-11-01', 142.70),
-(1, 1, 2, '2024-11-01', 114.50),
-(1, 1, 3, '2024-11-01', 98.10),
-(1, 2, 6, '2024-11-01', 187.50),
-(1, 2, 7, '2024-11-01', 168.40),
-(1, 3, 11, '2024-11-01', 123.90),
-(1, 4, 16, '2024-11-01', 74.80),
-(1, 5, 21, '2024-11-01', 39.70);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- Create indexes for better query performance
+CREATE INDEX idx_emissions_master_date ON Emissions_Master(date);
+CREATE INDEX idx_facility_sector ON Facilities(sector_type);
+CREATE INDEX idx_scope2_emissions_date ON Scope2_Emissions(date);
+CREATE INDEX idx_utility_costs_period ON Utility_Costs(billing_period);
+CREATE INDEX idx_daily_summary_date ON Daily_Summary(date);
+CREATE INDEX idx_monthly_reports_yearmonth ON Monthly_Reports(year_month);
