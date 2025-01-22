@@ -18,15 +18,16 @@ const verifyToken = require("./Middleware/authMiddleware"); // Import the JWT ve
 const companycontroller = require("./Controllers/company");
 const inputcontroller = require("./Controllers/input");
 const leaderboardcontroller= require("./Controllers/leaderboard");
+const reportController = require('./Controllers/report');
 
 
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 1433;
+const port = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors({ credentials: true, origin: 'http://localhost:1433' }));
+app.use(cors({ credentials: true, origin: 'http://127.0.0.1:3000' }));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -84,7 +85,11 @@ app.post('/input/updateRecycledDeviceQuantity', inputcontroller.updateRecycledDe
 //Leaderboard routes
 app.get("/leaderboard/top3", leaderboardcontroller.displayTop3CompaniesForCurrentMonth);
 
-
+// Report-related routes
+app.get("/api/report/emissions-by-sector", reportController.getEmissionsBySector);
+app.get("/api/report/energy-consumption-by-sector", reportController.getEnergyConsumptionBySector);
+app.get("/api/report/operational-cost-by-month", reportController.getOperationalCostByMonth);
+app.get("/api/report/yearly-emissions-by-sector", reportController.getYearlyEmissionsBySector);
 
 
 app.listen(port, async () => {

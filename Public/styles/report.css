@@ -1,46 +1,254 @@
 /* General Styles */
+/* Poppins Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet');
+/* Bootstrap Icons */
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+/* Sidebar Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
+}
+
+h1 {
+    font-weight: 800;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+.main {
+    min-height: 100vh;
+    width: calc(100% - 200px);
+    margin-left: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #f7fefa;
+}
+
+#sidebar {
+    width: 200px;
+    height: 100vh;
+    transition: all 0.35s ease-in-out;
+    background-color: #6453f3;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+#sidebar.collapsed {
+    margin-left: -264px;
+}
+
+.toggler-btn {
+    background-color: transparent;
+    cursor: pointer;
+    border: 0;
+}
+
+.toggler-btn i {
+    font-size: 1.75rem;
+    color: #6453f3;
+    font-weight: 1000;
+}
+
+.navbar {
+    padding: 1.15rem 1.5rem;
+    border-bottom: 2px dashed #b3a8a8;
+}
+
+.sidebar-nav {
+    flex: 1 1 auto;
+}
+
+.sidebar-logo {
+    display: flex;
+    padding: 0.9rem 1.2rem 0.2rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar-logo a {
+    color: white;
+    font-weight: 800;
+    font-size: 1.2rem;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: center;
+    color: white;
+    font-size: .75rem;
+}
+
+.sidebar-header hr {
+    width: 80%;
+    margin: .5rem 0;
+}
+
+a.sidebar-link {
+    padding: .5rem 1.2rem;
+    color: white;
+    position: relative;
+    transition: all 0.35s;
+    display: block;
+    font-size: 0.9rem;
+}
+
+a.sidebar-link:hover {
+    background-color: #f9f6f630;
+}
+
+.progress-net .sidebar-link {
+    color: white;
+    width: 75%;
+    margin: auto;
+    font-size: 0.81rem;
+}
+
+
+.sidebar-link[data-bs-toggle="collapse"]::after {
+    border: solid;
+    border-width: 0 .075rem .075rem 0;
+    content: "";
+    display: inline-block;
+    padding: 2px;
+    position: absolute;
+    right: 1.5rem;
+    top: 1.4rem;
+    transform: rotate(-135deg);
+    transition: all .2s ease-out;
+}
+
+.sidebar-link[data-bs-toggle="collapse"].collapsed::after {
+    transform: rotate(45deg);
+    transition: all .2s ease-out;
+}
+
+.user-profile {
+    display: flex;
+    flex-direction: row;
+    background-color: #769ff6;
+    border-radius: 20px;
+    width: 80%;
+    font-weight: 600;
+    box-shadow: 5px 5px black;
+    border: black 1px solid;
+    margin-bottom: 20px;
+}
+
+.user-profile:hover {
+    background-color: #769ff6;
+    box-shadow: none;
+    transform: translateY(+7px) translateX(+7px);
+    transition: all 0.35s;
+}
+
+.user-profile img {
+    width: 35px;
+    height: 35px;
+    border-radius: 500px;
+    object-fit: cover;
+    margin-right: 8px;
+}
+
+.user {
+    display: flex;
+    flex-direction: row;
+    margin-left: 20px;
+    padding-top: 15px;
+    align-items: center;
+}
+
+.user p {
+    font-size: 12px;
     margin: 0;
-    padding: 0;
-    background-color: #f2fcfb;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.main {
+    background-color: #f7fefa;
+}
+
+.sidebar-footer {
+    margin-bottom: 15px;
+}
+
+/* Specific to the Report Page */
+.report-page h2 {
+  font-size: 1.8rem;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #555;
+}
+
+.card h3 {
+  font-size: 1.5rem;
+}
+
+#back-to-sector-chart {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000; /* Ensure it's above the charts */
+    size: 50%;
+}
+
+.table-icon {
+  font-size: 1.2rem;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  cursor: pointer;
+  color: #333;
+  opacity: 0.7;
+}
+.table-icon:hover {
+  opacity: 1;
+}
+
+.chart-description-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.chart {
+  width: 50%; /* Occupy half of the container */
+  padding: 10px;
+}
+
+.description {
+  width: 50%; /* Occupy the other half of the container */
+  padding: 10px;
+  font-size: 0.9rem;
+}
+
+.description h5 {
+  margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  /* Adjust layout for smaller screens */
+  .chart-description-container {
+    flex-direction: column;
   }
-  
-  header {
-    background-color: #fff;
-    border-bottom: 2px solid #ccc;
+  .chart, .description {
+    width: 100%; /* Full width on smaller screens */
   }
-  
-  main {
-    padding-top: 100px; /* Account for fixed navbar */
-  }
-  
-  .data-display {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Specific to the Report Page */
-  .report-page h2 {
-    font-size: 1.8rem;
-  }
-  
-  .card-title {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #555;
-  }
-  
-  .card h3 {
-    font-size: 1.5rem;
-  }
-  
-  button.btn-info {
-    background-color: #17a2b8;
-    color: #fff;
-    border-radius: 5px;
-    font-weight: 500;
-  }
+}
   
