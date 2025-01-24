@@ -6,6 +6,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const puppeteer = require("puppeteer");
 require('dotenv').config();
 
 
@@ -79,8 +80,11 @@ app.patch("/campaign/updateParticipationStatus/:id", companycontroller.updateCom
 app.patch("/campaign/updateParticipationStatus/:id", companycontroller.updateCompanyParticipation);
 
 //input routes
-app.get("/input/getDeviceId/:device_name", inputcontroller.getDeviceIdByName);
-app.post('/input/updateRecycledDeviceQuantity', inputcontroller.updateRecycledDeviceQuantity);
+app.post('/input/addPost', inputcontroller.addPostUrl);
+app.get('/input/:id', inputcontroller.getCompanyName);
+
+// Endpoint for scraping Instagram post
+
 
 //Leaderboard routes
 app.get("/leaderboard/top3", leaderboardcontroller.displayTop3CompaniesForCurrentMonth);
