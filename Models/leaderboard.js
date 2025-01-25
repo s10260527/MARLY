@@ -10,13 +10,12 @@ class LeaderBoard {
             await sql.connect(dbConfig);
 
             const sqlQuery = `
-                SELECT TOP 3 c.company_id, c.company_name, SUM(cp.quantity) AS total_recycled_devices
-                FROM Companies c
-                JOIN Campaign_participants cp ON c.company_id = cp.company_id
-                JOIN Campaigns cam ON cp.campaign_id = cam.campaign_id
-                WHERE MONTH(cam.start_date) = @month AND YEAR(cam.start_date) = @year
-                GROUP BY c.company_id, c.company_name
-                ORDER BY total_recycled_devices DESC;
+                SELECT TOP 3 post_id,company_id,company_name,poster_url,poster_name,likes,poster_img,post_date
+                FROM Post_Details
+                WHERE 
+                MONTH(post_date) = MONTH(GETDATE()) AND 
+                YEAR(post_date) = YEAR(GETDATE())
+                ORDER BY likes DESC;
             `;
 
             const request = new sql.Request();
