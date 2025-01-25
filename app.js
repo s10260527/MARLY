@@ -6,7 +6,6 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const puppeteer = require("puppeteer");
 require('dotenv').config();
 
 
@@ -88,6 +87,7 @@ app.get('/input/:id', inputcontroller.getCompanyName);
 
 //Leaderboard routes
 app.get("/leaderboard/top3", leaderboardcontroller.displayTop3CompaniesForCurrentMonth);
+app.get("/leaderboard/proxy-image", leaderboardcontroller.proxyImage);
 
 // Report-related routes
 app.get("/api/report/emissions-by-sector", reportController.getEmissionsBySector);
