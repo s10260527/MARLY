@@ -1,180 +1,75 @@
-// public/scripts/dashboard.js
-
-// Helper to decode JWT for debugging
-function parseJwt(token) {
-    try {
-        const base64Url = token.split(".")[1];
-        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-        return JSON.parse(window.atob(base64));
-    } catch (e) {
-        console.error("Error parsing JWT:", e);
-        return null;
-    }
-}
+let offset = 0; // Initialize offset for pagination
+const limit = 10; // Rows per request
+let isLoading = false; // Prevent duplicate requests
+let hasMoreData = true; // Flag to stop fetching when all data is loaded
 
 document.addEventListener("DOMContentLoaded", () => {
-    const token = localStorage.getItem("token");
-    console.log("Local Storage Token:", token);
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("No token found. Please log in.");
+    window.location.href = "login.html";
+    return;
+  }
 
-    if (!token) {
-        alert("No token found, please log in.");
-        window.location.href = "login.html";
-        return;
+  // Decode and debug token
+  const decoded = parseJwt(token);
+  console.log("Decoded JWT:", decoded);
+
+  // Initial fetch
+  fetchPaginatedData(token);
+
+  // Infinite scroll
+  window.addEventListener("scroll", () => {
+    if (
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 &&
+      !isLoading &&
+      hasMoreData
+    ) {
+      fetchPaginatedData(token);
     }
-
-    // Debug decode
-    const decoded = parseJwt(token);
-    console.log("Decoded JWT Payload:", decoded);
-
-    // Proceed with your AJAX call
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:3000/api/dashboard/data",
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-        success: function (response) {
-            console.log("Dashboard data fetch success:", response);
-
-            // Update the cards with fetched data
-            $("#sidebarCompanyName").text(response.companyName);
-            $("#carbon-emissions-card h5 div").text(response.totalEmissions.toFixed(2));
-            $("#energy-consumption-card h5 div").text(response.totalEnergyConsumption.toFixed(2));
-            $("#operational-costs-card h5 div").text(`$${response.totalOperationalCosts.toFixed(2)}`);
-
-            // Populate additional data for insights
-            emissionsData = {
-                monthlyData: {
-                    overview: {
-                        total: [
-                            { value: response.totalEmissions - 10 },
-                            { value: response.totalEmissions }
-                        ]
-                    }
-                }
-            };
-            energyData = {
-                monthlyData: {
-                    overview: {
-                        total: [
-                            { value: response.totalEnergyConsumption - 200 },
-                            { value: response.totalEnergyConsumption }
-                        ]
-                    }
-                }
-            };
-            operationalCostsData = {
-                monthlyData: {
-                    overview: {
-                        total: [
-                            { value: response.totalOperationalCosts - 1000 },
-                            { value: response.totalOperationalCosts }
-                        ]
-                    }
-                }
-            };
-
-            // Update the dashboard glance
-            updateDataGlance();
-        },
-        error: function (xhr) {
-            console.error("Failed to fetch dashboard data:", xhr);
-
-            // Handle specific error cases
-            if (xhr.status === 401) {
-                console.warn("Unauthorized! Redirecting to login page...");
-                window.location.href = "/login.html";
-            } else if (xhr.status === 403) {
-                console.log("1")
-                console.warn("Forbidden! Check your server permissions.");
-                alert("You do not have permission to access this resource.");
-            } else {
-                alert("An error occurred while fetching dashboard data. Please try again later.");
-            }
-        },
-    });
+  });
 });
 
-// Helper function to update individual cards
-function updateCard(type, value, changePercent) {
-    let formattedValue, formattedPercent, unit;
-    const isPositive = changePercent > 0;
+function fetchPaginatedData(token) {
+  isLoading = true;
 
-    switch (type) {
-        case 'carbon-emissions':
-            formattedValue = `${Math.round(value)}`;
-            break;
-        case 'energy-consumption':
-            formattedValue = `${Math.round(value).toLocaleString()}`;
-            break;
-        case 'operational-costs':
-            if (value >= 1000000) {
-                formattedValue = `${(value / 1000000).toFixed(1)}`;
-                unit = 'M';
-            } else {
-                formattedValue = `${(value / 1000).toFixed(1)}`;
-                unit = 'K';
-            }
-            break;
-    }
+  $.ajax({
+    type: "GET",
+    url: `/api/dashboard/data/paginated?limit=${limit}&offset=${offset}`,
+    headers: { Authorization: `Bearer ${token}` },
+    success: (response) => {
+      console.log("Fetched paginated data:", response);
 
-    formattedPercent = `${isPositive ? '+' : ''}${Math.round(changePercent)}%`;
+      const container = $("#dashboardContainer");
+      response.data.forEach((row) => {
+        const rowHtml = `
+          <div class="dashboard-row">
+            <p><strong>Date:</strong> ${new Date(row.emission_date).toLocaleDateString()}</p>
+            <p><strong>Emissions:</strong> ${row.emissions.toFixed(2)}</p>
+            <p><strong>Energy:</strong> ${row.energy.toFixed(2)}</p>
+            <p><strong>Costs:</strong> $${row.costs.toFixed(2)}</p>
+          </div>
+        `;
+        container.append(rowHtml);
+      });
 
-    // Get elements for the card
-    const elements = getCardElements(type);
-
-    // Update the card values
-    elements.valueDiv.textContent = formattedValue;
-    if (type === 'operational-costs' && elements.unitSpan) {
-        elements.unitSpan.textContent = unit;
-    }
-    elements.percentSpan.textContent = formattedPercent;
-    elements.percentSpan.className = `card-subtitle mb-2 text-body-secondary ${isPositive ? 'positive-percent' : 'negative-percent'}`;
-    elements.arrowIcon.className = `bi bi-arrow-${isPositive ? 'up' : 'down'}-right`;
-}
-
-// Update the "data glance" cards on the dashboard
-function updateDataGlance() {
-    if (!emissionsData || !energyData || !operationalCostsData) {
-        console.error("Data is not loaded yet.");
-        return;
-    }
-
-    // Extract the latest data points from each dataset
-    const latestEmissionsData = emissionsData.monthlyData.overview.total.slice(-2);
-    const latestEnergyData = energyData.monthlyData.overview.total.slice(-2);
-    const latestCostsData = operationalCostsData.monthlyData.overview.total.slice(-2);
-
-    // Calculate percentage changes
-    const emissionsChange = ((latestEmissionsData[1].value - latestEmissionsData[0].value) / latestEmissionsData[0].value) * 100;
-    const energyChange = ((latestEnergyData[1].value - latestEnergyData[0].value) / latestEnergyData[0].value) * 100;
-    const costsChange = ((latestCostsData[1].value - latestCostsData[0].value) / latestCostsData[0].value) * 100;
-
-    // Update the dashboard cards with the calculated data
-    updateCard('carbon-emissions', Math.round(latestEmissionsData[1].value), emissionsChange);
-    updateCard('energy-consumption', Math.round(latestEnergyData[1].value), energyChange);
-    updateCard('operational-costs', latestCostsData[1].value, costsChange);
-
-    // Update additional data insights (e.g., equivalences)
-    updateDataInsights(latestEmissionsData[1].value, latestEnergyData[1].value);
-}
-
-// Function to update data insights (e.g., equivalences)
-function updateDataInsights(emissionsValue, energyValue) {
-    const carTrips = Math.round(emissionsValue * 1000 / 12); // Convert tons to kg and divide by 12kg per 100km
-    const hdbFlats = Math.round(energyValue / 4500); // Divide by the energy consumption of an HDB flat
-
-    document.querySelector('#car-equivalent').textContent = `x${carTrips.toLocaleString()}`;
-    document.querySelector('#hdb-equivalent').textContent = `x${hdbFlats.toLocaleString()}`;
-}
-
-// Helper function to get elements for each card
-function getCardElements(type) {
-    const cardId = `${type}-card`;
-    return {
-        valueDiv: document.querySelector(`#${cardId} .card-title div`),
-        unitSpan: document.querySelector(`#${cardId} .card-title span`),
-        percentSpan: document.querySelector(`#${cardId} .card-subtitle`),
-        arrowIcon: document.querySelector(`#${cardId} .card-subtitle i`)
-    };
+      offset += limit; // Increment offset for the next request
+      if (response.data.length < limit) {
+        hasMoreData = false; // Stop further requests if no more data
+        console.log("All data loaded.");
+      }
+    },
+    error: (xhr) => {
+      console.error("Error fetching paginated data:", xhr);
+      if (xhr.status === 401) {
+        alert("Unauthorized! Redirecting to login page.");
+        window.location.href = "login.html";
+      } else {
+        alert("An error occurred while fetching data. Please try again later.");
+      }
+    },
+    complete: () => {
+      isLoading = false;
+    },
+  });
 }
