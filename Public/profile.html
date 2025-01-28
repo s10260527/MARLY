@@ -252,47 +252,30 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         $(document).ready(function () {
-            // Update sidebar with company name
-            const sidebarCompanyName = localStorage.getItem('companyId');
-            if (sidebarCompanyName) {
-                $.ajax({
-                    type: 'GET',
-                    url: `http://localhost:3000/api/profile/${sidebarCompanyName}`,
-                    success: function (response) {
-                        $('#sidebarCompanyName').text(response.companyName);
-                    },
-                    error: function (xhr) {
-                        console.error('An error occurred while fetching sidebar company data.');
-                    }
-                });
-            }
-
-            const companyId = localStorage.getItem('companyId');
-
-            if (!companyId) {
-                alert('Unauthorized. Please log in to access the profile page.');
-                window.location.href = '/login.html'; // Redirect to login page if unauthorized
-                return;
-            }
-
-            // Fetch profile data using the company ID
+            // Fetch company profile data for the current user
             $.ajax({
-                type: 'GET',
-                url: `http://localhost:3000/api/profile/${companyId}`,
+                type: "GET",
+                url: "http://localhost:3000/api/profile/current",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`, // Ensure the JWT is stored in localStorage
+                },
                 success: function (response) {
                     // Populate profile data
-                    $('#companyName').text(response.companyName);
-                    $('#industry').text(response.industryType);
-                    $('#industryType').text(response.industryType);
-                    $('#joinedDate').text(response.joined);
-                    $('#country').text(response.country);
-                    $('#city').text(response.city);
-                    $('#contactNumber').text(response.contactPhone);
-                    $('#businessEmail').text(response.businessEmail);
+                    $("#companyName").text(response.companyName);
+                    $("#industry").text(response.industryType);
+                    $("#industryType").text(response.industryType);
+                    $("#joinedDate").text(response.joined);
+                    $("#country").text(response.country);
+                    $("#city").text(response.city);
+                    $("#contactNumber").text(response.contactPhone);
+                    $("#businessEmail").text(response.businessEmail);
                 },
                 error: function (xhr) {
-                    alert('An error occurred while fetching profile data.');
-                }
+                    alert("An error occurred while fetching profile data.");
+                    if (xhr.status === 401) {
+                        window.location.href = "/login.html"; // Redirect to login page if unauthorized
+                    }
+                },
             });
         });
     </script>
