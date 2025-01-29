@@ -1,12 +1,13 @@
+// app.js
 const express = require("express");
 const sql = require("mssql");
-const dbConfig = require("./dbConfig");
+const dbConfig = require("./dbConfig"); // DB credentials
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-// Route imports
+// Imports for your existing routes/models
 const authRoutes = require("./Models/auth");
 const signupRouter = require("./Models/signup");
 const loginRouter = require("./Models/login");
@@ -52,7 +53,6 @@ app.use("/api/profile", authenticateToken, profileRouter);
 app.get("/api/profile/current", authenticateToken, (req, res) => {
   res.redirect("/api/profile");
 });
-
 app.get("/api/emission/totalemission", authenticateToken, emissionController.getTopEmissionsByCurrentMonth);
 app.get("/api/emission/mostimproved", authenticateToken, emissionController.getMostImprovedByMonth);
 app.get("/campaign/isParticipant/:id", companycontroller.checkIsParticipant);
@@ -60,34 +60,35 @@ app.patch("/campaign/updateParticipationStatus/:id", companycontroller.updateCom
 app.get("/input/getDeviceId/:device_name", inputcontroller.getDeviceIdByName);
 app.post("/input/updateRecycledDeviceQuantity", inputcontroller.updateRecycledDeviceQuantity);
 app.get("/leaderboard/top3", leaderboardcontroller.displayTop3CompaniesForCurrentMonth);
-
-// Report Routes
 app.get("/api/report/emissions-by-sector", authenticateToken, reportController.getEmissionsBySector);
 app.get("/api/report/energy-consumption-by-sector", authenticateToken, reportController.getEnergyConsumptionBySector);
 app.get("/api/report/operational-cost-by-month", authenticateToken, reportController.getOperationalCostByMonth);
 app.get("/api/report/yearly-emissions-by-sector", authenticateToken, reportController.getYearlyEmissionsBySector);
 
-// 1) Add route for /api/dashboard/data/paginated
+// 1) Paginated route
 app.get("/api/dashboard/data/paginated", authenticateToken, async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 10;
     const offset = parseInt(req.query.offset) || 0;
-
     let pool = await sql.connect(dbConfig);
 
+    // Example combining data for emissions, energy, costs
+    // Adjust as needed for real queries
     const result = await pool.request().query(`
-      SELECT TOP(${limit}) 
+      SELECT TOP(${limit})
         CONVERT(varchar(10), em.date, 120) AS emission_date,
         CAST(em.total_gross_emissions AS DECIMAL(10,2)) AS emissions,
-        (SELECT SUM(consumption_amount) 
-         FROM Utility_Costs u 
-         WHERE u.facility_id = em.facility_id 
-           AND u.billing_period = em.date
+        (
+          SELECT SUM(consumption_amount)
+          FROM Utility_Costs u
+          WHERE u.facility_id = em.facility_id
+            AND u.billing_period = em.date
         ) AS energy,
-        (SELECT SUM(amount)
-         FROM Operational_Costs_Master o
-         WHERE o.facility_id = em.facility_id
-           AND o.date = em.date
+        (
+          SELECT SUM(amount)
+          FROM Operational_Costs_Master o
+          WHERE o.facility_id = em.facility_id
+            AND o.date = em.date
         ) AS costs
       FROM Emissions_Master em
       ORDER BY em.date DESC
@@ -102,59 +103,221 @@ app.get("/api/dashboard/data/paginated", authenticateToken, async (req, res) => 
   }
 });
 
-// 2) Expand /api/dashboard/energy to return real data
+// 2) /api/dashboard/emissions
+app.get("/api/dashboard/emissions", authenticateToken, async (req, res) => {
+  try {
+    let pool = await sql.connect(dbConfig);
+
+    // Summaries by year+month for "overview"
+    const monthlyEmissions = await pool.request().query(`
+      SELECT YEAR(date) AS yr,
+             MONTH(date) AS mo,
+             SUM(total_gross_emissions) AS sumGross
+      FROM Emissions_Master
+      GROUP BY YEAR(date), MONTH(date)
+      ORDER BY YEAR(date), MONTH(date);
+    `);
+
+    // Summaries by sector (pretend there's a sector column in Emissions_Master)
+    // Example: We'll do monthly sums for each sector if you store it
+    // If you don't have a sector column, remove or adapt
+    // We'll produce a single aggregated sum to show "by sector" in the pie chart
+    const sectorEmissions = await pool.request().query(`
+      SELECT sector_type AS sector,
+             YEAR(date) AS yr,
+             MONTH(date) AS mo,
+             SUM(total_gross_emissions) AS sumGross
+      FROM Emissions_Master em
+      JOIN Facilities f ON em.facility_id = f.facility_id
+      GROUP BY sector_type, YEAR(date), MONTH(date)
+      ORDER BY sector_type, YEAR(date), MONTH(date);
+    `);
+
+    // Build overview arrays
+    const overviewTotal = [];
+    const overviewSustainable = [];
+    const overviewCredits = [];
+
+    monthlyEmissions.recordset.forEach(row => {
+      const iso = `${row.yr}-${String(row.mo).padStart(2,"0")}`;
+      const dateLabel = new Date(row.yr, row.mo-1, 1)
+        .toLocaleString('default', { month:'short', year:'numeric' });
+      const grossVal = parseFloat(row.sumGross)||0;
+      // Example offsets
+      const sustVal = grossVal*0.3;
+      const credVal = grossVal*0.2;
+
+      overviewTotal.push({ date: dateLabel, isoDate: iso, value: grossVal });
+      overviewSustainable.push({ date: dateLabel, isoDate: iso, value: sustVal });
+      overviewCredits.push({ date: dateLabel, isoDate: iso, value: credVal });
+    });
+
+    // Build sector-based arrays. We'll store them by sector: monthlyData["Maintenance"], etc.
+    // Each is { total:[], sustainable:[], credits:[] }
+    const sectorMap = {}; 
+    sectorEmissions.recordset.forEach(row => {
+      const sectorName = row.sector || "Other"; // fallback
+      if (!sectorMap[sectorName]) {
+        sectorMap[sectorName] = {
+          total: [],
+          sustainable: [],
+          credits: []
+        };
+      }
+      const iso = `${row.yr}-${String(row.mo).padStart(2,"0")}`;
+      const dateLabel = new Date(row.yr, row.mo-1, 1)
+        .toLocaleString('default',{month:'short', year:'numeric'});
+      const val = parseFloat(row.sumGross)||0;
+      const sustVal = val*0.3;
+      const credVal = val*0.2;
+
+      sectorMap[sectorName].total.push({ date: dateLabel, isoDate: iso, value: val });
+      sectorMap[sectorName].sustainable.push({ date: dateLabel, isoDate: iso, value: sustVal });
+      sectorMap[sectorName].credits.push({ date: dateLabel, isoDate: iso, value: credVal });
+    });
+
+    // Construct final monthlyData
+    const monthlyData = {
+      overview: {
+        total: overviewTotal,
+        sustainable: overviewSustainable,
+        credits: overviewCredits
+      }
+    };
+    // Add each sector in sectorMap
+    Object.keys(sectorMap).forEach(sectorName => {
+      monthlyData[sectorName] = sectorMap[sectorName];
+    });
+
+    // If you want dailyData, you can do a daily grouping
+    // For now, we'll skip or set empty
+    const dailyData = {};
+
+    return res.json({ monthlyData, dailyData });
+  } catch (err) {
+    console.error("Error in /api/dashboard/emissions:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// 3) /api/dashboard/energy
 app.get("/api/dashboard/energy", authenticateToken, async (req, res) => {
   try {
     let pool = await sql.connect(dbConfig);
 
-    const monthlyQuery = await pool.request().query(`
+    // Summaries for "overview"
+    const monthlyEnergy = await pool.request().query(`
       SELECT YEAR(billing_period) AS yr,
              MONTH(billing_period) AS mo,
-             SUM(consumption_amount) AS totalConsumption
+             SUM(consumption_amount) AS sumConsumption
       FROM Utility_Costs
       GROUP BY YEAR(billing_period), MONTH(billing_period)
       ORDER BY YEAR(billing_period), MONTH(billing_period);
     `);
+    const overviewTotal = [];
+    monthlyEnergy.recordset.forEach(row=>{
+      const iso = `${row.yr}-${String(row.mo).padStart(2,'0')}`;
+      const dateLabel = new Date(row.yr, row.mo-1, 1)
+        .toLocaleString('default',{month:'short',year:'numeric'});
+      const val = parseFloat(row.sumConsumption)||0;
+      overviewTotal.push({ date: dateLabel, isoDate: iso, value: val });
+    });
 
-    const monthlyRows = monthlyQuery.recordset;
-    const overviewTotal = monthlyRows.map(row => ({
-      date: new Date(row.yr, row.mo -1, 1)
-        .toLocaleString('default', { month: 'short', year: 'numeric' }),
-      isoDate: `${row.yr}-${String(row.mo).padStart(2, "0")}`,
-      value: parseFloat(row.totalConsumption) || 0
-    }));
+    // Summaries by "sector" if you store a sector in Utility_Costs or Facilities
+    const sectorResult = await pool.request().query(`
+      SELECT f.sector_type AS sector,
+             YEAR(u.billing_period) AS yr,
+             MONTH(u.billing_period) AS mo,
+             SUM(u.consumption_amount) AS sumConsumption
+      FROM Utility_Costs u
+      JOIN Facilities f ON u.facility_id = f.facility_id
+      GROUP BY f.sector_type, YEAR(u.billing_period), MONTH(u.billing_period)
+      ORDER BY f.sector_type, YEAR(u.billing_period), MONTH(u.billing_period);
+    `);
+
+    const sectorMap = {};
+    sectorResult.recordset.forEach(r => {
+      const sector = r.sector || "Other";
+      if (!sectorMap[sector]) {
+        sectorMap[sector] = { total: [] };
+      }
+      const iso = `${r.yr}-${String(r.mo).padStart(2,'0')}`;
+      const dateLabel = new Date(r.yr, r.mo-1,1).toLocaleString('default',{month:'short',year:'numeric'});
+      const val = parseFloat(r.sumConsumption)||0;
+      sectorMap[sector].total.push({ date: dateLabel, isoDate: iso, value: val });
+    });
 
     const monthlyData = { overview: { total: overviewTotal } };
-    return res.json({ monthlyData });
+    Object.keys(sectorMap).forEach(sector => {
+      monthlyData[sector] = sectorMap[sector];
+    });
+
+    // If needed dailyData
+    const dailyData = {};
+
+    return res.json({ monthlyData, dailyData });
   } catch(err){
     console.error("Error in /api/dashboard/energy:", err);
     return res.status(500).json({ message: "Internal server error" });
   }
 });
 
-// 3) Expand /api/dashboard/costs to return real data
+// 4) /api/dashboard/costs
 app.get("/api/dashboard/costs", authenticateToken, async (req, res) => {
   try {
     let pool = await sql.connect(dbConfig);
 
-    const monthlyQuery = await pool.request().query(`
+    // Summaries for "overview"
+    const monthlyCosts = await pool.request().query(`
       SELECT YEAR(date) AS yr,
              MONTH(date) AS mo,
-             SUM(amount) AS totalCosts
+             SUM(amount) AS sumCost
       FROM Operational_Costs_Master
       GROUP BY YEAR(date), MONTH(date)
       ORDER BY YEAR(date), MONTH(date);
     `);
 
-    const monthlyRows = monthlyQuery.recordset;
-    const overviewTotal = monthlyRows.map(row => ({
-      date: new Date(row.yr, row.mo -1, 1)
-        .toLocaleString('default', { month: 'short', year: 'numeric' }),
-      isoDate: `${row.yr}-${String(row.mo).padStart(2, "0")}`,
-      value: parseFloat(row.totalCosts) || 0
-    }));
+    const overviewTotal = [];
+    monthlyCosts.recordset.forEach(r => {
+      const iso = `${r.yr}-${String(r.mo).padStart(2,'0')}`;
+      const dateLabel = new Date(r.yr, r.mo-1,1)
+        .toLocaleString('default',{month:'short', year:'numeric'});
+      const val = parseFloat(r.sumCost)||0;
+      overviewTotal.push({ date: dateLabel, isoDate: iso, value: val });
+    });
 
-    const monthlyData = { overview: { total: overviewTotal } };
+    // Summaries by sector if you store that in a column (e.g. sector_type)
+    const sectorResult = await pool.request().query(`
+      SELECT f.sector_type AS sector,
+             YEAR(o.date) AS yr,
+             MONTH(o.date) AS mo,
+             SUM(o.amount) AS sumCost
+      FROM Operational_Costs_Master o
+      JOIN Facilities f ON o.facility_id = f.facility_id
+      GROUP BY f.sector_type, YEAR(o.date), MONTH(o.date)
+      ORDER BY f.sector_type, YEAR(o.date), MONTH(o.date);
+    `);
+
+    const sectorMap = {};
+    sectorResult.recordset.forEach(r => {
+      const sector = r.sector || "Other";
+      if (!sectorMap[sector]) {
+        sectorMap[sector] = { total: [] };
+      }
+      const iso = `${r.yr}-${String(r.mo).padStart(2,'0')}`;
+      const dateLabel = new Date(r.yr, r.mo-1,1)
+        .toLocaleString('default',{month:'short',year:'numeric'});
+      const val = parseFloat(r.sumCost)||0;
+      sectorMap[sector].total.push({ date: dateLabel, isoDate: iso, value: val });
+    });
+
+    const monthlyData = {
+      overview: { total: overviewTotal }
+    };
+    Object.keys(sectorMap).forEach(sector => {
+      monthlyData[sector] = sectorMap[sector];
+    });
+
     return res.json({ monthlyData });
   } catch(err){
     console.error("Error in /api/dashboard/costs:", err);
@@ -162,74 +325,10 @@ app.get("/api/dashboard/costs", authenticateToken, async (req, res) => {
   }
 });
 
-// 4) Add missing /api/dashboard/emissions route
-app.get("/api/dashboard/emissions", authenticateToken, async (req, res) => {
-  try {
-    let pool = await sql.connect(dbConfig);
-
-    const emissionsQuery = await pool.request().query(`
-      SELECT YEAR(date) AS yr,
-             MONTH(date) AS mo,
-             SUM(total_gross_emissions) AS totalEmissions
-      FROM Emissions_Master
-      GROUP BY YEAR(date), MONTH(date)
-      ORDER BY YEAR(date), MONTH(date);
-    `);
-
-    const monthlyRows = emissionsQuery.recordset;
-    const overviewTotal = monthlyRows.map(row => ({
-      date: new Date(row.yr, row.mo - 1, 1)
-        .toLocaleString("default", { month: "short", year: "numeric" }),
-      isoDate: `${row.yr}-${String(row.mo).padStart(2, "0")}`,
-      value: parseFloat(row.totalEmissions) || 0
-    }));
-
-    const monthlyData = { overview: { total: overviewTotal } };
-    return res.json({ monthlyData });
-  } catch (err) {
-    console.error("Error in /api/dashboard/emissions:", err);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-});
-
-// 5) Add route for emissions-by-sector
-app.get("/api/dashboard/emissions-by-sector", authenticateToken, async (req, res) => {
-  try {
-    let pool = await sql.connect(dbConfig);
-    const result = await pool.request().query(`
-      SELECT sector, SUM(total_gross_emissions) AS totalEmissions
-      FROM Emissions_Master
-      GROUP BY sector
-      ORDER BY totalEmissions DESC;
-    `);
-    res.json({ data: result.recordset });
-  } catch (err) {
-    console.error("Error in /api/dashboard/emissions-by-sector:", err);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
-
-// 6) Add route for operational-costs-by-sector
-app.get("/api/dashboard/operational-costs-by-sector", authenticateToken, async (req, res) => {
-  try {
-    let pool = await sql.connect(dbConfig);
-    const result = await pool.request().query(`
-      SELECT sector, SUM(amount) AS totalCost
-      FROM Operational_Costs_Master
-      GROUP BY sector
-      ORDER BY totalCost DESC;
-    `);
-    res.json({ data: result.recordset });
-  } catch (err) {
-    console.error("Error in /api/dashboard/operational-costs-by-sector:", err);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
-
-// Serve static files from the 'Public' directory
+// Serve static files, e.g. your dashboard.html and scripts
 app.use(express.static("Public"));
 
-// Test Database Connection Route (Optional)
+// Test DB route (optional)
 app.get("/api/test-db", async (req, res) => {
   try {
     const request = new sql.Request();
@@ -241,7 +340,7 @@ app.get("/api/test-db", async (req, res) => {
   }
 });
 
-// Start the server
+// Start server
 const server = app.listen(port, async () => {
   try {
     await sql.connect({
