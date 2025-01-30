@@ -13,8 +13,9 @@
   <!-- External CSS -->
   <link rel="stylesheet" href="styles/template.css">
   <link rel="stylesheet" href="styles/campaign.css">
-
-
+  <link rel="stylesheet" href="styles/chatbot.css">
+  <a target="_blank" href="https://icons8.com/icon/38865/sent">Send</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+  <a href="https://www.flaticon.com/free-icons/chatbot" title="chatbot icons"></a>
   <!-- Poppins Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -88,6 +89,24 @@
     <div class="main">
         <!-- Add your content here -->
         <body>
+          <section class="chat-window" style="position: fixed;">
+            <button class="close">x close</button>
+            <div class="chat">
+              <div class="model">
+                <p>Hi, how can I help you?</p>
+              </div>
+            </div>
+            <div class="input-area">
+              <input placeholder="Ask me anything..." type="text">
+              <button>
+                <i class="bi bi-send"></i>
+              </button>
+            </div>
+          </section>
+
+          <div class="chat-button" style="position: fixed;">
+            <img src="assets/images/chatbot.png" alt="chat">
+          </div>
             <!-- Button Section -->
           <section class="button-section">
           </section>
@@ -207,6 +226,15 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="scripts/campaign.js"></script>
 <script src="scripts/template.js"></script>
+<script type="importmap">
+  {
+    "imports": {
+      "@google/generative-ai": "https://esm.run/@google/generative-ai"
+    }
+  }
+</script>
+<script type="module" src="scripts/chatbot.js"></script>
+
 
 </body>
 </html>

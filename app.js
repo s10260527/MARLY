@@ -19,7 +19,7 @@ const companycontroller = require("./Controllers/company");
 const inputcontroller = require("./Controllers/input");
 const leaderboardcontroller= require("./Controllers/leaderboard");
 const reportController = require('./Controllers/report');
-
+const chatbotController = require('./Controllers/chatbot');
 
 require("dotenv").config();
 
@@ -73,6 +73,9 @@ app.get('/api/test-db', async (req, res) => {
 });
 
 // Start server
+//ChatBot routes
+app.get("/chatbot/data", chatbotController.getAllSqlDetails);
+
 // Campaign routes
 app.get("/campaign/isParticipant/:id", companycontroller.checkIsParticipant);
 app.patch("/campaign/updateParticipationStatus/:id", companycontroller.updateCompanyParticipation);
