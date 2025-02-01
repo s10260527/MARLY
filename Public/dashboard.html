@@ -27,6 +27,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <link href="styles/ai-suggestions.css" rel="stylesheet">
+
 </head>
 <body>
     <section class="chat-window" style="position: fixed;">
@@ -73,6 +78,12 @@
                 <a href="report.html" class="sidebar-link">
                     <i class="bi bi-clipboard-data-fill"></i>
                     <span>Reports</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="ai-suggestions-detailed.html" class="sidebar-link">
+                    <i class="bi bi-robot"></i>
+                    <span>AI Suggestions</span>
                 </a>
             </li>
             <li class="sidebar-item">
@@ -235,50 +246,6 @@
                     <p class="card-text multiply-info"><em>(4-room HDB flat powered for 1 year 24/7)</em></p>
                 </div>
             </div>
-            <h6>💡 AI Suggestions</h6>
-            <div class="suggestions-container">
-                <div class="suggestion-card">
-                    <h3 class="suggestion-title">Carbon Emissions</h3>
-                    <div class="suggestion-item">
-                        <div class="suggestion-number">1</div>
-                        <div class="suggestion-content">
-                            <h4>Invest in Energy Efficiency</h4>
-                            <ul class="suggestion-list">
-                                <li>Upgrade equipment: Replace outdated machinery with energy-efficient models</li>
-                                <li>Optimize lighting: Install LED lights and utilize natural light whenever possible</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="suggestion-card">
-                    <h3 class="suggestion-title">Operational Costs</h3>
-                    <div class="suggestion-item">
-                        <div class="suggestion-number">1</div>
-                        <div class="suggestion-content">
-                            <h4>Optimize Supply Chain</h4>
-                            <ul class="suggestion-list">
-                                <li>Negotiate better deals: Work with suppliers to secure competitive pricing and terms</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="suggestion-item">
-                        <div class="suggestion-number">2</div>
-                        <div class="suggestion-content">
-                            <h4>Automate Processes</h4>
-                            <ul class="suggestion-list">
-                                <li>Invest in technology: Utilize software and tools to streamline operations and reduce manual labor</li>
-                                <li>Train employees: Ensure staff is adequately trained to use new technologies effectively</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="suggestion-disclaimer">
-                    *This content was generated with the assistance of artificial intelligence. While we strive for relevance and accuracy, please note that AI-generated content may not always reflect the most current legal standards or personalized advice.
-                </div>
-            </div>
          </div>
          <!-- General Graph -->
         <div class="general-graph">
@@ -416,43 +383,74 @@
                 </div>
             </div>
         </div>
-        <!-- Competing Company -->
-        <div class="competing-company">
-            <div class="card bg-mine">
-              <div class="card-body">
-                <h3 class="company-head">A Competing Company</h3>
-                <div class="d-flex align-items-center gap-3 mb-3">
-                  <img src="assets/images/smart-tech-logo.png" alt="Google Logo" class="rounded-circle" />
-                  <div>
-                    <div class="d-flex align-items-center gap-2">
-                      <h3 class="h5 mb-0">SmartTech Corp.</h3>
-                      <span class="badge bg-mine">Leaderboard #3</span>
+        <!-- AI Suggestions Widget -->
+        <div class="ai-widget competing-company">
+            <div class="card">
+                <div class="ai-header d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-lightbulb text-warning me-2 fs-4"></i>
+                        <h5 class="mb-0">AI Suggestions</h5>
                     </div>
-                    <div class="progress mt-2" style="height: 8px;">
-                      <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="d-flex align-items-center">
+                        <span class="live-badge badge bg-success me-2">
+                            <i class="fas fa-circle me-1"></i>Live
+                        </span>
+                        <small class="text-muted" id="lastUpdated">Updated just now</small>
                     </div>
-                    <small class="text-muted">Progress to Net Zero Goal ♻️ (80%)</small>
-                  </div>
                 </div>
-          
-                <div class="content-wrapper">
-                  <p class="small company-desc">
-                    We’ve been innovating and advancing technology focused on the connections that matter since we invented the original SMART Board® in 1987. We’re proud that our interactive displays and software solutions are trusted by teachers, students, and business leaders all around the world.
-                  </p>
-          
-                  <div class="company-stats">
-                    <div class="stat-block">
-                      <h4 class="h2 mb-0">3</h4>
-                      <small class="text-muted">Total Devices Recycled<br>(Nov 2024)</small>
-                      <br/>
-                      <small class="text-primary">2 Mobiles</small>, 
-                      <small class="text-secondary">1 Desktop</small>
+
+                <div class="p-3">
+                    <div class="btn-group w-100 mb-3">
+                        <button class="btn btn-outline-secondary category-toggle active" data-category="all">
+                            <i class="fas fa-globe me-1"></i>All
+                        </button>
+                        <button class="btn btn-outline-secondary category-toggle" data-category="emissions">
+                            <i class="fas fa-cloud me-1"></i>Emissions
+                        </button>
+                        <button class="btn btn-outline-secondary category-toggle" data-category="costs">
+                            <i class="fas fa-dollar-sign me-1"></i>Costs
+                        </button>
                     </div>
-                  </div>
+
+                    <div id="suggestionCards" class="suggestion-cards">
+                        <!-- Cards will be dynamically inserted here -->
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <button id="refreshBtn" class="btn btn-primary">
+                            <i class="fas fa-sync-alt me-1"></i>Refresh Suggestions
+                        </button>
+                        <a href="ai-suggestions-detailed.html" class="btn btn-primary">View Detailed Suggestions</a>
+                    </div>
                 </div>
-              </div>
             </div>
         </div>
+
+        <!-- Card Template -->
+        <template id="cardTemplate">
+            <div class="suggestion-card card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="badge me-2"></span>
+                            <h6 class="mb-2"></h6>
+                            <p class="mb-2 text-muted small description"></p>
+                            <div class="d-flex align-items-center">
+                                <span class="trend me-2"></span>
+                                <span class="impact text-success"></span>
+                            </div>
+                            <div class="mt-2 timeline text-muted small"></div>
+                        </div>
+                        <div class="progress-ring d-flex align-items-center justify-content-center">
+                            <span class="completion"></span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="ai-suggestions-detailed.html" class="btn btn-sm btn-link">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </template>
     </div>
   </div>
 
@@ -479,5 +477,6 @@
     }
   </script>
   <script type="module" src="scripts/chatbot.js"></script>
+  <script src="scripts/ai-suggestions.js"></script>
 </body>
 </html>

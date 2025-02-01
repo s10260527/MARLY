@@ -350,23 +350,74 @@ a.sidebar-link:hover {
     background-color: #f0f0f0;
 }
 
-/* Competing Company */
+/* Update competing-company (AI widget container) styles */
 .competing-company {
     display: flex;
     margin-top: -400px;
     margin-bottom: 20px;
     flex-direction: row;
-    padding: 0px 20px;
-
     grid-column: 1 / 2;
+    width: 100%;
 }
 
+/* Remove card's background and shadow */
 .competing-company .card {
+    width: 100%;
     padding: 15px;
     border: none;
-    border-radius: 15px;
-    background-color: #eff6f2;
-    color: #011209;
+    border-radius: 0;
+    background-color: #f7fefa; /* Match dashboard background */
+    box-shadow: none;
+}
+
+/* Update suggestion cards */
+.ai-widget .suggestion-card {
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #333;
+    margin-bottom: 1rem;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add priority color borders */
+.ai-widget .suggestion-card.priority-high {
+    border-left: 4px solid #dc3545;
+}
+
+.ai-widget .suggestion-card.priority-medium {
+    border-left: 4px solid #ffc107;
+}
+
+.ai-widget .suggestion-card.priority-low {
+    border-left: 4px solid #28a745;
+}
+
+/* Update category toggle buttons */
+.ai-widget .category-toggle.active {
+    background-color: #6453f3 !important;
+    border-color: #6453f3 !important;
+    color: white !important;
+}
+
+.ai-widget .suggestion-cards {
+    width: 100%;
+    min-height: 200px; /* Ensures space is reserved before suggestions load */
+}
+
+/* Update header section */
+.ai-header {
+    background: transparent;
+    padding: 0 0 1rem 0;
+}
+
+/* Live badge styles */
+.live-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
 }
 
 .company-head {
