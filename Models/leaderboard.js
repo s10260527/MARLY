@@ -10,12 +10,12 @@ class LeaderBoard {
             await sql.connect(dbConfig);
 
             const sqlQuery = `
-                SELECT TOP 3 post_id,company_id,company_name,poster_url,poster_name,likes,poster_img,post_date
+                SELECT TOP 3 post_id, company_id, company_name, poster_url, poster_name, likes, poster_img, post_date
                 FROM Post_Details
                 WHERE 
-                MONTH(post_date) = MONTH(GETDATE()) AND 
-                YEAR(post_date) = YEAR(GETDATE())
+                    MONTH(post_date) = 1  -- Filter for January (1 is the month for January)
                 ORDER BY likes DESC;
+
             `;
 
             const request = new sql.Request();
