@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('token');
   if (!token) return;
 
+  // Initial fetch - can remove if you only rely on month picker
   $.ajax({
     type: 'GET',
     url: '/api/dashboard/emissions',
@@ -30,7 +31,28 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error("Error fetching /api/dashboard/emissions:", xhr);
     }
   });
+
+  // Listen for the "Back" button in the carbon tab
+  document.getElementById('backButton')?.addEventListener('click', handleEmissionsBack);
+  // Net Emissions toggle
+  document.getElementById('netEmissionsToggle')?.addEventListener('click', toggleNetEmissions);
 });
+
+// Called from the "monthRangeChanged" listener or reset to default
+function refreshEmissionsData(newData) {
+  // Overwrite the global data
+  window.emissionsData = newData;
+  // Reset state
+  emissionsState.view = 'overview';
+  emissionsState.currentSector = null;
+  emissionsState.currentMonth = null;
+  emissionsState.navStack = [];
+  
+  if (!emissionsLineChart || !sectorPieChart) {
+    initEmissionsCharts();
+  }
+  updateEmissionsCharts();
+}
 
 function initEmissionsCharts() {
   const lineCtx = document.getElementById('emissionsLineChart').getContext('2d');
@@ -55,9 +77,6 @@ function initEmissionsCharts() {
       onClick: handleEmissionsPieClick
     }
   });
-
-  document.getElementById('backButton')?.addEventListener('click', handleEmissionsBack);
-  document.getElementById('netEmissionsToggle')?.addEventListener('click', toggleNetEmissions);
 }
 
 function updateEmissionsCharts() {
@@ -80,6 +99,14 @@ function updateEmissionsCharts() {
 
   const ds = isDaily ? d.dailyData[dataKey] : d.monthlyData[dataKey];
   if (!ds) return;
+
+  // If user has drilled down to a sector, show a message
+  const viewIndicator = document.getElementById('viewIndicator');
+  if (emissionsState.currentSector) {
+    viewIndicator.textContent = `You are viewing the chart for ${emissionsState.currentSector} data.`;
+  } else {
+    viewIndicator.textContent = '';
+  }
 
   let lineData;
   if (emissionsState.showingNetEmissions) {
@@ -124,6 +151,7 @@ function updateEmissionsCharts() {
       ]
     };
   }
+
   emissionsLineChart.data = lineData;
   emissionsLineChart.update();
 
@@ -138,7 +166,7 @@ function updateEmissionsCharts() {
 
 function handleEmissionsLineClick(evt, elements) {
   if (!elements || !elements.length) return;
-  emissionsState.navStack.push({...emissionsState});
+  emissionsState.navStack.push({ ...emissionsState });
   const idx = elements[0].index;
   const ov = window.emissionsData.monthlyData.overview;
   emissionsState.currentMonth = ov.total[idx].isoDate;
@@ -146,20 +174,31 @@ function handleEmissionsLineClick(evt, elements) {
   updateEmissionsCharts();
 }
 
+// *** DRILL DOWN EXAMPLE ***
+// When user clicks a pie slice, show only that sector's data
 function handleEmissionsPieClick(evt, elements) {
   if (!elements || !elements.length) return;
-  emissionsState.navStack.push({...emissionsState});
+  emissionsState.navStack.push({ ...emissionsState });
   const i = elements[0].index;
-  const sec = sectorPieChart.data.labels[i];
+  const sec = sectorPieChart.data.labels[i]; // e.g. "iPhone Assembly"
+  
+  // Set the currentSector and change the view to 'sector' or 'sector-month'
   emissionsState.currentSector = sec;
   emissionsState.view = emissionsState.currentMonth ? 'sector-month' : 'sector';
-  updateEmissionsCharts();
+  
+  updateEmissionsCharts(); 
 }
 
+// The user clicks "Back" to revert
 function handleEmissionsBack() {
   if (emissionsState.navStack.length > 0) {
     const st = emissionsState.navStack.pop();
     Object.assign(emissionsState, st);
+    updateEmissionsCharts();
+  } else {
+    // If no navStack, revert to overview
+    emissionsState.view = 'overview';
+    emissionsState.currentSector = null;
     updateEmissionsCharts();
   }
 }
@@ -189,16 +228,16 @@ function buildPieData(d, monthIndex) {
       if (monthIndex !== null && monthIndex >= 0) {
         val=arr[monthIndex].value;
       } else {
+        // Summation for all months
         val=arr.reduce((acc,x)=>acc+x.value,0);
       }
       labs.push(se);
       vals.push(val);
       cols.push('#'+Math.floor(Math.random()*16777215).toString(16));
     });
+  } else {
+    // If we want to handle sub-sectors or detailed sub-breakdowns, do so here
+    // Otherwise show just one slice, or skip
   }
-  // else if in sector, show subSectors
-  return {
-    labels: labs,
-    datasets: [{ data: vals, backgroundColor: cols }]
-  };
+  return { labels: labs, datasets: [{ data: vals, backgroundColor: cols }] };
 }

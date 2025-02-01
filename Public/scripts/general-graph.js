@@ -2,6 +2,7 @@
 
 let chart = null;
 
+// We keep the existing approach that waits for emissionsData, energyData, operationalCostsData
 document.addEventListener('DOMContentLoaded', () => {
   const check = setInterval(() => {
     if (window.emissionsData && window.energyData && window.operationalCostsData) {
@@ -67,4 +68,33 @@ function initGeneralChart() {
       }
     }
   });
+}
+
+// Called by the month picker success callback
+function refreshGeneralGraphData(emissions, energy, costs) {
+  // Overwrite window.*Data so the next iteration is correct
+  window.emissionsData = emissions;
+  window.energyData = energy;
+  window.operationalCostsData = costs;
+
+  if (!chart) {
+    // If chart not created yet, init
+    initGeneralChart();
+    return;
+  }
+
+  const eData = emissions.monthlyData.overview;
+  const nData = energy.monthlyData.overview;
+  const cData = costs.monthlyData.overview;
+
+  const cArr = eData.total.map(x => x.value);
+  const eArr = nData.total.map(x => x.value);
+  const oArr = cData.total.map(x => x.value);
+  const labels = eData.total.map(x => x.date);
+
+  chart.data.labels = labels;
+  chart.data.datasets[0].data = cArr;
+  chart.data.datasets[1].data = eArr;
+  chart.data.datasets[2].data = oArr;
+  chart.update();
 }

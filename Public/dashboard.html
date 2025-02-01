@@ -89,7 +89,6 @@
                 src="assets/images/user-avatar.png"
                 alt="User Avatar"
               />
-              <!-- Updated with JS -->
               <p id="sidebarCompanyName">Loading...</p>
             </div>
           </a>
@@ -151,30 +150,31 @@
           <div class="picker-content">
             <div class="calendar-section">
               <div class="years-container">
+                <!-- Left year grid -->
                 <div class="year-grid">
                   <div class="year-header">
-                    <button class="year-nav-btn" id="prevYear2024">
+                    <button class="year-nav-btn" id="prevYearLeft">
                       <i class="bi bi-chevron-left"></i>
                     </button>
-                    <span>2024</span>
-                    <button class="year-nav-btn" id="nextYear2024">
+                    <span id="leftYearLabel">2024</span>
+                    <button class="year-nav-btn" id="nextYearLeft">
                       <i class="bi bi-chevron-right"></i>
                     </button>
                   </div>
-                  <div class="month-grid" id="monthGrid2024"></div>
+                  <div class="month-grid" id="monthGridLeft"></div>
                 </div>
-
+                <!-- Right year grid -->
                 <div class="year-grid">
                   <div class="year-header">
-                    <button class="year-nav-btn" id="prevYear2025">
+                    <button class="year-nav-btn" id="prevYearRight">
                       <i class="bi bi-chevron-left"></i>
                     </button>
-                    <span>2025</span>
-                    <button class="year-nav-btn" id="nextYear2025">
+                    <span id="rightYearLabel">2025</span>
+                    <button class="year-nav-btn" id="nextYearRight">
                       <i class="bi bi-chevron-right"></i>
                     </button>
                   </div>
-                  <div class="month-grid" id="monthGrid2025"></div>
+                  <div class="month-grid" id="monthGridRight"></div>
                 </div>
               </div>
             </div>
@@ -198,8 +198,12 @@
             </div>
           </div>
           <div class="picker-footer">
-            <button class="confirm-btn" id="confirmSelection">
+            <button class="confirm-btn btn btn-primary" id="confirmSelection">
               Confirm Selection
+            </button>
+            <!-- Reset to Default button styled to fit the design -->
+            <button class="btn btn-secondary" id="resetDefault">
+              Reset to Default
             </button>
           </div>
         </div>
@@ -208,7 +212,6 @@
 
       <!-- Data Glance -->
       <div class="data-glance">
-        <!-- Cards that get updated by JS -->
         <div class="card" style="width: 15rem;" id="carbon-emissions-card">
           <div class="card-body">
             <h5 class="card-title">
@@ -378,113 +381,81 @@
       <!-- Detailed Graph -->
       <div class="detailed-graph">
         <h6>Detailed Graph</h6>
-        <ul
-          class="nav nav-tabs"
-          id="detailedGraphTabs"
-          role="tablist"
-        >
+        <ul class="nav nav-tabs" id="detailedGraphTabs" role="tablist">
           <li class="nav-item" role="presentation">
-            <button
-              class="nav-link active"
-              id="carbon-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#carbon"
-              type="button"
-              role="tab"
-              aria-controls="carbon"
-              aria-selected="true"
-            >
+            <button class="nav-link active" id="carbon-tab" data-bs-toggle="tab" data-bs-target="#carbon" type="button" role="tab" aria-controls="carbon" aria-selected="true">
               Carbon Emissions
             </button>
           </li>
           <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="energy-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#energy"
-              type="button"
-              role="tab"
-              aria-controls="energy"
-              aria-selected="false"
-            >
+            <button class="nav-link" id="energy-tab" data-bs-toggle="tab" data-bs-target="#energy" type="button" role="tab" aria-controls="energy" aria-selected="false">
               Energy Consumption
             </button>
           </li>
           <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="costs-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#costs"
-              type="button"
-              role="tab"
-              aria-controls="costs"
-              aria-selected="false"
-            >
+            <button class="nav-link" id="costs-tab" data-bs-toggle="tab" data-bs-target="#costs" type="button" role="tab" aria-controls="costs" aria-selected="false">
               Operational Costs
             </button>
           </li>
         </ul>
         <div class="card">
           <div class="card-body">
-            <div
-              class="tab-content"
-              id="detailedGraphContent"
-            >
+            <div class="tab-content" id="detailedGraphContent">
               <!-- Carbon Emissions Tab -->
-              <div
-                class="tab-pane fade show active"
-                id="carbon"
-                role="tabpanel"
-                aria-labelledby="carbon-tab"
-              >
+              <div class="tab-pane fade show active" id="carbon" role="tabpanel" aria-labelledby="carbon-tab">
                 <div class="detailed-graph-carbon">
-                  <!-- Controls Row -->
-                  <div class="controls-row">
+                  <!-- 
+                    We create a new row for the Back button & the "viewIndicator"
+                    so it’s higher & visible with a purple background. 
+                  -->
+                  <div class="d-flex align-items-center mb-3" style="gap: 1rem;">
+                    <button id="backButton" 
+                            class="btn" 
+                            style="background-color: #7d70f5; color: #fff;">
+                      <i class="bi bi-arrow-left"></i> Back
+                    </button>
+                    <span id="viewIndicator" 
+                          class="view-indicator" 
+                          style="margin: 0; font-weight: 500;">
+                    </span>
+                  </div>
+
+                  <!-- The original controls-row with a backButton (hidden) remains -->
+                  <div class="controls-row" style="display:none;">
                     <div class="controls-left">
-                      <button
-                        id="backButton"
-                        class="btn btn-secondary back-button"
-                      >
+                      <button id="backButton" class="btn btn-secondary back-button">
                         <i class="bi bi-arrow-left"></i> Back
                       </button>
                     </div>
-                    <span
-                      id="viewIndicator"
-                      class="view-indicator"
-                    ></span>
+                    <span id="viewIndicator" class="view-indicator"></span>
                     <div class="controls-right">
-                      <button
-                        id="netEmissionsToggle"
-                        class="btn btn-outline-primary"
-                      >
+                      <button id="netEmissionsToggle" class="btn btn-outline-primary">
                         Show Net Emissions
                       </button>
                     </div>
+                  </div>
+
+                  <div class="controls-right text-end">
+                    <!-- Moved Net Emissions Toggle here so it’s still accessible -->
+                    <button id="netEmissionsToggle" class="btn btn-outline-primary">
+                      Show Net Emissions
+                    </button>
                   </div>
 
                   <!-- Charts Row -->
                   <div class="row charts-row">
                     <!-- Line Graph Section -->
                     <div class="col-lg-8">
-                      <h5
-                        class="chart-title"
-                        id="lineChartTitle"
-                      >
+                      <h5 class="chart-title" id="lineChartTitle">
                         Carbon Emissions Over Time
                       </h5>
                       <div class="chart-container">
                         <canvas id="emissionsLineChart"></canvas>
                       </div>
                     </div>
-
                     <!-- Pie Chart Section -->
                     <div class="col-lg-4">
-                      <h5
-                        class="chart-title"
-                        id="pieChartTitle"
-                      >
+                      <h5 class="chart-title" id="pieChartTitle">
                         Emissions by Sector
                       </h5>
                       <div class="chart-container">
@@ -494,52 +465,48 @@
                   </div>
                 </div>
               </div>
-
               <!-- Energy Consumption Tab -->
-              <div
-                class="tab-pane fade"
-                id="energy"
-                role="tabpanel"
-                aria-labelledby="energy-tab"
-              >
+              <div class="tab-pane fade" id="energy" role="tabpanel" aria-labelledby="energy-tab">
                 <div class="detailed-graph-energy">
-                  <!-- Controls Row -->
-                  <div class="controls-row">
+                  <!-- 
+                    New row for the Energy back button & its viewIndicator 
+                  -->
+                  <div class="d-flex align-items-center mb-3" style="gap: 1rem;">
+                    <button id="energyBackButton" 
+                            class="btn" 
+                            style="background-color: #7d70f5; color: #fff;">
+                      <i class="bi bi-arrow-left"></i> Back
+                    </button>
+                    <span id="energyViewIndicator" 
+                          class="view-indicator" 
+                          style="margin: 0; font-weight: 500;">
+                    </span>
+                  </div>
+
+                  <!-- Original controls-row with a hidden back button remains -->
+                  <div class="controls-row" style="display:none;">
                     <div class="controls-left">
-                      <button
-                        id="energyBackButton"
-                        class="btn btn-secondary back-button"
-                      >
+                      <button id="energyBackButton" class="btn btn-secondary back-button">
                         <i class="bi bi-arrow-left"></i> Back
                       </button>
                     </div>
-                    <span
-                      id="energyViewIndicator"
-                      class="view-indicator"
-                    ></span>
+                    <span id="energyViewIndicator" class="view-indicator"></span>
                   </div>
 
                   <!-- Charts Row -->
                   <div class="row charts-row">
                     <!-- Line Graph Section -->
                     <div class="col-lg-8">
-                      <h5
-                        class="chart-title"
-                        id="energyLineChartTitle"
-                      >
+                      <h5 class="chart-title" id="energyLineChartTitle">
                         Energy Consumption Over Time
                       </h5>
                       <div class="chart-container">
                         <canvas id="energyLineChart"></canvas>
                       </div>
                     </div>
-
                     <!-- Pie Chart Section -->
                     <div class="col-lg-4">
-                      <h5
-                        class="chart-title"
-                        id="energyPieChartTitle"
-                      >
+                      <h5 class="chart-title" id="energyPieChartTitle">
                         Energy Consumption by Sector
                       </h5>
                       <div class="chart-container">
@@ -549,67 +516,54 @@
                   </div>
                 </div>
               </div>
-
               <!-- Operational Costs Tab -->
-              <div
-                class="tab-pane fade"
-                id="costs"
-                role="tabpanel"
-                aria-labelledby="costs-tab"
-              >
+              <div class="tab-pane fade" id="costs" role="tabpanel" aria-labelledby="costs-tab">
                 <div class="detailed-graph-costs">
-                  <!-- Controls Row -->
-                  <div class="controls-row">
-                    <div class="controls-left">
-                      <button
-                        id="costsBackButton"
-                        class="btn btn-secondary back-button"
-                      >
-                        <i class="bi bi-arrow-left"></i> Back
-                      </button>
-                    </div>
-                    <span
-                      id="costsViewIndicator"
-                      class="view-indicator"
-                    ></span>
+                  <!-- 
+                    New row for the Costs back button & its viewIndicator 
+                  -->
+                  <div class="d-flex align-items-center mb-3" style="gap: 1rem;">
+                    <button id="costsBackButton" 
+                            class="btn" 
+                            style="background-color: #7d70f5; color: #fff;">
+                      <i class="bi bi-arrow-left"></i> Back
+                    </button>
+                    <span id="costsViewIndicator" 
+                          class="view-indicator" 
+                          style="margin: 0; font-weight: 500;">
+                    </span>
                   </div>
+
+                  <!-- Original hidden lines (kept intact) -->
+                  <div class="controls-left" style="display:none;">
+                    <button id="costsBackButton" class="btn btn-secondary back-button">
+                      <i class="bi bi-arrow-left"></i> Back
+                    </button>
+                  </div>
+                  <span id="costsViewIndicator" class="view-indicator" style="display:none;"></span>
 
                   <!-- Charts Row -->
                   <div class="row charts-row">
                     <!-- Vertical Bar Graph Section -->
                     <div class="col-lg-8">
-                      <h5
-                        class="chart-title"
-                        id="costsVerticalBarChartTitle"
-                      >
+                      <h5 class="chart-title" id="costsVerticalBarChartTitle">
                         Operational Costs Over Time
                       </h5>
                       <div class="chart-container">
-                        <canvas
-                          id="costsVerticalBarChart"
-                        ></canvas>
+                        <canvas id="costsVerticalBarChart"></canvas>
                       </div>
                     </div>
-
-                    <!-- Horizontal Bar Graph Section -->
+                    <!-- Pie Chart Section -->
                     <div class="col-lg-4">
-                      <h5
-                        class="chart-title"
-                        id="costsHorizontalBarChartTitle"
-                      >
+                      <h5 class="chart-title" id="costsHorizontalBarChartTitle">
                         Operational Costs by Sector
                       </h5>
                       <div class="chart-container">
-                        <canvas
-                          id="costsHorizontalBarChart"
-                        ></canvas>
+                        <canvas id="costsHorizontalBarChart"></canvas>
                       </div>
                       <div class="text-center mt-3">
                         <p class="h5">
-                          Total: $
-                          <span
-                            id="costsHorizontalChartTotal"
-                          >0</span>
+                          Total: $<span id="costsHorizontalChartTotal">0</span>
                         </p>
                       </div>
                     </div>
@@ -622,7 +576,7 @@
           <!-- Detailed Graph Ends -->
 
           <!-- Competing Company -->
-          <div class="competing-company mt-4"> <!-- Added 'mt-4' for top margin -->
+          <div class="competing-company mt-4">
             <div class="card bg-mine">
               <div class="card-body">
                 <h3 class="company-head">A Competing Company</h3>
@@ -631,7 +585,7 @@
                     src="assets/images/smart-tech-logo.png"
                     alt="SmartTech Corp. Logo"
                     class="rounded-circle"
-                    width="60" <!-- Adjusted size for better alignment -->
+                    width="60"
                     height="60"
                   />
                   <div>
@@ -639,10 +593,7 @@
                       <h5 class="mb-0">SmartTech Corp.</h5>
                       <span class="badge bg-mine">Leaderboard #3</span>
                     </div>
-                    <div
-                      class="progress mt-2"
-                      style="height: 8px;"
-                    >
+                    <div class="progress mt-2" style="height: 8px;">
                       <div
                         class="progress-bar"
                         role="progressbar"
@@ -652,9 +603,9 @@
                         aria-valuemax="100"
                       ></div>
                     </div>
-                    <small class="text-muted"
-                      >Progress to Net Zero Goal ♻️ (80%)</small
-                    >
+                    <small class="text-muted">
+                      Progress to Net Zero Goal ♻️ (80%)
+                    </small>
                   </div>
                 </div>
 
@@ -671,10 +622,10 @@
                   <div class="company-stats">
                     <div class="stat-block">
                       <h4 class="h2 mb-0">3</h4>
-                      <small class="text-muted"
-                        >Total Devices Recycled<br />
-                        (Nov 2024)</small
-                      >
+                      <small class="text-muted">
+                        Total Devices Recycled<br />
+                        (Nov 2024)
+                      </small>
                       <br />
                       <small class="text-primary">2 Mobiles</small>,
                       <small class="text-secondary">1 Desktop</small>
@@ -688,9 +639,7 @@
       </div> <!-- End .d-flex -->
 
       <!-- Bootstrap Bundle JS -->
-      <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-      </script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
       <!-- External Scripts (Month Picker, Graphs, etc.) -->
       <script src="scripts/month-picker.js"></script>
@@ -739,30 +688,23 @@
               // Sidebar company name
               $("#sidebarCompanyName").text(response.companyName);
 
-              // Card: Carbon Emissions
-              $("#carbonEmissionsValue").text(
-                parseFloat(response.totalEmissions || 0).toFixed(2)
-              );
+              // For Carbon Emissions (kg -> tonnes)
+              const emissionsInTonnes = parseFloat(response.totalEmissions || 0) / 1000;
+              $("#carbonEmissionsValue").text(emissionsInTonnes.toFixed(2));
 
-              // Card: Energy Consumption
-              $("#energyConsumptionValue").text(
-                parseFloat(response.totalEnergyConsumption || 0).toFixed(2)
-              );
+              // For Energy (Wh -> kWh)
+              const energyInKWh = parseFloat(response.totalEnergyConsumption || 0) / 1000;
+              $("#energyConsumptionValue").text(energyInKWh.toFixed(2));
 
-              // Card: Operational Costs
-              $("#operationalCostsValue").text(
-                parseFloat(response.totalOperationalCosts || 0).toFixed(2)
-              );
+              // For Costs (cents -> dollars)
+              const costsInDollars = parseFloat(response.totalOperationalCosts || 0) / 100;
+              $("#operationalCostsValue").text(costsInDollars.toFixed(2));
 
-              // Example of "Insights" logic (just a placeholder):
-              // Suppose 1 ton of CO2 = 3.5 "car equivalents" (random example)
-              const carEquivalent =
-                Math.round((response.totalEmissions || 0) * 3.5) || 0;
+              // Simple "Insights"
+              const carEquivalent = Math.round(emissionsInTonnes * 3.5) || 0;
               $("#car-equivalent").text(`${carEquivalent} cars`);
 
-              // Suppose 1 kWh = 0.0005 "HDB-equivalents" (random example)
-              const hdbEquivalent =
-                Math.round((response.totalEnergyConsumption || 0) * 0.0005) || 0;
+              const hdbEquivalent = Math.round(energyInKWh * 0.0005) || 0;
               $("#hdb-equivalent").text(`${hdbEquivalent} HDB flats`);
             },
             error: function (xhr) {
@@ -776,51 +718,22 @@
           });
 
           // ---- 2.2) Fetch paginated data for charts, if needed ----
-          // The following is an example for a line chart (Carbon Emissions Over Time).
-          // This depends on how your `emissions-graph.js` or other scripts are structured.
-          // If they already do their own fetch, you can skip or adapt.
-
           fetchPaginatedDataForCharts(token);
         });
 
-        // Example function to fetch data for charts
+        // Example function
         function fetchPaginatedDataForCharts(token) {
-          const limit = 50; // or however many months you'd like
+          const limit = 50; 
           const offset = 0;
 
-          // GET /api/dashboard/data/paginated?limit=...&offset=...
           $.ajax({
             type: "GET",
             url: `/api/dashboard/data/paginated?limit=${limit}&offset=${offset}`,
             headers: { Authorization: `Bearer ${token}` },
             success: (response) => {
               console.log("Paginated data for charts:", response.data);
-              
-              // You can transform this data to build your chart.js datasets
-              // For example, build arrays for the line chart:
-              const dates = [];
-              const emissionsData = [];
-              const energyData = [];
-              const costData = [];
-
-              response.data.forEach((row) => {
-                if (row.emission_date) {
-                  const dateObj = new Date(row.emission_date);
-                  const labelStr = `${
-                    dateObj.getMonth() + 1
-                  }/${dateObj.getFullYear()}`;
-
-                  dates.push(labelStr);
-                  emissionsData.push(parseFloat(row.emissions || 0));
-                  energyData.push(parseFloat(row.energy || 0));
-                  costData.push(parseFloat(row.costs || 0));
-                }
-              });
-
-              // Now pass these to your existing chart scripts:
-              updateCarbonEmissionsLineChart(dates, emissionsData);
-              updateEnergyConsumptionLineChart(dates, energyData);
-              updateOperationalCostsBarChart(dates, costData);
+              // ...
+              // update your charts if needed
             },
             error: (xhr) => {
               console.error("Error fetching paginated data:", xhr);
@@ -828,22 +741,145 @@
           });
         }
 
-        // If needed, these are stubs that your external scripts (emissions-graph.js, etc.) might define:
+        // Stub chart updates
         function updateCarbonEmissionsLineChart(labels, data) {
-          // For example, if emissionsLineChart is a global Chart object:
-          // emissionsLineChart.data.labels = labels;
-          // emissionsLineChart.data.datasets[0].data = data;
-          // emissionsLineChart.update();
           console.log("Should update Carbon Emissions chart with:", labels, data);
         }
-
         function updateEnergyConsumptionLineChart(labels, data) {
-          console.log("Should update Energy Consumption chart with:", labels, data);
+          console.log("Should update Energy chart with:", labels, data);
         }
-
         function updateOperationalCostsBarChart(labels, data) {
-          console.log("Should update Operational Costs chart with:", labels, data);
+          console.log("Should update Costs chart with:", labels, data);
         }
       </script>
-    </body>
+      
+      <!-- Listener for Month Picker range changes -->
+      <script>
+        // When the month range changes, re-fetch graph data with the selected date range.
+        document.addEventListener('monthRangeChanged', (e) => {
+          const { startDate, endDate } = e.detail;
+          const start = startDate.toISOString();
+          const end = endDate.toISOString();
+          console.log("Month range changed:", start, end);
+          
+          const token = localStorage.getItem("token");
+
+          // 1) Costs
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/costs?start=${start}&end=${end}`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshCostsData(res); 
+            },
+            error: (xhr) => {
+              console.error("Error updating costs data:", xhr);
+            }
+          });
+
+          // 2) Energy
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/energy?start=${start}&end=${end}`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshEnergyData(res);
+            },
+            error: (xhr) => {
+              console.error("Error updating energy data:", xhr);
+            }
+          });
+
+          // 3) Emissions
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/emissions?start=${start}&end=${end}`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshEmissionsData(res);
+            },
+            error: (xhr) => {
+              console.error("Error updating emissions data:", xhr);
+            }
+          });
+
+          // 4) General
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/general?start=${start}&end=${end}`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshGeneralGraphData(res.emissions, res.energy, res.costs);
+            },
+            error: (xhr) => {
+              console.error("Error updating general graph data:", xhr);
+            }
+          });
+        });
+      </script>
+      
+      <!-- Listener for Reset to Default button -->
+      <script>
+        document.getElementById('resetDefault').addEventListener('click', () => {
+          document.getElementById('monthRange').value = '';
+          console.log("Reset to default triggered");
+          const token = localStorage.getItem("token");
+          
+          // Re-fetch default data
+          // Costs
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/costs`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshCostsData(res);
+            },
+            error: (xhr) => {
+              console.error("Error resetting costs data:", xhr);
+            }
+          });
+          
+          // Energy
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/energy`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshEnergyData(res);
+            },
+            error: (xhr) => {
+              console.error("Error resetting energy data:", xhr);
+            }
+          });
+          
+          // Emissions
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/emissions`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshEmissionsData(res);
+            },
+            error: (xhr) => {
+              console.error("Error resetting emissions data:", xhr);
+            }
+          });
+          
+          // General
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/general`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshGeneralGraphData(res.emissions, res.energy, res.costs);
+            },
+            error: (xhr) => {
+              console.error("Error resetting general graph data:", xhr);
+            }
+          });
+        });
+      </script>
+    </div>
+  </div>
+</body>
 </html>

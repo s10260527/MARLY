@@ -29,7 +29,23 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error("Error fetching /api/dashboard/energy:", xhr);
     }
   });
+
+  // Listen for the "Back" button in the energy tab
+  document.getElementById('energyBackButton')?.addEventListener('click', handleEnergyBack);
 });
+
+function refreshEnergyData(newData) {
+  energyState.view = 'overview';
+  energyState.currentSector = null;
+  energyState.currentMonth = null;
+  energyState.navStack = [];
+  
+  window.energyData = newData;
+  if (!energyLineChart || !energyPieChart) {
+    initEnergyCharts();
+  }
+  updateEnergyCharts();
+}
 
 function initEnergyCharts() {
   const lineCtx = document.getElementById('energyLineChart').getContext('2d');
@@ -54,13 +70,23 @@ function initEnergyCharts() {
       onClick: handleEnergyPieClick
     }
   });
-
-  document.getElementById('energyBackButton')?.addEventListener('click', handleEnergyBack);
 }
 
 function updateEnergyCharts() {
   if (!window.energyData) return;
   const d = window.energyData;
+
+  // Set the view indicator message above the chart title
+  const viewIndicator = document.getElementById('energyViewIndicator');
+  if (energyState.currentSector) {
+    viewIndicator.textContent = `You are viewing the chart for ${energyState.currentSector} data.`;
+    viewIndicator.style.marginTop = "10px";
+    viewIndicator.style.marginBottom = "10px";
+  } else {
+    viewIndicator.textContent = '';
+    viewIndicator.style.marginTop = "";
+    viewIndicator.style.marginBottom = "";
+  }
 
   let dataKey;
   let isDaily = false;
@@ -129,25 +155,32 @@ function handleEnergyBack() {
     const st = energyState.navStack.pop();
     Object.assign(energyState, st);
     updateEnergyCharts();
+  } else {
+    energyState.view = 'overview';
+    energyState.currentSector = null;
+    energyState.currentMonth = null;
+    updateEnergyCharts();
   }
 }
 
 function buildEnergyPieData(d, monthIndex) {
-  const labs=[],vals=[],cols=[];
+  const labs = [], vals = [], cols = [];
   if (!energyState.currentSector) {
-    const sectorKeys = Object.keys(d.monthlyData).filter(k => k!=='overview' && !k.includes('-'));
+    const sectorKeys = Object.keys(d.monthlyData).filter(k => k !== 'overview' && !k.includes('-'));
     sectorKeys.forEach(se => {
       const arr = d.monthlyData[se].total;
-      let val=0;
+      let val = 0;
       if (monthIndex !== null && monthIndex >= 0) {
-        val=arr[monthIndex].value;
+        val = arr[monthIndex].value;
       } else {
-        val=arr.reduce((acc,x)=>acc+x.value,0);
+        val = arr.reduce((acc, x) => acc + x.value, 0);
       }
       labs.push(se);
       vals.push(val);
-      cols.push('#'+Math.floor(Math.random()*16777215).toString(16));
+      cols.push('#' + Math.floor(Math.random() * 16777215).toString(16));
     });
+  } else {
+    // Additional sub-sector handling can be added here if needed
   }
   return { labels: labs, datasets: [{ data: vals, backgroundColor: cols }] };
 }
