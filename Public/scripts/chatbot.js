@@ -62,13 +62,13 @@ use companyId as 1 and retrieve other tables accordingly when prompted
     Yes, individuals can reduce their carbon footprint by using less energy, driving less, and supporting businesses with sustainable practices.
     
     16. what is our company's total emissions?
-    The company's current total carbon emission cost is 3375200.68 tons. For more details such as the different sectors contributing to the carbon emission, you can toggle Carbon Emissions in the dashboard
+    The company's current total carbon emission cost is 3375200.68 metric tons. For more details such as the different sectors contributing to the carbon emission, you can toggle Carbon Emissions in the dashboard
 
     17. What is our total cost?
     The company's current total operational cost is 4.46 billion. For more details such as the different sectors contributing to the operational cost, you can toggle operational costs in the dashboard
 
     18. What is the current campaign about?
-    The current campaign is about raising awareness
+    The current campaign is about raising awareness about ways to achieve net zero
 
 
     Instructions for Tone:

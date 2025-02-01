@@ -59,6 +59,7 @@ fetch("/leaderboard/top3")
             .then(response => response.blob())
             .then(imageBlob => {
                 // Create a URL for the image blob
+                console.log(firstPlace.poster_img)
                 const imageUrl = URL.createObjectURL(imageBlob);
                 winnerPoster.src = imageUrl; // Set the image source
                 winnerPoster.alt = `${firstPlace.company_name}'s Poster`; // Set alt text
@@ -99,7 +100,6 @@ fetch("/leaderboard/top3")
             // Handle the "Get Certificate" button click
             document.getElementById("first-place-cert-btn").addEventListener("click", () => {
                 document.getElementById("certificate-company-name").textContent = firstPlace.company_name;
-                document.getElementById("certificate-recycled-count").textContent = firstPlace.total_recycled_devices;
 
                 // Show the certificate modal
                 document.getElementById("certificate-modal").style.display = "block";
@@ -142,8 +142,8 @@ document.getElementById("download-cert-btn").addEventListener("click", () => {
     // Achievement Text
     doc.setFontSize(16);
     const month = new Date().toLocaleString('default', { month: 'long' });
-    const achievementText = `For coming in first place in the campaign: Tech to Trash`;
-    const Text = `recycling a total of ${firstPlace.total_recycled_devices} devices in the month of ${month} ${new Date().getFullYear()}.`;
+    const achievementText = `For getting the highest amount of Instagram likes`;
+    const Text = `with ${firstPlace.likes} likes in the month of ${month} ${new Date().getFullYear()}.`;
 
     // Combine both text parts into one string for the final achievement
     const fullAchievementText = `${achievementText} ${Text}`;

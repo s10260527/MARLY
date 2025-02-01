@@ -19,6 +19,9 @@
   <link rel="stylesheet" href="styles/month-picker.css">
   <link rel="stylesheet" href="styles/general-graph.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+  <link rel="stylesheet" href="styles/chatbot.css">
+  <a target="_blank" href="https://icons8.com/icon/38865/sent">Send</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+  <a href="https://www.flaticon.com/free-icons/chatbot" title="chatbot icons"></a>
 
   <!-- Poppins Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,6 +29,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <section class="chat-window" style="position: fixed;">
+        <button class="close">x close</button>
+        <div class="chat">
+          <div class="model">
+            <p>Hi, how can I help you?</p>
+          </div>
+        </div>
+        <div class="input-area">
+          <input placeholder="Ask me anything..." type="text">
+          <button>
+            <i class="bi bi-send"></i>
+          </button>
+        </div>
+      </section>
+
+      <div class="chat-button" style="position: fixed;">
+        <img src="assets/images/chatbot.png" alt="chat">
+      </div>
+        <!-- Button Section -->
+      <section class="button-section">
+      </section>
+
   <div class="d-flex">
     <!-- Sidebar -->
     <aside id="sidebar" class="sidebar-toggle">
@@ -446,5 +471,13 @@
   <!-- Month Picker Script -->
   <script src="scripts/month-picker.js"></script>
   <script src="scripts/general-graph.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "@google/generative-ai": "https://esm.run/@google/generative-ai"
+      }
+    }
+  </script>
+  <script type="module" src="scripts/chatbot.js"></script>
 </body>
 </html>
