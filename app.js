@@ -19,7 +19,7 @@ const companycontroller = require("./Controllers/company");
 const inputcontroller = require("./Controllers/input");
 const leaderboardcontroller= require("./Controllers/leaderboard");
 const reportController = require('./Controllers/report');
-
+const chatbotController = require('./Controllers/chatbot');
 
 require("dotenv").config();
 
@@ -73,17 +73,24 @@ app.get('/api/test-db', async (req, res) => {
 });
 
 // Start server
+//ChatBot routes
+app.get("/chatbot/data", chatbotController.getAllSqlDetails);
+
 // Campaign routes
 app.get("/campaign/isParticipant/:id", companycontroller.checkIsParticipant);
 app.patch("/campaign/updateParticipationStatus/:id", companycontroller.updateCompanyParticipation);
 app.patch("/campaign/updateParticipationStatus/:id", companycontroller.updateCompanyParticipation);
 
 //input routes
-app.get("/input/getDeviceId/:device_name", inputcontroller.getDeviceIdByName);
-app.post('/input/updateRecycledDeviceQuantity', inputcontroller.updateRecycledDeviceQuantity);
+app.post('/input/addPost', inputcontroller.addPostUrl);
+app.get('/input/:id', inputcontroller.getCompanyName);
+
+// Endpoint for scraping Instagram post
+
 
 //Leaderboard routes
 app.get("/leaderboard/top3", leaderboardcontroller.displayTop3CompaniesForCurrentMonth);
+app.get("/leaderboard/proxy-image", leaderboardcontroller.proxyImage);
 
 // Report-related routes
 app.get("/api/report/emissions-by-sector", reportController.getEmissionsBySector);

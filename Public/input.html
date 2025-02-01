@@ -23,23 +23,25 @@
 
   
       <!-- Input field for Instagram post URL -->
-      <div class="form-floating">
-        <input
-          type="url"
-          class="form-control"
-          id="instagramPostUrl"
-          placeholder="Instagram Post URL"
-          required
-        />
-        <label for="instagramPostUrl">Instagram Post URL</label>
-      </div>
-  
-      <!-- Buttons Container -->
-      <div class="button-container">
-        <button class="btn btn-lg" id="submit-btn" type="submit">Submit</button>
-        <a href="campaign.html" class="btn btn-lg btn-secondary" id="back-btn">Back</a>
-      </div>
-    </div>
+      <form id="instagramForm">
+        <div class="form-floating">
+          <input
+            type="url"
+            class="form-control"
+            id="instagramPostUrl"
+            placeholder="Instagram Post URL"
+            required
+          />
+          <label for="instagramPostUrl">Instagram Post URL</label>
+        </div>
+      
+        <!-- Buttons Container -->
+        <div class="button-container">
+          <button class="btn btn-lg" id="submit-btn" type="submit">Submit</button>
+          <a href="campaign.html" class="btn btn-lg btn-secondary" id="back-btn">Back</a>
+        </div>
+      </form>
+      
   
     <!-- Container to hold dynamically added forms -->
     <div id="forms-container"></div>
