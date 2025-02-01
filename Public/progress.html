@@ -19,7 +19,11 @@
   <!-- Month Picker CSS -->
   <link rel="stylesheet" href="styles/month-picker.css">
   <link rel="stylesheet" href="styles/general-graph.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<style>#progressBarContainer {
+    width: 50%; /* Match the table width */
+    margin: 0 auto; /* Center the progress bar */
+}
+</style>
 
   <!-- Poppins Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -92,8 +96,13 @@
       <!-- Sidebar Ends -->
 <!-- Main Content Container -->
 <div class="container mt-4" style="margin-left: 220px; max-width: calc(100% - 220px);">
-    <!-- NET ZERO PROGRESS Section -->
-    <h3 class="text-center">NET ZERO PROGRESS</h3>
+<!-- NET ZERO PROGRESS Section -->
+<h3 class="text-center">NET ZERO PROGRESS</h3>
+<!-- Goal Display -->
+<div class="text-center mb-3">
+    <h5><strong>Goal Toward Net Zero:</strong> <span id="netZeroGoal">500 MT</span></h5>
+</div>
+<div id="progressBarContainer">
     <div class="progress mt-3" style="height: 30px;">
         <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
              role="progressbar" style="width: 75%;" 
@@ -101,6 +110,9 @@
             75% Completed
         </div>
     </div>
+</div>
+
+    
 
     <!-- Carbon Emissions Graph -->
     <div class="mt-4 d-flex justify-content-center">
@@ -125,20 +137,26 @@
                 <tbody>
                     <tr>
                         <td>Category 1</td>
-                        <td>Direct emissions from owned or controlled sources (e.g., fuel combustion, company vehicles).</td>
+                        <td>Direct emissions from owned or controlled sources.</td>
                         <td id="cat1-emissions">320 MT</td>
                     </tr>
                     <tr>
                         <td>Category 2</td>
-                        <td>Indirect emissions from purchased electricity, steam, heating, and cooling.</td>
+                        <td>Indirect emissions from purchased electricity, heating, and cooling.</td>
                         <td id="cat2-emissions">210 MT</td>
                     </tr>
                     <tr>
                         <td>Category 3</td>
-                        <td>All other indirect emissions from the value chain, including suppliers and customers.</td>
+                        <td>All other indirect emissions from the value chain.</td>
                         <td id="cat3-emissions">150 MT</td>
                     </tr>
+                    <!-- ✅ New Total Row -->
+                    <tr class="table-dark">
+                        <td colspan="2"><strong>Total Carbon Emissions</strong></td>
+                        <td id="total-emissions"><strong>680 MT</strong></td>
+                    </tr>
                 </tbody>
+                
             </table>
 
             <!-- Update Button -->
@@ -197,6 +215,12 @@
       </div>
       <div class="modal-body">
         <form id="updateEmissionsForm">
+            <!-- Goal Toward Net Zero Input -->
+<div class="mb-3">
+    <label for="netZeroGoalInput" class="form-label"><strong>Set Goal Toward Net Zero (MT):</strong></label>
+    <input type="number" class="form-control" id="netZeroGoalInput" placeholder="Enter goal in metric tons CO₂e">
+</div>
+
           <!-- Category 1 Input -->
           <div class="mb-3">
             <label for="category1" class="form-label"><strong>Category 1:</strong> Direct emissions from owned or controlled sources (e.g., fuel combustion, company vehicles).</label>
@@ -225,53 +249,131 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        console.log("JavaScript loaded!"); // Debugging: Check if script runs
+        console.log("JavaScript loaded! ✅"); // Debugging
     
-        // Get button and modal elements
+        // ✅ Ensure Modal Initialization
+        const updateModal = new bootstrap.Modal(document.getElementById("updateEmissionsModal"), { keyboard: false });
+    
+        // ✅ Get button and modal elements
         const openUpdateModalBtn = document.getElementById("openUpdateModal");
         const updateEmissionsForm = document.getElementById("updateEmissionsForm");
     
         if (!openUpdateModalBtn) {
-            console.error("Update button not found!");
+            console.error("❌ Update button not found!");
             return;
         }
     
         if (!updateEmissionsForm) {
-            console.error("Update form not found!");
+            console.error("❌ Update form not found!");
             return;
         }
     
-        // Show modal when update button is clicked
+        // ✅ Show modal when update button is clicked
         openUpdateModalBtn.addEventListener("click", function () {
-            console.log("Update button clicked!"); // Debugging
-            const modal = new bootstrap.Modal(document.getElementById("updateEmissionsModal"));
-            modal.show();
+            console.log("Update button clicked! ✅");
+            updateModal.show();
         });
     
-        // Handle form submission
-        updateEmissionsForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-            console.log("Form submitted!"); // Debugging
+        // ✅ Define Chart Variable Globally
+        let emissionsChart;
     
-            // Get input values
-            const cat1 = document.getElementById("category1").value || 0;
-            const cat2 = document.getElementById("category2").value || 0;
-            const cat3 = document.getElementById("category3").value || 0;
+        // ✅ Initialize Chart.js AFTER the DOM is loaded
+        function initializeChart() {
+            const ctx = document.getElementById('emissionsChart').getContext('2d');
+            emissionsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ["Category 1", "Category 2", "Category 3"],
+                    datasets: [{
+                        label: "Carbon Emissions (Metric Tons CO₂e)",
+                        data: [320, 210, 150], // Initial Data
+                        backgroundColor: ["#FF6B6B", "#4ECDC4", "#45B7D1"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: "Metric Tons CO₂e"
+                            }
+                        }
+                    }
+                }
+            });
+        }
     
-            // Update table with new values
+        // ✅ Initialize Chart on Page Load
+        initializeChart();
+    
+        // ✅ Function to Update Table
+        function updateTable(cat1, cat2, cat3) {
+            console.log("Updating table... ✅");
             document.getElementById("cat1-emissions").textContent = `${cat1} MT`;
             document.getElementById("cat2-emissions").textContent = `${cat2} MT`;
             document.getElementById("cat3-emissions").textContent = `${cat3} MT`;
     
-            // Close modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById("updateEmissionsModal"));
-            modal.hide();
+            // ✅ Calculate and update the total
+            let total = cat1 + cat2 + cat3;
+            document.getElementById("total-emissions").innerHTML = `<strong>${total} MT</strong>`;
+        }
+    
+        // ✅ Function to Update Graph
+        function updateGraph(cat1, cat2, cat3) {
+            console.log("Updating graph... ✅");
+            if (!emissionsChart) {
+                console.error("❌ emissionsChart is undefined!");
+                return;
+            }
+            emissionsChart.data.datasets[0].data = [cat1, cat2, cat3];
+            emissionsChart.update();
+        }
+    
+        // ✅ Handle form submission
+        updateEmissionsForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            console.log("Form submitted! ✅");
+    
+            // ✅ Get input values and ensure valid numbers
+            let cat1 = parseFloat(document.getElementById("category1").value) || 0;
+            let cat2 = parseFloat(document.getElementById("category2").value) || 0;
+            let cat3 = parseFloat(document.getElementById("category3").value) || 0;
+            let netZeroGoal = parseFloat(document.getElementById("netZeroGoalInput").value) || 0;
+    
+            // ✅ Debugging Output
+            console.log(`New Values: Category 1 = ${cat1}, Category 2 = ${cat2}, Category 3 = ${cat3}, Net Zero Goal = ${netZeroGoal} ✅`);
+    
+            // ✅ Update table
+            updateTable(cat1, cat2, cat3);
+    
+            // ✅ Update graph
+            updateGraph(cat1, cat2, cat3);
+    
+            // ✅ Update Net Zero Goal
+            if (netZeroGoal > 0) {
+                document.getElementById("netZeroGoal").textContent = `${netZeroGoal} MT`;
+            }
+    
+            // ✅ Close modal
+            updateModal.hide();
         });
     });
     </script>
     
+    
+    
+    
+    
+    
+    
+    
 <!-- Bootstrap Scripts (Move to the Bottom) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+
 </body>
 </html>
 

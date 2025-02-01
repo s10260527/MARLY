@@ -498,3 +498,8 @@ a.sidebar-link:hover {
     line-height: 1.4;
     margin-top: 30px;
 }
+
+#progressBarContainer {
+    width: 50%; /* Match the table width */
+    margin: 0 auto; /* Center it */
+}
