@@ -8,7 +8,7 @@ const router = express.Router();
 router.use(express.json());
 
 // Login route
-router.post("/", async (req, res) => { 
+router.post("/", async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -16,34 +16,34 @@ router.post("/", async (req, res) => {
     }
 
     try {
-        // Check if the company exists
-        const checkCompanyQuery = "SELECT * FROM Companies WHERE contact_email = @ContactEmail";
-        const checkCompanyRequest = new sql.Request();
-        checkCompanyRequest.input("ContactEmail", sql.VarChar, email);
-        const companyResult = await checkCompanyRequest.query(checkCompanyQuery);
+        // Check if the user exists
+        const checkUserQuery = "SELECT * FROM Users WHERE email = @Email";
+        const request = new sql.Request();
+        request.input("Email", sql.VarChar, email);
+        const userResult = await request.query(checkUserQuery);
 
-        if (companyResult.recordset.length === 0) {
+        if (userResult.recordset.length === 0) {
             return res.status(400).json({ message: "Invalid email or password" });
         }
 
-        const company = companyResult.recordset[0];
+        const user = userResult.recordset[0];
 
-        // Compare the password
-        const isMatch = await bcrypt.compare(password, company.hashed_password);
+        // Compare the hashed password
+        const isMatch = await bcrypt.compare(password, user.password_hash);
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid email or password" });
         }
 
         // Generate JWT
-        const token = jwt.sign({ companyId: company.company_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-        // Set the token in a cookie to be used in other pages
-        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' });
-
-        // Send back company ID to be stored in local storage
-        res.status(200).json({ message: "Login successful", success: true, redirectUrl: "/profile.html", companyId: company.company_id });
+        // Send response
+        res.status(200).json({
+            message: "Login successful",
+            token, // Send the token to the frontend
+        });
     } catch (error) {
-        console.error("Login error", error);
+        console.error("Login error:", error);
         res.status(500).json({ message: "An error occurred during login" });
     }
 });
