@@ -30,6 +30,14 @@ DECLARE @greentech_id INT = @apple_id + 1;
 DECLARE @ecotech_id INT = @apple_id + 2;
 DECLARE @cleanenergy_id INT = @apple_id + 3;
 
+INSERT INTO Post_Details (
+    company_id, company_name, poster_url, poster_name, likes, poster_img, post_date
+) VALUES
+(2, 'GreenTech Solutions', 'https://www.instagram.com/p/C6wdLYBL3_j/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==', 'clean_energy_1', 46, 'https://instagram.fsin15-1.fna.fbcdn.net/v/t51.29350-15/436549292_1549770562252808_8619398173777793441_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&_nc_ht=instagram.fsin15-1.fna.fbcdn.net&_nc_cat=108&_nc_ohc=iyOxgaLbWmoQ7kNvgHhk0sr&_nc_gid=f1e7871fe80241c388deab25393688b5&edm=ANTKIIoBAAAA&ccb=7-5&oh=00_AYBmmp0zALNm2CbRmoSaSauNukbQ9t8KHvNz7oEUwr11rg&oe=67A3D625&_nc_sid=d885a2', '2025-01-11 08:49:25.000'),
+(3, 'EcoTech Industries', 'https://www.instagram.com/p/CEd9iOsnkmh/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==', 'clean_energy_1', 30, 'https://instagram.fsin15-2.fna.fbcdn.net/v/t51.29350-15/118513806_3518565701533023_5844780437150459345_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&_nc_ht=instagram.fsin15-2.fna.fbcdn.net&_nc_cat=103&_nc_ohc=koHszlQ_0dQQ7kNvgF2vg84&_nc_gid=b1692d6d90d34d42b8cbeadf15950235&edm=ANTKIIoBAAAA&ccb=7-5&oh=00_AYDurfNoZmBUg4Ve8SHUYpVhz2fFgepQIRH4kIS9U8rQGQ&oe=67996834&_nc_sid=d885a2', '2025-01-29 12:29:26.000'),
+(4, 'CleanEnergy Corp', 'https://www.instagram.com/p/CFT_k8HHhFd/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==', 'clean_energy_1', 45, 'https://instagram.fsin15-2.fna.fbcdn.net/v/t51.29350-15/119652577_386754482448725_1914808262752464731_n.jpg?stp=dst-jpg_e35_s1080x1080_tt6&_nc_ht=instagram.fsin15-2.fna.fbcdn.net&_nc_cat=105&_nc_ohc=moNSrK0LJ48Q7kNvgHEBDQt&_nc_gid=36b66d9aaeea4227b279a13507c3d72f&edm=ANTKIIoBAAAA&ccb=7-5&oh=00_AYDA4KYm4fp7dIDi_1Eth5C3wy2UvcV2mBWkK_OUpllRrg&oe=67997BBC&_nc_sid=d885a2', '2025-01-28 12:29:26.000');
+
+
 -- Insert Campaign Data
 INSERT INTO Campaigns (
     company_id, campaign_name, description, start_date, end_date
