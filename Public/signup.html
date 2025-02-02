@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Verdex - Company Signup</title>
+    <title>Verdex - User Signup</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -54,35 +54,26 @@
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <h2 class="h4 text-center mb-4">Welcome to Verdex!<br>Company Sign Up Here!</h2>
+                <h2 class="h4 text-center mb-4">Welcome to Verdex!<br>User Sign Up Here!</h2>
                 <form id="signupForm">
                     <div class="form-group">
-                        <label for="companyName">Company Name</label>
-                        <input type="text" class="form-control" id="companyName" name="company_name" placeholder="Enter your company name" required>
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
                     </div>
                     <div class="form-group">
-                        <label for="industryType">Industry Type</label>
-                        <input type="text" class="form-control" id="industryType" name="industry_type" placeholder="Enter your industry type" required>
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
                     </div>
                     <div class="form-group">
-                        <label for="country">Country</label>
-                        <input type="text" class="form-control" id="country" name="country" placeholder="Enter your country" required>
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
                     </div>
                     <div class="form-group">
-                        <label for="city">City</label>
-                        <input type="text" class="form-control" id="city" name="city" placeholder="Enter your city" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signupEmail">Business Email</label>
-                        <input type="email" class="form-control" id="signupEmail" name="contact_email" placeholder="Enter your business email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="contactPhone">Contact Phone</label>
-                        <input type="text" class="form-control" id="contactPhone" name="contact_phone" placeholder="Enter your contact phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signupPassword">Password</label>
-                        <input type="password" class="form-control" id="signupPassword" name="password" placeholder="Enter your password" required>
+                        <label for="role">Role</label>
+                        <select class="form-control" id="role" name="role" required>
+                            <option value="admin">Admin</option>
+                            <option value="employee">Employee</option>
+                        </select>
                     </div>
                     <div class="form-check mb-3">
                         <input type="checkbox" class="form-check-input" id="termsCheck" name="agreed_to_terms" required>
@@ -91,9 +82,6 @@
                     <button type="submit" class="btn btn-dark btn-block">Sign Up</button>
                     <div class="text-center mt-3">
                         <span>Already have an account? <a href="login.html">Log In Here</a></span>
-                    </div>
-                    <div class="text-center mt-3">
-                        <a href="#">Forgot password?</a>
                     </div>
                 </form>
             </div>
@@ -116,13 +104,10 @@
             $('#signupForm').on('submit', function (e) {
                 e.preventDefault();
                 const formData = {
-                    company_name: $('#companyName').val(),
-                    industry_type: $('#industryType').val(),
-                    country: $('#country').val(),
-                    city: $('#city').val(),
-                    contact_email: $('#signupEmail').val(),
-                    contact_phone: $('#contactPhone').val(),
-                    password: $('#signupPassword').val(),
+                    username: $('#username').val(),
+                    email: $('#email').val(),
+                    password: $('#password').val(),
+                    role: $('#role').val(),
                     agreed_to_terms: $('#termsCheck').is(':checked') ? 1 : 0
                 };
 
@@ -134,7 +119,7 @@
                     success: function (response) {
                         alert(response.message);
                         // Redirect to login page after successful signup
-                        if (response.message === "Company registered successfully") {
+                        if (response.message === "User registered successfully") {
                             window.location.href = "login.html";
                         }
                     },
