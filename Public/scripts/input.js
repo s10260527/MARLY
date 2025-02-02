@@ -1,145 +1,78 @@
-// Input Form Handling (scripts/input.js)
+const companyId = localStorage.getItem('companyId');
 
-// Select the form container where forms will be added
-const formsContainer = document.getElementById('forms-container');
+document.addEventListener("DOMContentLoaded", function () {
+  const instagramForm = document.getElementById("instagramForm");
+  const instagramPostUrl = document.getElementById("instagramPostUrl");
 
-// Select the add form button
-const addFormBtn = document.getElementById('add-form-btn');
+  instagramForm.addEventListener("submit", async function (e) {
+    e.preventDefault(); // Prevent default form submission
 
-// Event listener to handle adding a new form
-addFormBtn.addEventListener('click', function () {
-  // Create a new form element
-  const newForm = document.createElement('div');
-  newForm.classList.add('form-background'); // Apply the form background styles
-  
-  // Create the form structure
-  const formHTML = `
-    <h1 class="h3">New Device Form</h1>
-    <form action="">
-      <!-- Dropdown for selecting device type -->
-      <div class="form-floating">
-        <select class="form-control" id="deviceDropdown" required>
-          <option value="computer">Computer</option>
-          <option value="mobile">Mobile Device</option>
-        </select>
-        <label for="deviceDropdown">Device Type</label>
-      </div>
+    const url = instagramPostUrl.value.trim(); // Get the URL from the input field
 
-      <!-- Quantity input for password -->
-      <div class="form-floating">
-        <input type="number" class="form-control" id="floatingPassword" placeholder="Quantity" min="1" required>
-        <label for="floatingPassword">Quantity</label>
-      </div>
-
-      <button class="w-100 btn btn-lg" id="submit-btn" type="submit">Submit</button>
-      <div class="plus-icon-container">
-        <button type="button" class="btn btn-link" id="add-form-btn">
-          <i class="fas fa-plus"></i>
-        </button>
-    </form>
-  `;
-
-  // Add the form structure to the new form element
-  newForm.innerHTML = formHTML;
-
-  // Append the new form to the forms container
-  formsContainer.appendChild(newForm);
-});
-
-// Optional: Close functionality for the dynamically created forms
-formsContainer.addEventListener('click', function (event) {
-  // Check if the clicked element is the close button
-  if (event.target && event.target.matches('.btn-close')) {
-    // Remove the parent form of the clicked close button
-    event.target.closest('.form-background').remove();
-  }
-});
-
-
-
-
-
-//-------------------------AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH-----------------------------------
-
-// Global variables
-let deviceId = null;
-let quantity = null;
-
-document.getElementById("device-form").addEventListener("submit", async function (e) {
-  e.preventDefault(); // Prevent default form submission
-
-  // Get the device name and quantity from the form
-  const deviceName = document.getElementById("deviceDropdown").value;
-  quantity = document.getElementById("floatingPassword").value;
-
-  try {
-    // Make the request to the backend to get the device ID by name
-    const response = await fetch(`/input/getDeviceId/${deviceName}`, {
-      method: 'GET',
-    });
-
-    if (!response.ok) {
-      throw new Error('Device not found');
+    if (!url) {
+      alert("Please enter a valid URL.");
+      return;
     }
 
-    // Parse the response
-    const data = await response.json();
-    deviceId = data.device_id;
-
-    // Call the method to update the recycled device quantity
-    await updateRecycledDeviceQuantity(deviceId, quantity);
-
-    // Clear the form fields after submission (reset the form)
-    clearForm();
-
-  } catch (error) {
-    console.error('Error fetching device ID:', error);
-  }
-});
-
-// The function that updates the recycled device quantity using the global variables
-async function updateRecycledDeviceQuantity(deviceId, quantity) {
-  const campaignId = 1;  // Use your actual campaign ID
-  const companyId = localStorage.getItem('companyId');   // Use your actual company ID
-
-  try {
-    // Send the request to update the recycled device quantity
-    const updateResponse = await fetch('/input/updateRecycledDeviceQuantity', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        campaign_id: campaignId,
-        company_id: companyId,
-        device_id: deviceId,
-        new_quantity: quantity,
-      }),
-    });
-
-    if (!updateResponse.ok) {
-      throw new Error('Failed to update quantity');
+    if (!companyId) {
+      alert("Company ID is missing.");
+      return;
     }
 
-    // Parse the update response
-    const updateData = await updateResponse.json();
-    console.log('Update Successful:', updateData.message);
-    
-    // Handle success (e.g., display success message or update UI)
-    alert('Recycled device quantity updated successfully!');
-  } catch (error) {
-    console.error('Error updating device quantity:', error);
-    // Handle error (e.g., display error message)
-    alert('Error updating recycled device quantity');
-  }
-}
+    console.log("Retrieved URL:", url);
+    console.log("Company ID:", companyId);
 
-// Function to clear the form fields
-function clearForm() {
-  // Get the form element
-  const form = document.querySelector('form');
+    try {
+      // Step 1: Retrieve company name using a GET request
+      const response = await fetch(`/input/${companyId}`, { // Pass company_id in URL
+        method: 'GET', // Use GET since we are retrieving data
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-  // Reset the form (clear all fields)
-  form.reset();
-}
+      if (!response.ok) {
+        throw new Error(`Failed to fetch company name. Status: ${response.status}`);
+      }
 
+      const company_name = await response.json();
+      if (company_name) {
+        console.log("Company Name before sending to newPostData:", company_name);
+        console.log("Company id before sending to newPostData:", companyId);
+        // Step 2: Construct the newPostData object
+        const newPostData = {
+          company_id: companyId,
+          company_name: company_name, // Pass the company name
+          poster_url: url,
+        };
+
+        console.log("newPostData:", newPostData);  // Log newPostData to verify the values
+
+        // Step 3: Send the URL, company ID, and company name to the backend
+        const postResponse = await fetch('/input/addPost', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newPostData),  // Send newPostData here
+        });
+
+        const postData = await postResponse.json();
+
+        if (postData.message) {
+          alert(postData.message); // Show success or error message from backend
+        } else {
+          alert("Error: Could not add the post details.");
+        }
+      } else {
+        alert("Company name not found.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while processing the request.");
+    }
+
+    // Clear the form
+    instagramPostUrl.value = "";
+  });
+});

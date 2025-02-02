@@ -20,7 +20,11 @@
     <button class="btn btn-outline-secondary back-button" onclick="history.back()">
       <i class="bi bi-arrow-left"></i> Campaign
     </button>
-
+    <!-- Winner Poster Section -->
+    <div id="winner-poster-section" style="text-align: center; margin-top: 20px; display: none;">
+        <h2>Winner's Poster</h2>
+        <img id="winner-poster" src="" alt="Winner Poster" style="max-width: 100%; height: auto; border: 2px solid #ddd; border-radius: 8px;">
+    </div>
     <!-- Podium Container -->
     <div class="podium-container">
         <!-- Second Place Podium -->
@@ -50,7 +54,7 @@
   <div class="modal-content">
       <h2>Certificate of Achievement</h2>
       <p>Congratulations, <span id="certificate-company-name">Company A</span>!</p>
-      <p>You have successfully recycled <span id="certificate-recycled-count">1500</span> devices!</p>
+      <p>You have won the campaign!</p>
       <button id="download-cert-btn" class="download-btn">Download Certificate</button>
   </div>
 </div>

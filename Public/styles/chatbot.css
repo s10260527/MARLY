@@ -1,0 +1,192 @@
+:root {
+    --grey: #f5f5f5;
+    --blue: #3d88f9;
+    --black: #1a1a1a;
+}
+
+body.chat-open .chat-window {
+    display: flex;
+    animation: chatBounce 0.4s ease-in forwards;
+}
+
+.chat-window.closing {
+    animation: chatFadeOut 0.3s ease-out forwards;
+}
+
+/* Chat open animation */
+@keyframes chatBounce {
+    0% { transform: scale(0.5); opacity: 0; }
+    80% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+/* Chat close animation */
+@keyframes chatFadeOut {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0; }
+}
+
+
+.chat-button {
+    position: absolute;
+    bottom: 60px;
+    right: 20px;
+    z-index: 998;
+    background-color: #769ff6;
+    height: 80px;
+    width: 80px;
+    border-radius: 100%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    img {
+        width: 50px;
+    }
+
+    &:hover {
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+}
+
+.chat-window {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background-color: white;
+    border-radius: 20px;
+    position: absolute;
+    z-index: 999;
+    bottom: 60px;
+    right: 20px;
+    height: 500px;
+    width: 360px;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between; 
+
+    .close {
+        border-radius: 20px 20px 0 0;
+        border: none;
+        padding: 8px 0;
+        background-color: #6453f3;
+        color: white;
+        cursor: pointer;
+    }
+
+
+    .chat {
+        background-color: white;
+        flex: 1;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px; /* Ensure consistent spacing between messages */
+        overflow-y: scroll;
+    }
+    
+    .chat p {
+        border-radius: 20px;
+        padding: 16px;
+        word-wrap: break-word;
+        max-width: 75%; /* Prevents messages from stretching too wide */
+        margin: 4px 0; /* Adds slight spacing between messages */
+        padding: 16px;
+    }
+    
+    /* Aligns model messages to the left */
+    .chat .model {
+        display: flex;
+        justify-content: flex-start;
+    }
+    
+    .chat .model p {
+        background-color: var(--grey);
+    }
+    
+    /* Aligns user messages to the right */
+    .chat .user {
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    .chat .user p {
+        background-color: var(--blue);
+        color: white;
+        font-size: 15px;
+    }
+
+    .chat .error {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .chat .error p {
+        font-size: 15px;
+        text-align: center;
+        color: red;
+        background: none; /* Remove background if needed */
+        max-width: 100%; /* Ensure it doesn't shrink */
+    }
+    
+    
+
+    .input-area {
+        height: 70px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 8px;
+        border-top: 1px solid lightgray;
+
+        input {
+            height: 40px;
+            flex: 1;
+            border: none;
+            background-color: var(--grey);
+            border-radius: 20px;
+            padding-left: 20px;
+        }
+
+        button {
+            height: 40px;
+            width: 40px;
+            border-radius: 100%;
+            border: none;
+            margin-left: 12px;
+            background-color: var(--blue);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+
+            img {
+                width: 18px
+            }
+
+            &:hover {
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+            }
+        }
+    }
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+    width: 40px;
+    opacity: 0.4;
+    aspect-ratio: 4;
+    --_g: no-repeat radial-gradient(circle closest-side,#000 90%,#0000);
+    background: 
+      var(--_g) 0%   50%,
+      var(--_g) 50%  50%,
+      var(--_g) 100% 50%;
+    background-size: calc(100%/3) 100%;
+    animation: l7 0.5s infinite linear;
+  }
+  @keyframes l7 {
+      33%{background-size:calc(100%/3) 0%  ,calc(100%/3) 100%,calc(100%/3) 100%}
+      50%{background-size:calc(100%/3) 100%,calc(100%/3) 0%  ,calc(100%/3) 100%}
+      66%{background-size:calc(100%/3) 100%,calc(100%/3) 100%,calc(100%/3) 0%  }
+  }

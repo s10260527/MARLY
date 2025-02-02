@@ -32,6 +32,9 @@
   <script
     src="https://code.jquery.com/jquery-3.6.0.min.js">
   </script>
+  <link rel="stylesheet" href="styles/chatbot.css">
+  <a target="_blank" href="https://icons8.com/icon/38865/sent">Send</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+  <a href="https://www.flaticon.com/free-icons/chatbot" title="chatbot icons"></a>
 
   <!-- Poppins Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -40,9 +43,36 @@
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
     rel="stylesheet"
   />
+
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <link href="styles/ai-suggestions.css" rel="stylesheet">
+
 </head>
 
 <body>
+    <section class="chat-window" style="position: fixed;">
+        <button class="close">x close</button>
+        <div class="chat">
+          <div class="model">
+            <p>Hi, how can I help you?</p>
+          </div>
+        </div>
+        <div class="input-area">
+          <input placeholder="Ask me anything..." type="text">
+          <button>
+            <i class="bi bi-send"></i>
+          </button>
+        </div>
+      </section>
+
+      <div class="chat-button" style="position: fixed;">
+        <img src="assets/images/chatbot.png" alt="chat">
+      </div>
+        <!-- Button Section -->
+      <section class="button-section">
+      </section>
+
   <div class="d-flex">
     <!-- Sidebar -->
     <aside id="sidebar" class="sidebar-toggle">
@@ -72,6 +102,12 @@
             <span>Reports</span>
           </a>
         </li>
+            <li class="sidebar-item">
+                <a href="ai-suggestions-detailed.html" class="sidebar-link">
+                    <i class="bi bi-robot"></i>
+                    <span>AI Suggestions</span>
+                </a>
+            </li>
         <li class="sidebar-item">
           <a href="campaign.html" class="sidebar-link">
             <i class="bi bi-megaphone-fill"></i>
@@ -592,6 +628,14 @@
                     <div class="d-flex align-items-center gap-2">
                       <h5 class="mb-0">SmartTech Corp.</h5>
                       <span class="badge bg-mine">Leaderboard #3</span>
+        </div>
+        <!-- AI Suggestions Widget -->
+        <div class="ai-widget competing-company">
+            <div class="card">
+                <div class="ai-header d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-lightbulb text-warning me-2 fs-4"></i>
+                        <h5 class="mb-0">AI Suggestions</h5>
                     </div>
                     <div class="progress mt-2" style="height: 8px;">
                       <div
@@ -608,6 +652,22 @@
                     </small>
                   </div>
                 </div>
+
+                <div class="p-3">
+                    <div class="btn-group w-100 mb-3">
+                        <button class="btn btn-outline-secondary category-toggle active" data-category="all">
+                            <i class="fas fa-globe me-1"></i>All
+                        </button>
+                        <button class="btn btn-outline-secondary category-toggle" data-category="emissions">
+                            <i class="fas fa-cloud me-1"></i>Emissions
+                        </button>
+                        <button class="btn btn-outline-secondary category-toggle" data-category="costs">
+                            <i class="fas fa-dollar-sign me-1"></i>Costs
+                        </button>
+                    </div>
+
+                    <div id="suggestionCards" class="suggestion-cards">
+                        <!-- Cards will be dynamically inserted here -->
 
                 <div class="content-wrapper">
                   <p class="small company-desc">
@@ -630,9 +690,14 @@
                       <small class="text-primary">2 Mobiles</small>,
                       <small class="text-secondary">1 Desktop</small>
                     </div>
-                  </div>
+
+                    <div class="text-center mt-3">
+                        <button id="refreshBtn" class="btn btn-primary">
+                            <i class="fas fa-sync-alt me-1"></i>Refresh Suggestions
+                        </button>
+                        <a href="ai-suggestions-detailed.html" class="btn btn-primary">View Detailed Suggestions</a>
+                    </div>
                 </div>
-              </div>
             </div>
           </div> <!-- End Competing Company -->
         </div> <!-- End .main -->
@@ -879,7 +944,42 @@
           });
         });
       </script>
+
+        <!-- Card Template -->
+        <template id="cardTemplate">
+            <div class="suggestion-card card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="badge me-2"></span>
+                            <h6 class="mb-2"></h6>
+                            <p class="mb-2 text-muted small description"></p>
+                            <div class="d-flex align-items-center">
+                                <span class="trend me-2"></span>
+                                <span class="impact text-success"></span>
+                            </div>
+                            <div class="mt-2 timeline text-muted small"></div>
+                        </div>
+                        <div class="progress-ring d-flex align-items-center justify-content-center">
+                            <span class="completion"></span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="ai-suggestions-detailed.html" class="btn btn-sm btn-link">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </template>
     </div>
   </div>
+  <script type="importmap">
+    {
+      "imports": {
+        "@google/generative-ai": "https://esm.run/@google/generative-ai"
+      }
+    }
+  </script>
+  <script type="module" src="scripts/chatbot.js"></script>
+  <script src="scripts/ai-suggestions.js"></script>
 </body>
 </html>

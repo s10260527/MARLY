@@ -216,12 +216,18 @@ BEGIN
                 @facility_id,
                 @CurrentDate,
                 CASE @facility_type
-                    WHEN 'Assembly' THEN 250.0
-                    WHEN 'Semiconductor' THEN 400.0
+                    WHEN 'Assembly' THEN 450.0
+                    WHEN 'Semiconductor' THEN 600.0
+                    WHEN 'R&D' THEN 250.0
+                    WHEN 'Energy Production' THEN 350.0
+                    ELSE 300.0
                 END * @seasonal_factor * @tech_improvement * @release_factor,
                 CASE @facility_type
-                    WHEN 'Assembly' THEN 250.0
-                    WHEN 'Semiconductor' THEN 400.0
+                    WHEN 'Assembly' THEN 450.0
+                    WHEN 'Semiconductor' THEN 600.0
+                    WHEN 'R&D' THEN 250.0
+                    WHEN 'Energy Production' THEN 350.0
+                    ELSE 300.0
                 END * @seasonal_factor * @tech_improvement * @release_factor * 
                 (1 - (DATEDIFF(YEAR, @StartDate, @CurrentDate) * 0.08)),
                 'Verified',
@@ -267,7 +273,7 @@ BEGIN
             INSERT INTO Scope2_Emissions (
                 emission_id, date, electricity_consumption, steam_consumption,
                 cooling_consumption, heating_consumption, grid_emission_factor,
-                location_based_emissions, market_based_emissions, department_id  -- Added column
+                location_based_emissions, market_based_emissions, department_id
             )
             VALUES (
                 @emission_id,
@@ -275,25 +281,37 @@ BEGIN
                 CASE @facility_type
                     WHEN 'Assembly' THEN 50000.0
                     WHEN 'Semiconductor' THEN 75000.0
+                    WHEN 'R&D' THEN 35000.0
+                    WHEN 'Energy Production' THEN 25000.0
+                    ELSE 40000.0
                 END * @seasonal_factor * @release_factor,
                 CASE @facility_type
                     WHEN 'Assembly' THEN 20000.0
                     WHEN 'Semiconductor' THEN 30000.0
+                    WHEN 'R&D' THEN 15000.0
+                    WHEN 'Energy Production' THEN 10000.0
+                    ELSE 15000.0
                 END * @seasonal_factor,
                 CASE @facility_type
                     WHEN 'Assembly' THEN 15000.0
                     WHEN 'Semiconductor' THEN 25000.0
+                    WHEN 'R&D' THEN 12000.0
+                    WHEN 'Energy Production' THEN 8000.0
+                    ELSE 10000.0
                 END * @seasonal_factor * 
                 CASE WHEN MONTH(@CurrentDate) IN (6,7,8) THEN 1.5 ELSE 1.0 END,
                 CASE @facility_type
                     WHEN 'Assembly' THEN 10000.0
                     WHEN 'Semiconductor' THEN 15000.0
+                    WHEN 'R&D' THEN 8000.0
+                    WHEN 'Energy Production' THEN 5000.0
+                    ELSE 7000.0
                 END * @seasonal_factor *
                 CASE WHEN MONTH(@CurrentDate) IN (12,1,2) THEN 1.5 ELSE 1.0 END,
                 0.5,
-                NULL,
-                NULL,
-                @dept_id  -- Added value
+                NULL,  -- These will be calculated in a later update
+                NULL,  -- These will be calculated in a later update
+                @dept_id
             );
 
             -- 4. Daily Production and Costs
@@ -307,25 +325,82 @@ BEGIN
                 CASE @facility_type
                     WHEN 'Assembly' THEN 25000.0
                     WHEN 'Semiconductor' THEN 15000.0
-                END * @seasonal_factor * @release_factor * (1 + (DATEDIFF(YEAR, @StartDate, @CurrentDate) * 0.05)),
+                    WHEN 'R&D' THEN 5000.0
+                    WHEN 'Energy Production' THEN 20000.0
+                    ELSE 10000.0
+                END * @seasonal_factor * @release_factor * 
+                (1 + (DATEDIFF(YEAR, @StartDate, @CurrentDate) * 0.05)),
                 CASE @facility_type
-                    WHEN 'Assembly' THEN 250.0
-                    WHEN 'Semiconductor' THEN 400.0
+                    WHEN 'Assembly' THEN 450.0
+                    WHEN 'Semiconductor' THEN 600.0
+                    WHEN 'R&D' THEN 250.0
+                    WHEN 'Energy Production' THEN 350.0
+                    ELSE 300.0
                 END * @seasonal_factor * @tech_improvement,
                 CASE @facility_type
                     WHEN 'Assembly' THEN 75000.0
                     WHEN 'Semiconductor' THEN 100000.0
+                    WHEN 'R&D' THEN 40000.0
+                    WHEN 'Energy Production' THEN 60000.0
+                    ELSE 50000.0
                 END * @seasonal_factor * @tech_improvement,
                 CASE @facility_type
                     WHEN 'Assembly' THEN 1000000.0
                     WHEN 'Semiconductor' THEN 1500000.0
-                END * @seasonal_factor * @release_factor * (1 - (DATEDIFF(YEAR, @StartDate, @CurrentDate) * 0.03)),
-                0.75 + (DATEDIFF(YEAR, @StartDate, @CurrentDate) * 0.02),
+                    WHEN 'R&D' THEN 500000.0
+                    WHEN 'Energy Production' THEN 800000.0
+                    ELSE 700000.0
+                END * @seasonal_factor * @release_factor * 
+                (1 - (DATEDIFF(YEAR, @StartDate, @CurrentDate) * 0.03)),
+                -- Updated efficiency metrics calculation ensuring realistic values and a cap below 100%
+                CASE 
+                    WHEN (CASE @facility_type
+                            WHEN 'Assembly' THEN 75.0
+                            WHEN 'Semiconductor' THEN 80.0
+                            WHEN 'R&D' THEN 65.0
+                            WHEN 'Energy Production' THEN 70.0
+                            ELSE 65.0
+                         END + (DATEDIFF(YEAR, @StartDate, @CurrentDate) * 0.5)) > 99 
+                    THEN 99 
+                    ELSE (CASE @facility_type
+                            WHEN 'Assembly' THEN 75.0
+                            WHEN 'Semiconductor' THEN 80.0
+                            WHEN 'R&D' THEN 65.0
+                            WHEN 'Energy Production' THEN 70.0
+                            ELSE 65.0
+                          END + (DATEDIFF(YEAR, @StartDate, @CurrentDate) * 0.5))
+                END,
                 JSON_MODIFY(
                     JSON_MODIFY(
                         JSON_MODIFY('{}', '$.production', 0.85 + (DATEDIFF(YEAR, @StartDate, @CurrentDate) * 0.01)),
                         '$.quality', 0.90 + (DATEDIFF(YEAR, @StartDate, @CurrentDate) * 0.005)),
                     '$.maintenance', 0.88 + (DATEDIFF(YEAR, @StartDate, @CurrentDate) * 0.008))
+            );
+
+            INSERT INTO Scope3_Emissions (
+                emission_id, date, category, activity_data,
+                emission_factor, calculated_emissions, data_source
+            )
+            VALUES (
+                @emission_id,
+                @CurrentDate,
+                'Supply Chain',
+                CASE @facility_type
+                    WHEN 'Assembly' THEN 200.0
+                    WHEN 'Semiconductor' THEN 250.0
+                    WHEN 'R&D' THEN 100.0
+                    WHEN 'Energy Production' THEN 150.0
+                    ELSE 120.0
+                END * @seasonal_factor,
+                0.5,
+                CASE @facility_type
+                    WHEN 'Assembly' THEN 100.0
+                    WHEN 'Semiconductor' THEN 125.0
+                    WHEN 'R&D' THEN 50.0
+                    WHEN 'Energy Production' THEN 75.0
+                    ELSE 60.0
+                END * @seasonal_factor,
+                'Supplier Reports'
             );
 
             -- 5. Monthly Reports (first day of each month)

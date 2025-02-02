@@ -15,16 +15,24 @@ const emissionController = require("./Controllers/emission");
 const profileRouter = require("./Models/profile"); // <-- updated profile
 const companycontroller = require("./Controllers/company");
 const inputcontroller = require("./Controllers/input");
-const leaderboardcontroller = require("./Controllers/leaderboard");
-const reportController = require("./Controllers/report");
-const dashboardRouter = require("./Models/dashboard");
-const dashboardController = require("./Controllers/dashboardController");
+const leaderboardcontroller= require("./Controllers/leaderboard");
+const reportController = require('./Controllers/report');
+const chatbotController = require('./Controllers/chatbot');
+
+const aiSuggestionsController = require('./Controllers/ai-suggestions/aiSuggestionsController');
+
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors({ credentials: true, origin: "http://127.0.0.1:3000" }));
 app.use(express.json());
+app.use(express.static("Public"));
+app.use(cors({ 
+    credentials: true, 
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'] 
+}));
 app.use(cookieParser());
 
 // Authentication middleware
@@ -57,16 +65,39 @@ app.use("/api/profile", authenticateToken, profileRouter);
 app.get("/api/emission/totalemission", authenticateToken, emissionController.getTopEmissionsByCurrentMonth);
 app.get("/api/emission/mostimproved", authenticateToken, emissionController.getMostImprovedByMonth);
 
-// Campaign endpoints
+// Serve static files (HTML, CSS, JS) from the "Public" directory
+app.use(express.static("Public"));
+
+// Test database connection endpoint (For debugging)
+app.get('/api/test-db', async (req, res) => {
+    try {
+        const request = new sql.Request();
+        const result = await request.query('SELECT 1 AS result');
+        res.status(200).json({ message: 'Database connection is successful', result: result.recordset });
+    } catch (err) {
+        console.error('Database connection error:', err);
+        res.status(500).json({ message: 'Database connection failed', error: err.message });
+    }
+});
+
+// Start server
+//ChatBot routes
+app.get("/chatbot/data", chatbotController.getAllSqlDetails);
+
+// Campaign routes
 app.get("/campaign/isParticipant/:id", companycontroller.checkIsParticipant);
 app.patch("/campaign/updateParticipationStatus/:id", companycontroller.updateCompanyParticipation);
 
 // Input endpoints
-app.get("/input/getDeviceId/:device_name", inputcontroller.getDeviceIdByName);
-app.post("/input/updateRecycledDeviceQuantity", inputcontroller.updateRecycledDeviceQuantity);
+app.post('/input/addPost', inputcontroller.addPostUrl);
+app.get("/input/:id", inputcontroller.getCompanyName);
+
+// Endpoint for scraping Instagram post
+
 
 // Leaderboard
 app.get("/leaderboard/top3", leaderboardcontroller.displayTop3CompaniesForCurrentMonth);
+app.get("/leaderboard/proxy-image", leaderboardcontroller.proxyImage);
 
 // Reports
 app.get("/api/report/emissions-by-sector", authenticateToken, reportController.getEmissionsBySector);

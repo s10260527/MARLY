@@ -52,6 +52,9 @@
 USE MARLY;
 GO
 
+
+
+
 -- Enable JSON support
 ALTER DATABASE MARLY SET COMPATIBILITY_LEVEL = 130;
 GO
@@ -74,6 +77,20 @@ CREATE TABLE Companies (
 
 
 -- CAMPAIGN TABLES ----------------------------------
+CREATE TABLE Post_Details
+(
+    post_id INT IDENTITY(1,1) PRIMARY KEY,
+	company_id INT,
+    company_name VARCHAR(255) NOT NULL,
+	poster_url VARCHAR(255),
+	poster_name VARCHAR(255),
+    likes INT,
+    poster_img NVARCHAR(MAX),
+    post_date DATETIME NOT NULL
+	FOREIGN KEY (company_id) REFERENCES Companies(company_id) ON DELETE CASCADE
+
+);
+
 CREATE TABLE Campaigns (
     campaign_id INT IDENTITY(1,1) PRIMARY KEY,
     company_id INT NOT NULL,
