@@ -186,19 +186,34 @@ a.sidebar-link:hover {
 }
 
 /* Specific to the Report Page */
-.report-page h2 {
-  font-size: 1.8rem;
-}
-
-.card-title {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #555;
-}
-
-.card h3 {
-  font-size: 1.5rem;
-}
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  .text-center h2 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .text-muted {
+    font-size: 0.9rem;
+  }
+  
+  /* Card styles */
+  .card {
+    border-radius: 0.5rem;
+  }
+  
+  .card-title {
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+  
+  .card h3 {
+    font-size: 1.5rem;
+  }
 
 #back-to-sector-chart {
     position: absolute;

@@ -5,6 +5,7 @@ module.exports = {
   server: "localhost",
   database: "MARLY",
   trustServerCertificate: true,
+  requestTimeout: 30000, // e.g. 30s
   options: {
     port: 1433,
     connectionTimeout: 60000,

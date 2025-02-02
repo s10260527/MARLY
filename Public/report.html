@@ -57,16 +57,22 @@
                   <hr>
               </div>
               <li class="sidebar-item">
-                  <a href="#" class="sidebar-link">
+                  <a href="dashboard.html" class="sidebar-link">
                       <i class="bi bi-pie-chart-fill"></i>
                       <span>Dashboard</span>
                   </a>
               </li>
               <li class="sidebar-item">
-                  <a href="#" class="sidebar-link">
+                  <a href="report.html" class="sidebar-link">
                       <i class="bi bi-clipboard-data-fill"></i>
                       <span>Reports</span>
                   </a>
+              </li>
+              <li class="sidebar-item">
+                <a href="ai-suggestions-detailed.html" class="sidebar-link">
+                    <i class="bi bi-robot"></i>
+                    <span>AI Suggestions</span>
+                </a>  
               </li>
               <li class="sidebar-item">
                 <a href="campaign.html" class="sidebar-link">
@@ -106,172 +112,182 @@
               </a>
           </div>
       </aside>
-
-    <main class="container mt-5 pt-5">
-      <div class="text-center my-4">
+      
+    <!-- Report page start -->
+    <main class="container mt-5 pt-3">
+      <div class="text-center my-3">
         <h2>Company Sustainability Report</h2>
         <p class="text-muted">
           Overview of your company’s sustainability metrics
         </p>
       </div>
 
-      <div class="row">
-        <div class="col-md-3 mb-4">
+      <div class="row g-3">
+        <!-- 1) Products -->
+        <div class="col-ms-6 col-lg-3">
           <div class="card h-100 shadow">
             <div class="card-body text-center">
               <p class="card-title font-weight-bold">Products</p>
-              <h3 class="text-primary">249</h3>
+              <h3 class="text-primary" id="total-products">0</h3>
             </div>
           </div>
         </div>
-        <div class="col-md-3 mb-4">
+      
+        <!-- 2) Carbon Emissions -->
+        <div class="col-sm-6 col-lg-3">
           <div class="card h-100 shadow">
             <div class="card-body text-center">
               <p class="card-title font-weight-bold">Carbon Emissions</p>
-              <h3 class="text-success">342</h3>
+              <h3 class="text-success" id="carbon-emissions">0</h3>
             </div>
           </div>
         </div>
-        <div class="col-md-3 mb-4">
+      
+        <!-- 3) Goals Reached -->
+        <div class="col-sm-6 col-lg-3">
           <div class="card h-100 shadow">
             <div class="card-body text-center">
               <p class="card-title font-weight-bold">Goal Reached</p>
-              <h3 class="text-warning">75%</h3>
+              <h3 class="text-warning" id="goals-reached">0%</h3>
             </div>
           </div>
         </div>
-        <div class="col-md-3 mb-4">
+      
+        <!-- 4) Projects -->
+        <div class="col-sm-6 col-lg-3">
           <div class="card h-100 shadow">
             <div class="card-body text-center">
               <p class="card-title font-weight-bold">Projects</p>
-              <h3 class="text-danger">53</h3>
+              <h3 class="text-danger" id="projects-count">0</h3>
             </div>
           </div>
         </div>
       </div>
+      
 
       <!-- Chart Section -->
-      <div class="row mt-4">
+      <div class="row g-3 mt-4">
+        <!-- 1) Emissions by Sector (Pie Chart) -->
         <div class="col-md-6">
           <div class="card h-100 shadow">
             <div class="card-body">
               <!-- Table Icon Trigger -->
-              <i
-                class="fas fa-table table-icon"
-                data-target="#emissionsTableModal"
-              ></i>
+              <i class="fas fa-table table-icon" 
+              data-bs-toggle="modal"          
+              data-bs-target="#dataTableModal"
+              data-table="emissionsData">  
+              </i>
               <h5 class="card-title text-center">Emissions by Sector</h5>
-              <div id="pie-chart" style="height: 350px"></div>
+              
+              <!-- Match with "pie-chart-emissions" in JS -->
+              <div id="pie-chart-emissions" style="height: 350px;"></div>
               <p class="text-center mt-4">
                 This chart shows the distribution of total emissions by sector.
               </p>
             </div>
           </div>
         </div>
+
+        <!-- 2) Scope Emissions (Bar Chart) -->
         <div class="col-md-6">
           <div class="card h-100 shadow">
             <div class="card-body">
               <!-- Table Icon Trigger -->
-              <i
-                class="fas fa-table table-icon"
-                data-target="#emissionsTableModal"
-              ></i>
-              <h5 class="card-title text-center">Current and Goals Emission</h5>
-              <!-- Ensure ID matches with JavaScript selector -->
-              <div id="area-chart" style="height: 350px"></div>
-            </div>
-          </div>
-        </div>
-        <!-- New Bar Chart for Energy Consumption by Sector -->
-        <div class="col-md-6 mt-4">
-          <div class="card h-100 shadow">
-            <div class="card-body">
-              <!-- Table Icon Trigger -->
-              <i
-                class="fas fa-table table-icon"
-                data-target="#emissionsTableModal"
-              ></i>
-              <div class="d-flex justify-content-end">
-                <button id="back-to-sector-chart" class="btn btn-secondary mb-3" style="display: none;">Back to Sector Chart</button>
-              </div>
-              <h5 class="card-title text-center">
-                Energy Consumption by Sector
-              </h5>
-              <div id="energy-bar-chart" style="height: 350px"></div>
+              <i class="fas fa-table table-icon"></i>
+              <h5 class="card-title text-center">Scope Emissions</h5>
+              <!-- Match with "bar-chart-scope" in JS (if you create scope data calls) -->
+              <div id="bar-chart-scope" style="height: 350px;"></div>
               <p class="text-center mt-4">
-                This chart shows the total energy consumption by sector. Click
-                on a sector to view monthly details.
+                A bar chart for Scope 1, 2, and 3 emissions.
               </p>
             </div>
           </div>
         </div>
-        <!-- Operational Costs -->
+
+        <!-- 3) Energy Consumption (Stacked/Bar Chart) -->
+        <div class="col-md-6 mt-3">
+          <div class="card h-100 shadow">
+            <div class="card-body">
+              <!-- Table Icon Trigger -->
+              <i class="fas fa-table table-icon" 
+              data-bs-toggle="modal"          
+              data-bs-target="#dataTableModal"
+              data-table="energyConsumptionData">  
+              </i> 
+              <h5 class="card-title text-center">Energy Consumption</h5>
+              <!-- Match with "stacked-bar-chart-energy" in JS -->
+              <div id="stacked-bar-chart-energy" style="height: 350px;"></div>
+              <p class="text-center mt-4">
+                This chart shows renewable vs. fossil energy consumption by facility.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4) Sustainability Goals Progress (Radial Bar Chart) -->
         <div class="col-md-6 mt-4">
           <div class="card h-100 shadow">
             <div class="card-body">
               <!-- Table Icon Trigger -->
-              <i
-                class="fas fa-table table-icon"
-                data-target="#emissionsTableModal"
-              ></i>
-              <h5 class="card-title text-center">Operational Cost by Month</h5>
-              <div id="operational-cost-line-chart" style="height: 350px"></div>
+              <i class="fas fa-table table-icon"
+              data-bs-toggle="modal"
+              data-bs-target="#dataTableModal"
+              data-table="sustainabilityGoalsData">
+              </i> 
+              <h5 class="card-title text-center">Sustainability Goals Progress</h5>
+              <!-- Match with "progress-chart-goals" in JS -->
+              <div id="progress-chart-goals" style="height: 350px;"></div>
               <p class="text-center mt-4">
-                This line graph shows the monthly operational cost. Select a
-                sector for detailed costs.
+                Progress on the sustainability goals you set.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5) Emissions Over Time (Line Chart) -->
+        <div class="col-md-12 mt-4">
+          <div class="card h-100 shadow">
+            <div class="card-body">
+              <!-- Table Icon Trigger -->
+              <i class="fas fa-table table-icon" data-target="#emissionsTableModal"></i>
+              <h5 class="card-title text-center">Emissions Over Time</h5>
+
+              <!-- Match with "line-chart-emissions" in JS -->
+              <div id="line-chart-emissions" style="height: 350px;"></div>
+              <p class="text-center mt-4">
+                This line graph shows facility emissions over time.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-12 text-center my-4">
-          <h4>Select a Sector to View Data</h4>
-        </div>
-        <div class="col-md-4 mb-3">
-          <button class="btn btn-info w-100">Electricity</button>
-        </div>
-        <div class="col-md-4 mb-3">
-          <button class="btn btn-info w-100">Manufacturing</button>
-        </div>
-        <div class="col-md-4 mb-3">
-          <button class="btn btn-info w-100">Transportation</button>
-        </div>
-        <div class="col-md-4 mb-3">
-          <button class="btn btn-info w-100">Waste Management</button>
-        </div>
-        <div class="col-md-4 mb-3">
-          <button class="btn btn-info w-100">Water Supply</button>
-        </div>
-        <div class="col-md-4 mb-3">
-          <button class="btn btn-info w-100">Others</button>
-        </div>
-      </div>
-
-      <!-- Individual Sector Data Section to show Emissions by Year -->
-      <div class="row mt-4">
-        <div class="col-12">
-          <div class="card h-100 shadow">
-            <div id="sector-details" class="mt-5">
-              <h5 class="card-title text-center" id="bar-chart-title">
-                Select a Sector to View Detailed Data
-              </h5>
-              <!-- Container for Monthly Emissions Chart -->
-              <div id="sector-emissions-chart" style="height: 350px;"></div>
-              <p class="text-center mt-4" id="emissions-description">
-                Monthly emissions for the selected sector.
-              </p>
-              
-              <!-- Container for Monthly Energy Consumption Chart -->
-              <div id="sector-energy-chart" style="height: 350px;"></div>
-              <p class="text-center mt-4" id="energy-description">
-                Monthly energy consumption for the selected sector.
-              </p>
+      <div class="modal fade" id="dataTableModal" tabindex="-1" aria-labelledby="dataTableModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl"> <!-- 'modal-xl' for wider table -->
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="dataTableModalLabel">Chart Data</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <!-- The table where we'll inject data dynamically -->
+              <table class="table table-bordered" id="chartDataTable">
+                <thead>
+                  <tr>
+                    <!-- Example columns for Emissions data -->
+                    <th>Sector</th>
+                    <th>Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- We'll fill this with JS -->
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
+
     </main>
 
     <!-- ApexCharts -->

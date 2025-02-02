@@ -1,48 +1,76 @@
-// Controllers/reportController.js
-const reportModel = require("../Models/report");
+const Report = require("../Models/report");
 
-module.exports = {
-    // Controller to get emissions by sector
-    getEmissionsBySector: async (req, res) => {
-        try {
-            const data = await reportModel.getEmissionsBySector();
-            res.status(200).json(data);
-        } catch (err) {
-            console.error("Error fetching emissions by sector:", err);
-            res.status(500).json({ error: "Failed to fetch emissions data" });
-        }
-    },
-
-    // Controller to get energy consumption by sector
-    getEnergyConsumptionBySector: async (req, res) => {
-        try {
-            const data = await reportModel.getEnergyConsumptionBySector();
-            res.status(200).json(data);
-        } catch (err) {
-            console.error("Error fetching energy consumption data:", err);
-            res.status(500).json({ error: "Failed to fetch energy consumption data" });
-        }
-    },
-
-    // Controller to get operational cost by month
-    getOperationalCostByMonth: async (req, res) => {
-        try {
-            const data = await reportModel.getOperationalCostByMonth();
-            res.status(200).json(data);
-        } catch (err) {
-            console.error("Error fetching operational cost data:", err);
-            res.status(500).json({ error: "Failed to fetch operational cost data" });
-        }
-    },
-
-    // Controller to get yearly emissions by sector
-    getYearlyEmissionsBySector: async (req, res) => {
-        try {
-            const data = await reportModel.getYearlyEmissionsBySector();
-            res.status(200).json(data);
-        } catch (err) {
-            console.error("Error fetching yearly emissions data:", err);
-            res.status(500).json({ error: "Failed to fetch yearly emissions data" });
-        }
+const getEmissionsBySector = async (req, res) => {
+    try {
+      const data = await Report.getEmissionsBySector();
+      if (!data) {
+        // Maybe return an empty array or 200 with []
+        return res.status(200).json([]);
+      }
+      res.json(data);
+    } catch (error) {
+      console.error("Error fetching emissions by sector:", error.message);
+      res.status(500).json({ message: error.message });
     }
+  };  
+
+const getEnergyConsumptionBySector = async (req, res) => {
+    try {
+        const data = await Report.getEnergyConsumptionBySector();
+        if (!data || data.length === 0) {
+            return res.status(404).json({ message: "No data found" });
+        }
+        res.json(data);
+    } catch (error) {
+        console.error("Error fetching energy consumption:", error.message);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const getOperationalCostByMonth = async (req, res) => {
+    try {
+        const data = await Report.getOperationalCostByMonth();
+        if (!data || data.length === 0) {
+            return res.status(404).json({ message: "No data found" });
+        }
+        res.json(data);
+    } catch (error) {
+        console.error("Error fetching operational costs:", error.message);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const getYearlyEmissionsBySector = async (req, res) => {
+    try {
+        const data = await Report.getYearlyEmissionsBySector();
+        if (!data || data.length === 0) {
+            return res.status(404).json({ message: "No data found" });
+        }
+        res.json(data);
+    } catch (error) {
+        console.error("Error fetching yearly emissions:", error.message);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const getSustainabilityGoals = async (req, res) => {
+    try {
+        const data = await Report.getSustainabilityGoals();
+        if (!data || data.length === 0) {
+            return res.status(404).json({ message: "No data found" });
+        }
+        res.json(data);
+    } catch (error) {
+        console.error("Error fetching sustainability goals:", error.message);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// **Export functions**
+module.exports = {
+    getEmissionsBySector,
+    getEnergyConsumptionBySector,
+    getOperationalCostByMonth,
+    getYearlyEmissionsBySector,
+    getSustainabilityGoals,
 };

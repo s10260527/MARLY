@@ -18,7 +18,7 @@ const verifyToken = require("./Middleware/authMiddleware"); // Import the JWT ve
 const companycontroller = require("./Controllers/company");
 const inputcontroller = require("./Controllers/input");
 const leaderboardcontroller= require("./Controllers/leaderboard");
-const reportController = require('./Controllers/report');
+const reportController = require("./Controllers/report"); 
 const chatbotController = require('./Controllers/chatbot');
 
 const aiSuggestionsController = require('./Controllers/ai-suggestions/aiSuggestionsController');
@@ -31,7 +31,6 @@ const port = process.env.PORT || 3000;
 // Middleware
 app.use(cors({ credentials: true, origin: 'http://127.0.0.1:3000' }));
 app.use(express.json());
-app.use(express.static("Public"));
 app.use(cors({ 
     credentials: true, 
     origin: ['http://localhost:3000', 'http://127.0.0.1:3000'] 
@@ -59,6 +58,22 @@ const authenticateToken = (req, res, next) => {
 app.use('/api/signup', signupRouter); // Signup route
 app.use('/api/login', loginRouter); // Login route
 app.use('/api/profile', authenticateToken, profileRouter); // Profile route with token authentication
+
+// Report-related routes
+app.get("/report/emissions-by-sector", reportController.getEmissionsBySector);
+app.get("/report/energy-consumption-by-sector", reportController.getEnergyConsumptionBySector);
+app.get("/report/operational-cost-by-month", reportController.getOperationalCostByMonth);
+app.get("/report/yearly-emissions-by-sector", reportController.getYearlyEmissionsBySector);
+app.get("/report/sustainability-goals", reportController.getSustainabilityGoals);
+app.get("/report/summary", (req, res) => {
+    const summaryData = {
+      total_products: 249,
+      carbon_emissions: 342,
+      goals_reached_percentage: 75,
+      projects_count: 53
+    };
+    res.json(summaryData);
+  });
 
 // Emission-related routes
 app.get("/api/emission/totalemission", emissionController.getTopEmissionsByCurrentMonth);
@@ -99,12 +114,6 @@ app.get('/input/:id', inputcontroller.getCompanyName);
 app.get("/leaderboard/top3", leaderboardcontroller.displayTop3CompaniesForCurrentMonth);
 app.get("/leaderboard/proxy-image", leaderboardcontroller.proxyImage);
 
-// Report-related routes
-app.get("/api/report/emissions-by-sector", reportController.getEmissionsBySector);
-app.get("/api/report/energy-consumption-by-sector", reportController.getEnergyConsumptionBySector);
-app.get("/api/report/operational-cost-by-month", reportController.getOperationalCostByMonth);
-app.get("/api/report/yearly-emissions-by-sector", reportController.getYearlyEmissionsBySector);
-
 // AI Suggestions routes (protected by authentication)
 app.get("/api/suggestions", aiSuggestionsController.getSuggestions);
 app.get("/api/suggestions/:id/details", aiSuggestionsController.getSuggestionDetails);
@@ -132,6 +141,16 @@ app.listen(port, async () => {
         process.exit(1);
     }
     console.log(`Server listening on port ${port}`);
+});
+
+// console.log("Registered Routes:");
+// console.log(app._router.stack);
+
+console.log("Registered API Routes:");
+app._router.stack.forEach((route) => {
+    if (route.route) {
+        console.log(route.route.path);
+    }
 });
 
 
