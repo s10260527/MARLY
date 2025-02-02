@@ -111,6 +111,9 @@
                         <span class="badge bg-success">
                             <i class="fas fa-circle me-1"></i>Live
                         </span>
+                        <!-- ADDED LINE: The element for lastUpdated -->
+                        <span id="lastUpdated" class="ms-2 text-muted"></span>
+                        <!-- End of added line -->
                         <div class="btn-group">
                             <button class="btn btn-outline-primary" id="exportBtn">
                                 <i class="fas fa-download me-1"></i>Export
@@ -122,55 +125,87 @@
                     </div>
                 </div>
 
-        <!-- Progress Summary -->
-        <div class="row g-4 mb-4" id="progressSummary">
-            <!-- KPI cards will be dynamically inserted here -->
-        </div>
-
-        <!-- Main Content -->
-        <div class="row g-4">
-            <!-- Suggestions Column -->
-            <div class="col-lg-8">
-                <!-- Detailed Suggestions -->
-                <div class="card mb-4">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Detailed Recommendations</h5>
-                        <div class="btn-group" id="suggestionFilters">
-                            <button class="btn btn-outline-secondary active btn-sm" data-filter="all">All</button>
-                            <button class="btn btn-outline-secondary btn-sm" data-filter="emissions">Emissions</button>
-                            <button class="btn btn-outline-secondary btn-sm" data-filter="costs">Costs</button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div id="loadingSpinner" class="text-center py-5">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                        <div id="suggestionsContainer">
-                            <!-- Suggestions will be dynamically inserted here -->
-                        </div>
-                    </div>
+                <!-- Progress Summary -->
+                <div class="row g-4 mb-4" id="progressSummary">
+                    <!-- KPI cards will be dynamically inserted here -->
                 </div>
 
-                <!-- Sector Analysis -->
-                <div class="card">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Sector Performance Analysis</h5>
-                        <div class="btn-group" id="sectorFilters">
-                            <button class="btn btn-outline-secondary active btn-sm" data-metric="emissions">Emissions</button>
-                            <button class="btn btn-outline-secondary btn-sm" data-metric="costs">Costs</button>
+                <!-- Main Content -->
+                <div class="row g-4">
+                    <!-- Suggestions Column -->
+                    <div class="col-lg-8">
+                        <!-- Detailed Suggestions -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Detailed Recommendations</h5>
+                                <div class="btn-group" id="suggestionFilters">
+                                    <button class="btn btn-outline-secondary active btn-sm" data-filter="all">All</button>
+                                    <button class="btn btn-outline-secondary btn-sm" data-filter="emissions">Emissions</button>
+                                    <button class="btn btn-outline-secondary btn-sm" data-filter="costs">Costs</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="loadingSpinner" class="text-center py-5">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                                <div id="suggestionsContainer">
+                                    <!-- Suggestions will be dynamically inserted here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sector Analysis -->
+                        <div class="card">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Sector Performance Analysis</h5>
+                                <div class="btn-group" id="sectorFilters">
+                                    <button class="btn btn-outline-secondary active btn-sm" data-metric="emissions">Emissions</button>
+                                    <button class="btn btn-outline-secondary btn-sm" data-metric="costs">Costs</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <canvas id="sectorChart" height="300"></canvas>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="mb-3">Facility Rankings</h6>
+                                        <div id="facilityRankings" class="list-group">
+                                            <!-- Rankings will be dynamically inserted here -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <canvas id="sectorChart" height="300"></canvas>
+
+                    <!-- Sidebar -->
+                    <div class="col-lg-4">
+                        <!-- Implementation Progress -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0">Implementation Progress</h5>
                             </div>
-                            <div class="col-md-6">
-                                <h6 class="mb-3">Facility Rankings</h6>
-                                <div id="facilityRankings" class="list-group">
-                                    <!-- Rankings will be dynamically inserted here -->
+                            <div class="card-body text-center">
+                                <div id="progressCircle" class="progress-circle mx-auto mb-3">
+                                    <!-- Progress circle will be dynamically inserted here -->
+                                </div>
+                                <div id="progressStats">
+                                    <!-- Progress stats will be dynamically inserted here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Equipment Health -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0">Equipment Health Monitor</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="equipmentList" class="list-group">
+                                    <!-- Equipment items will be dynamically inserted here -->
                                 </div>
                             </div>
                         </div>
@@ -178,67 +213,37 @@
                 </div>
             </div>
 
-            <!-- Sidebar -->
-            <div class="col-lg-4">
-                <!-- Implementation Progress -->
-                <div class="card mb-4">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">Implementation Progress</h5>
-                    </div>
-                    <div class="card-body text-center">
-                        <div id="progressCircle" class="progress-circle mx-auto mb-3">
-                            <!-- Progress circle will be dynamically inserted here -->
-                        </div>
-                        <div id="progressStats">
-                            <!-- Progress stats will be dynamically inserted here -->
-                        </div>
+            <!-- Toast Container -->
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body"></div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Equipment Health -->
-                <div class="card mb-4">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">Equipment Health Monitor</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="equipmentList" class="list-group">
-                            <!-- Equipment items will be dynamically inserted here -->
+            <!-- Suggestion Detail Modal -->
+            <div class="modal fade" id="suggestionDetailModal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Suggestion Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body" id="suggestionDetailContent">
+                            <!-- Detail content will be dynamically inserted here -->
                         </div>
                     </div>
                 </div>
             </div>
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+            <script src="scripts/ai-suggestions-detailed.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         </div>
     </div>
-
-    <!-- Toast Container -->
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body"></div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Suggestion Detail Modal -->
-    <div class="modal fade" id="suggestionDetailModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Suggestion Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" id="suggestionDetailContent">
-                    <!-- Detail content will be dynamically inserted here -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-    <script src="scripts/ai-suggestions-detailed.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
