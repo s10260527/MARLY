@@ -115,3 +115,23 @@ document.addEventListener('DOMContentLoaded', function () {
         progressText.textContent = `Progress to Net Zero Goal ♻️ (${savedProgress}%)`;
     }
 });
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("✅ JavaScript Loaded");
+
+    // Get progress bar element
+    const progressBar = document.getElementById("progressLink");
+
+    // Redirect to progress.html when clicked
+    if (progressBar) {
+        progressBar.addEventListener("click", function (event) {
+            console.log("🔄 Redirecting to progress.html...");
+            window.location.href = "progress.html";
+        });
+    } else {
+        console.error("❌ Progress bar link not found!");
+    }
+});
+
+
