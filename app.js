@@ -21,6 +21,8 @@ const leaderboardcontroller= require("./Controllers/leaderboard");
 const reportController = require('./Controllers/report');
 const chatbotController = require('./Controllers/chatbot');
 
+const aiSuggestionsController = require('./Controllers/ai-suggestions/aiSuggestionsController');
+
 require("dotenv").config();
 
 const app = express();
@@ -29,6 +31,11 @@ const port = process.env.PORT || 3000;
 // Middleware
 app.use(cors({ credentials: true, origin: 'http://127.0.0.1:3000' }));
 app.use(express.json());
+app.use(express.static("Public"));
+app.use(cors({ 
+    credentials: true, 
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'] 
+}));
 app.use(cookieParser());
 
 // Centralized authentication middleware
@@ -98,6 +105,12 @@ app.get("/api/report/energy-consumption-by-sector", reportController.getEnergyCo
 app.get("/api/report/operational-cost-by-month", reportController.getOperationalCostByMonth);
 app.get("/api/report/yearly-emissions-by-sector", reportController.getYearlyEmissionsBySector);
 
+// AI Suggestions routes (protected by authentication)
+app.get("/api/suggestions", aiSuggestionsController.getSuggestions);
+app.get("/api/suggestions/:id/details", aiSuggestionsController.getSuggestionDetails);
+app.get("/api/sector-analysis", aiSuggestionsController.getSectorAnalysis);
+app.get("/api/equipment-health", aiSuggestionsController.getEquipmentHealth);
+app.get("/api/implementation-progress", aiSuggestionsController.getImplementationProgress);
 
 app.listen(port, async () => {
     try {

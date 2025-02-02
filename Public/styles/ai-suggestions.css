@@ -1,0 +1,76 @@
+.ai-widget {
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.ai-header {
+    background: #f8f9fa;
+    border-radius: 12px 12px 0 0;
+    padding: 15px;
+}
+
+.live-badge {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.suggestion-card {
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.suggestion-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.priority-high { border-left-color: #dc3545; }
+.priority-medium { border-left-color: #ffc107; }
+.priority-low { border-left-color: #28a745; }
+
+.category-toggle.active {
+    background-color: #6f42c1 !important;
+    border-color: #6f42c1 !important;
+    color: white !important;
+}
+
+.progress-ring {
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+
+.progress-ring__svg {
+    transform: rotate(-90deg);
+}
+
+.progress-ring__circle--bg {
+    fill: none;
+    stroke: #f0f0f0;
+    stroke-width: 3;
+}
+
+.progress-ring__circle {
+    fill: none;
+    stroke: #6f42c1;
+    stroke-width: 3;
+    transition: stroke-dashoffset 0.5s ease;
+}
+
+.progress-ring__text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.trend-up { color: #28a745; }
+.trend-down { color: #dc3545; }
