@@ -353,6 +353,7 @@ a.sidebar-link:hover {
 /* Update competing-company (AI widget container) styles */
 .competing-company {
     display: flex;
+    margin-top: -400px;
     margin-bottom: 20px;
     flex-direction: row;
     grid-column: 1 / 2;
@@ -366,6 +367,7 @@ a.sidebar-link:hover {
     border: none;
     border-radius: 0;
     background-color: #f7fefa; /* Match dashboard background */
+    box-shadow: none;
 }
 
 /* Update suggestion cards */
@@ -379,7 +381,6 @@ a.sidebar-link:hover {
     width: 100%;
     position: relative;
     overflow: hidden;
-    height: fit-content;
 }
 
 /* Add priority color borders */

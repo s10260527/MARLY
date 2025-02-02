@@ -335,68 +335,6 @@
             </p>
           </div>
         </div>
-        <h6>💡 AI Suggestions</h6>
-        <div class="suggestions-container">
-          <div class="suggestion-card">
-            <h3 class="suggestion-title">Carbon Emissions</h3>
-            <div class="suggestion-item">
-              <div class="suggestion-number">1</div>
-              <div class="suggestion-content">
-                <h4>Invest in Energy Efficiency</h4>
-                <ul class="suggestion-list">
-                  <li>
-                    Upgrade equipment: Replace outdated machinery with
-                    energy-efficient models
-                  </li>
-                  <li>
-                    Optimize lighting: Install LED lights and utilize
-                    natural light whenever possible
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="suggestion-card">
-            <h3 class="suggestion-title">Operational Costs</h3>
-            <div class="suggestion-item">
-              <div class="suggestion-number">1</div>
-              <div class="suggestion-content">
-                <h4>Optimize Supply Chain</h4>
-                <ul class="suggestion-list">
-                  <li>
-                    Negotiate better deals: Work with suppliers to secure
-                    competitive pricing and terms
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="suggestion-item">
-              <div class="suggestion-number">2</div>
-              <div class="suggestion-content">
-                <h4>Automate Processes</h4>
-                <ul class="suggestion-list">
-                  <li>
-                    Invest in technology: Utilize software and tools to
-                    streamline operations and reduce manual labor
-                  </li>
-                  <li>
-                    Train employees: Ensure staff is adequately trained to
-                    use new technologies effectively
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="suggestion-disclaimer">
-            *This content was generated with the assistance of
-            artificial intelligence. While we strive for relevance and
-            accuracy, please note that AI-generated content may not
-            always reflect the most current legal standards or
-            personalized advice.
-          </div>
-        </div>
       </div>
       <!-- Suggestions Facts Ends -->
 
@@ -611,126 +549,51 @@
           <!-- Detailed Graph Ends -->
 
           <!-- Competing Company -->
-          <div class="competing-company mt-4">
-            <div class="card bg-mine">
-              <div class="card-body">
-                <h3 class="company-head">A Competing Company</h3>
-                <div class="d-flex align-items-center gap-3 mb-3">
-                  <img
-                    src="assets/images/smart-tech-logo.png"
-                    alt="SmartTech Corp. Logo"
-                    class="rounded-circle"
-                    width="60"
-                    height="60"
-                  />
-                  <div>
-                    <div class="d-flex align-items-center gap-2">
-                      <h5 class="mb-0">SmartTech Corp.</h5>
-                      <span class="badge bg-mine">Leaderboard #3</span>
+          <!-- AI Suggestions Widget -->
+          <div class="ai-widget competing-company">
+            <div class="card">
+                <div class="ai-header d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-lightbulb text-warning me-2 fs-4"></i>
+                        <h5 class="mb-0">AI Suggestions</h5>
                     </div>
-                    <div class="progress mt-2" style="height: 8px;">
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        style="width: 75%;"
-                        aria-valuenow="75"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
+                    <div class="d-flex align-items-center">
+                        <span class="live-badge badge bg-success me-2">
+                            <i class="fas fa-circle me-1"></i>Live
+                        </span>
+                        <small class="text-muted" id="lastUpdated">Updated just now</small>
                     </div>
-                    <small class="text-muted">
-                      Progress to Net Zero Goal ♻️ (80%)
-                    </small>
-                  </div>
                 </div>
 
-                <div class="content-wrapper">
-                  <p class="small company-desc">
-                    We’ve been innovating and advancing technology focused
-                    on the connections that matter since we invented the
-                    original SMART Board® in 1987. We’re proud that our
-                    interactive displays and software solutions are trusted
-                    by teachers, students, and business leaders all around
-                    the world.
-                  </p>
+                <div class="p-3">
+                    <div class="btn-group w-100 mb-3">
+                        <button class="btn btn-outline-secondary category-toggle active" data-category="all">
+                            <i class="fas fa-globe me-1"></i>All
+                        </button>
+                        <button class="btn btn-outline-secondary category-toggle" data-category="emissions">
+                            <i class="fas fa-cloud me-1"></i>Emissions
+                        </button>
+                        <button class="btn btn-outline-secondary category-toggle" data-category="costs">
+                            <i class="fas fa-dollar-sign me-1"></i>Costs
+                        </button>
+                    </div>
 
-                  <div class="company-stats">
-                    <div class="stat-block">
-                      <h4 class="h2 mb-0">3</h4>
-                      <small class="text-muted">
-                        Total Devices Recycled<br />
-                        (Nov 2024)
-                      </small>
-                      <br />
-                      <small class="text-primary">2 Mobiles</small>,
-                      <small class="text-secondary">1 Desktop</small>
+                    <div id="suggestionCards" class="suggestion-cards">
+                        <!-- Cards will be dynamically inserted here -->
                     </div>
 
                     <div class="text-center mt-3">
-                      <button id="refreshBtn" class="btn btn-primary">
-                        <i class="fas fa-sync-alt me-1"></i>Refresh Suggestions
-                      </button>
-                      <a href="ai-suggestions-detailed.html" class="btn btn-primary">View Detailed Suggestions</a>
+                        <button id="refreshBtn" class="btn btn-primary">
+                            <i class="fas fa-sync-alt me-1"></i>Refresh Suggestions
+                        </button>
+                        <a href="ai-suggestions-detailed.html" class="btn btn-primary">View Detailed Suggestions</a>
                     </div>
-                  </div>
                 </div>
-              </div>
             </div>
           </div>
           <!-- End Competing Company -->
         </div> <!-- End .main -->
       </div> <!-- End .d-flex -->
-
-      <!-- Now place the AI Suggestions block in its own container so no overlap -->
-      <!-- AI Suggestions Widget -->
-      <div class="ai-widget competing-company mt-4">
-        <div class="card">
-          <div class="ai-header d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-              <i class="fas fa-lightbulb text-warning me-2 fs-4"></i>
-              <h5 class="mb-0">AI Suggestions</h5>
-            </div>
-            <div class="progress mt-2" style="height: 8px;">
-              <div
-                class="progress-bar"
-                role="progressbar"
-                style="width: 75%;"
-                aria-valuenow="75"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              ></div>
-            </div>
-            <small class="text-muted">
-              Progress to Net Zero Goal ♻️ (80%)
-            </small>
-            
-            <!-- 
-              ADDED THIS SPAN TO FIX updateLastUpdated() 
-              The 'ai-suggestions.js' code expects an element with ID='lastUpdated'. 
-            -->
-            <span id="lastUpdated" class="ms-3 text-muted"></span>
-            <!-- End of added line -->
-          </div>
-        </div>
-
-        <div class="p-3">
-          <div class="btn-group w-100 mb-3">
-            <button class="btn btn-outline-secondary category-toggle active" data-category="all">
-              <i class="fas fa-globe me-1"></i>All
-            </button>
-            <button class="btn btn-outline-secondary category-toggle" data-category="emissions">
-              <i class="fas fa-cloud me-1"></i>Emissions
-            </button>
-            <button class="btn btn-outline-secondary category-toggle" data-category="costs">
-              <i class="fas fa-dollar-sign me-1"></i>Costs
-            </button>
-          </div>
-
-          <div id="suggestionCards" class="suggestion-cards">
-            <!-- Cards will be dynamically inserted here -->
-          </div>
-        </div>
-      </div>
       <!-- End AI Suggestions Widget -->
 
       <!-- Bootstrap Bundle JS -->
