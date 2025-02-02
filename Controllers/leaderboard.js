@@ -1,4 +1,5 @@
 const LeaderBoard = require("../Models/leaderboard");
+const axios = require("axios");
 
 const displayTop3CompaniesForCurrentMonth = async (req, res) => {
     try {
@@ -25,6 +26,23 @@ const displayTop3CompaniesForCurrentMonth = async (req, res) => {
     }
 };
 
+const proxyImage = async (req, res) => {
+    try {
+        const imageUrl = req.query.url; // Extract the image URL from the query parameters
+        if (!imageUrl) {
+            return res.status(400).json({ error: "Image URL is required" });
+        }
+
+        const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
+        res.set("Content-Type", response.headers["content-type"]); // Set content type
+        res.send(response.data); // Send the image data back
+    } catch (error) {
+        console.error("Error fetching image:", error.message);
+        res.status(500).json({ error: "Failed to fetch image" });
+    }
+};
+
 module.exports = {
-    displayTop3CompaniesForCurrentMonth
+    displayTop3CompaniesForCurrentMonth,
+    proxyImage
 };

@@ -1,3 +1,5 @@
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const podiums = document.querySelectorAll(".podium");
     podiums.forEach((podium, index) => {
@@ -31,7 +33,7 @@ fetch("/leaderboard/top3")
     .then(response => response.json())
     .then(data => {
         const topCompanies = data.topCompanies;
-
+        console.log(data)
         // Check if there are 3 companies
         if (topCompanies.length === 3) {
             // Assign values for 1st, 2nd, and 3rd place
@@ -41,13 +43,45 @@ fetch("/leaderboard/top3")
 
             // Set company names and recycled devices count
             document.getElementById("first-place-name").textContent = firstPlace.company_name;
-            document.getElementById("first-place-count").textContent = `${firstPlace.total_recycled_devices} devices`;
+            document.getElementById("first-place-count").textContent = `${firstPlace.likes} likes`;
 
             document.getElementById("second-place-name").textContent = secondPlace.company_name;
-            document.getElementById("second-place-count").textContent = `${secondPlace.total_recycled_devices} devices`;
+            document.getElementById("second-place-count").textContent = `${secondPlace.likes} likes`;
 
             document.getElementById("third-place-name").textContent = thirdPlace.company_name;
-            document.getElementById("third-place-count").textContent = `${thirdPlace.total_recycled_devices} devices`;
+            document.getElementById("third-place-count").textContent = `${thirdPlace.likes} likes`;
+
+            // Display winner's poster
+            const winnerPosterSection = document.getElementById("winner-poster-section");
+            const winnerPoster = document.getElementById("winner-poster");
+            // Fetch and display the image as before
+            fetch(`/leaderboard/proxy-image?url=${encodeURIComponent(firstPlace.poster_img)}`)
+            .then(response => response.blob())
+            .then(imageBlob => {
+                // Create a URL for the image blob
+                console.log(firstPlace.poster_img)
+                const imageUrl = URL.createObjectURL(imageBlob);
+                winnerPoster.src = imageUrl; // Set the image source
+                winnerPoster.alt = `${firstPlace.company_name}'s Poster`; // Set alt text
+                winnerPosterSection.style.display = "block"; // Show the winner's poster
+
+                // Now wrap the image with the Instagram link only after it's loaded
+                const instagramLink = firstPlace.poster_url; // Get Instagram URL
+                console.log(instagramLink);
+
+                // Create the link wrapper
+                const linkWrapper = document.createElement('a');
+                linkWrapper.href = instagramLink; // Set the Instagram link
+                linkWrapper.target = '_blank'; // Open in a new tab
+
+                // Append the image inside the link wrapper
+                linkWrapper.appendChild(winnerPoster);
+                winnerPosterSection.appendChild(linkWrapper); // Add the link wrapper to the section
+            })
+            .catch(error => {
+                console.error("Error fetching poster image:", error);
+            });
+
 
             // Assume you get the companyId of the logged-in company, e.g., from localStorage or sessionStorage
             const companyId = localStorage.getItem('companyId'); // Example: replace with actual method for getting companyId
@@ -66,7 +100,6 @@ fetch("/leaderboard/top3")
             // Handle the "Get Certificate" button click
             document.getElementById("first-place-cert-btn").addEventListener("click", () => {
                 document.getElementById("certificate-company-name").textContent = firstPlace.company_name;
-                document.getElementById("certificate-recycled-count").textContent = firstPlace.total_recycled_devices;
 
                 // Show the certificate modal
                 document.getElementById("certificate-modal").style.display = "block";
@@ -109,8 +142,8 @@ document.getElementById("download-cert-btn").addEventListener("click", () => {
     // Achievement Text
     doc.setFontSize(16);
     const month = new Date().toLocaleString('default', { month: 'long' });
-    const achievementText = `For coming in first place in the campaign: Tech to Trash`;
-    const Text = `recycling a total of ${firstPlace.total_recycled_devices} devices in the month of ${month} ${new Date().getFullYear()}.`;
+    const achievementText = `For getting the highest amount of Instagram likes`;
+    const Text = `with ${firstPlace.likes} likes in the month of ${month} ${new Date().getFullYear()}.`;
 
     // Combine both text parts into one string for the final achievement
     const fullAchievementText = `${achievementText} ${Text}`;

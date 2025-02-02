@@ -4,38 +4,108 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Company Sustainability Report</title>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <!-- Load jQuery here -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="styles/report.css" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- External CSS -->
+    <link rel="stylesheet" href="styles/template.css">
+    <link rel="stylesheet" href="styles/report.css">
+    <link rel="stylesheet" href="styles/chatbot.css">
+    <a target="_blank" href="https://icons8.com/icon/38865/sent">Send</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+    <a href="https://www.flaticon.com/free-icons/chatbot" title="chatbot icons"></a>
+
+    <!-- Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   </head>
   <body>
-    <!-- Header -->
-    <header class="bg-white border-bottom py-3 fixed-top">
-      <div class="container d-flex justify-content-between align-items-center">
-        <img src="assets/brand/logo.png" alt="Verdex Logo" height="40" />
-        <nav>
-          <ul class="nav">
-            <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Leaderboards</a>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="#">Resources</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
-            <li class="nav-item">
-              <a class="nav-link" href="#"
-                ><i class="fas fa-user"></i> Profile</a
-              >
-            </li>
-          </ul>
-        </nav>
+    <section class="chat-window" style="position: fixed;">
+      <button class="close">x close</button>
+      <div class="chat">
+        <div class="model">
+          <p>Hi, how can I help you?</p>
+        </div>
       </div>
-    </header>
+      <div class="input-area">
+        <input placeholder="Ask me anything..." type="text">
+        <button>
+          <i class="bi bi-send"></i>
+        </button>
+      </div>
+    </section>
+
+    <div class="chat-button" style="position: fixed;">
+      <img src="assets/images/chatbot.png" alt="chat">
+    </div>
+      <!-- Button Section -->
+    <section class="button-section">
+    </section>
+
+    <div class="d-flex">
+      <!-- Sidebar -->
+      <aside id="sidebar" class="sidebar-toggle">
+          <div class="sidebar-logo">
+              <img src="assets/brand/logo.png" alt="Verdex Logo" width="30" height="30">
+              <a href="#">Verdex</a>
+          </div>
+          <!-- Sidebar Navigation -->
+          <ul class="sidebar-nav p-0">
+              <div class="sidebar-header">
+                  <hr>
+              </div>
+              <li class="sidebar-item">
+                  <a href="#" class="sidebar-link">
+                      <i class="bi bi-pie-chart-fill"></i>
+                      <span>Dashboard</span>
+                  </a>
+              </li>
+              <li class="sidebar-item">
+                  <a href="#" class="sidebar-link">
+                      <i class="bi bi-clipboard-data-fill"></i>
+                      <span>Reports</span>
+                  </a>
+              </li>
+              <li class="sidebar-item">
+                <a href="campaign.html" class="sidebar-link">
+                    <i class="bi bi-megaphone-fill"></i>
+                    <span>Campaigns</span>
+                </a>
+              </li>
+              <div class="sidebar-header">
+                <hr>
+              </div>
+              <li class="sidebar-item user">
+                <a href="#" class="sidebar-link user-profile">
+                    <div class="user-info">
+                        <img src="assets/images/apple-logo.jpeg" alt="User Avatar">
+                        <p>Apple Inc.</p>
+                    </div>
+                </a>
+              </li>
+              <li class="sidebar-item progress-net">
+                <div class="sidebar-link">
+                    <span><b>Progress to Net Zero</b></span>
+                    <i class="bi bi-globe-americas"></i>
+                    <p></p>
+                    <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 75%"></div>
+                    </div>
+                    <p></p>
+                    <p><b>75%</b> of goal reached</p>
+                </div>
+              </li>
+          </ul>
+          <!-- Sidebar Navigation Ends -->
+          <div class="sidebar-footer">
+              <a href="#" class="sidebar-link">
+                  <i class="bi bi-person-raised-hand"></i>
+                  <span>About Us</span>
+              </a>
+          </div>
+      </aside>
 
     <main class="container mt-5 pt-5">
       <div class="text-center my-4">
@@ -65,8 +135,8 @@
         <div class="col-md-3 mb-4">
           <div class="card h-100 shadow">
             <div class="card-body text-center">
-              <p class="card-title font-weight-bold">Employees</p>
-              <h3 class="text-warning">1250</h3>
+              <p class="card-title font-weight-bold">Goal Reached</p>
+              <h3 class="text-warning">75%</h3>
             </div>
           </div>
         </div>
@@ -85,6 +155,11 @@
         <div class="col-md-6">
           <div class="card h-100 shadow">
             <div class="card-body">
+              <!-- Table Icon Trigger -->
+              <i
+                class="fas fa-table table-icon"
+                data-target="#emissionsTableModal"
+              ></i>
               <h5 class="card-title text-center">Emissions by Sector</h5>
               <div id="pie-chart" style="height: 350px"></div>
               <p class="text-center mt-4">
@@ -96,6 +171,11 @@
         <div class="col-md-6">
           <div class="card h-100 shadow">
             <div class="card-body">
+              <!-- Table Icon Trigger -->
+              <i
+                class="fas fa-table table-icon"
+                data-target="#emissionsTableModal"
+              ></i>
               <h5 class="card-title text-center">Current and Goals Emission</h5>
               <!-- Ensure ID matches with JavaScript selector -->
               <div id="area-chart" style="height: 350px"></div>
@@ -106,6 +186,14 @@
         <div class="col-md-6 mt-4">
           <div class="card h-100 shadow">
             <div class="card-body">
+              <!-- Table Icon Trigger -->
+              <i
+                class="fas fa-table table-icon"
+                data-target="#emissionsTableModal"
+              ></i>
+              <div class="d-flex justify-content-end">
+                <button id="back-to-sector-chart" class="btn btn-secondary mb-3" style="display: none;">Back to Sector Chart</button>
+              </div>
               <h5 class="card-title text-center">
                 Energy Consumption by Sector
               </h5>
@@ -121,6 +209,11 @@
         <div class="col-md-6 mt-4">
           <div class="card h-100 shadow">
             <div class="card-body">
+              <!-- Table Icon Trigger -->
+              <i
+                class="fas fa-table table-icon"
+                data-target="#emissionsTableModal"
+              ></i>
               <h5 class="card-title text-center">Operational Cost by Month</h5>
               <div id="operational-cost-line-chart" style="height: 350px"></div>
               <p class="text-center mt-4">
@@ -137,22 +230,22 @@
           <h4>Select a Sector to View Data</h4>
         </div>
         <div class="col-md-4 mb-3">
-          <button class="btn btn-info w-100">Direct Emissions</button>
-        </div>
-        <div class="col-md-4 mb-3">
-          <button class="btn btn-info w-100">Product Manufacturing</button>
-        </div>
-        <div class="col-md-4 mb-3">
-          <button class="btn btn-info w-100">Product Transport</button>
-        </div>
-        <div class="col-md-4 mb-3">
           <button class="btn btn-info w-100">Electricity</button>
         </div>
         <div class="col-md-4 mb-3">
-          <button class="btn btn-info w-100">Consumer Product Use</button>
+          <button class="btn btn-info w-100">Manufacturing</button>
         </div>
         <div class="col-md-4 mb-3">
-          <button class="btn btn-info w-100">End of Life Processing</button>
+          <button class="btn btn-info w-100">Transportation</button>
+        </div>
+        <div class="col-md-4 mb-3">
+          <button class="btn btn-info w-100">Waste Management</button>
+        </div>
+        <div class="col-md-4 mb-3">
+          <button class="btn btn-info w-100">Water Supply</button>
+        </div>
+        <div class="col-md-4 mb-3">
+          <button class="btn btn-info w-100">Others</button>
         </div>
       </div>
 
@@ -160,13 +253,20 @@
       <div class="row mt-4">
         <div class="col-12">
           <div class="card h-100 shadow">
-            <div class="card-body">
+            <div id="sector-details" class="mt-5">
               <h5 class="card-title text-center" id="bar-chart-title">
-                Select a Sector to View Emissions by Year
+                Select a Sector to View Detailed Data
               </h5>
-              <div id="bar-chart" style="height: 350px"></div>
-              <p class="text-center mt-4" id="bar-chart-description">
-                Click on a sector above to view yearly emissions data.
+              <!-- Container for Monthly Emissions Chart -->
+              <div id="sector-emissions-chart" style="height: 350px;"></div>
+              <p class="text-center mt-4" id="emissions-description">
+                Monthly emissions for the selected sector.
+              </p>
+              
+              <!-- Container for Monthly Energy Consumption Chart -->
+              <div id="sector-energy-chart" style="height: 350px;"></div>
+              <p class="text-center mt-4" id="energy-description">
+                Monthly energy consumption for the selected sector.
               </p>
             </div>
           </div>
@@ -179,5 +279,18 @@
 
     <!-- Custom JS -->
     <script src="scripts/report.js"></script>
+
+    <!-- Boostrap Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+    <script type="module" src="scripts/chatbot.js"></script>
   </body>
 </html>

@@ -1,14 +1,30 @@
 {
   "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
+    "chart.js": "^4.4.7",
+    "cheerio": "^1.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.2",
+    "lodash": "^4.17.21",
     "mssql": "^11.0.1",
     "nodemailer": "^6.9.16",
-    "nodemon": "^3.1.7"
+    "papaparse": "^5.5.2",
+    "puppeteer": "^24.0.0",
+    "recharts": "^2.15.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   }
 }

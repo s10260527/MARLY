@@ -1,164 +1,171 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet');
-/* Bootstrap Icons */
-@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+/* General spacing updates */
+body {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px; /* Increased padding for more breathing room */
+  background-color: #f5f5f5;
+  font-family: 'Poppins', sans-serif;
+}
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  margin: auto;
+  border-radius: 3px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+/* Form container spacing */
+#forms-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 30px; /* Increased gap between forms */
+  margin-top: 30px; /* Added more top margin */
+}
 
-/* Background Styling */
-.bg {
-    background-image: url('../assets/images/input\ background\ image.jpg');
-    background-size: cover; /* Ensures the image covers the entire area */
-    background-position: center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
-    height: 100vh; /* Ensures the background covers the full height of the viewport */
-  }
-  
-  /* Body styling */
-  body {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 0;
-    background-color: #f5f5f5;
-    font-family: 'Poppins', sans-serif;
+/* Styling for individual forms */
+.form-background {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 350px; /* Slightly wider forms */
+  margin: 15px; /* Added more margin between elements */
+  border-radius: 5px; /* Slightly more rounded corners */
+  padding: 25px; /* Increased padding inside forms */
+}
 
-  }
-  
-  /* Form container where the forms will appear side by side */
-  #forms-container {
-    display: flex;
-    flex-wrap: wrap; /* This ensures that forms will wrap to the next line if necessary */
-    gap: 10px; /* Optional: Adds space between the forms */
-    justify-content: flex-start; /* Aligns the forms to the left */
-  }
-  
-  
-  /* Styling for individual forms */
-  .form-background {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    max-width: 330px;
-    margin: 10px; /* Adds space between forms */
-    border-radius: 3px;
-    padding: 15px;
-  }
-  
-  .form-signin {
-    width: 100%;
-    max-width: 330px;
-    margin: auto;
-    border-radius: 3px;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
-  }
-  
-  h1 {
-    color: #fff;
-    padding: 15px;
-    text-align: center;
-    margin-top: 0;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-  }
-  
-  form {
-    padding: 15px;
-  }
-  
-  .form-control:focus {
-    border-color: #ced4da;
-    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
-  }
-  
-  input[type="email"], input[type="password"] {
-    margin-bottom: -1px;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-  
-  input[type="password"] {
-    margin-bottom: 10px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
-  
-  /* Submit button */
-  #submit-btn {
-    color: black;
-    background-color: #28f07d;
-  }
-  
-  /* Plus Icon below the submit button */
-  .plus-icon-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-  }
-  
-  .plus-icon-container i {
-    font-size: 24px;
-    color: #007bff;
-  }
-  
-  /* Floating labels */
-  .form-floating {
-    margin: 10px;
-  }
-  
-  .form-check {
-    display: flex;
-    align-items: center;
-    color: rgba(255, 255, 255, 0.65);
-  }
-  
-  .form-check label {
-    font-size: 0.9em;
-  }
-  
-  .form-check input {
-    margin-right: 0.5em;
-  }
-  
-  /* Styling for checkbox focus */
-  input[type="checkbox"]:checked {
-    background-color: #9ce060;
-    border-color: #81c63f;
-  }
-  
-  .copyright {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.65);
-  }
-  
-  /* Close button styling */
-  .btn-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    color: rgba(255, 255, 255, 0.65);
-    background: none;
-    border: none;
-    font-size: 1.5em;
-    cursor: pointer;
-  }
-  
-  /* Custom dropdown styling */
-  select.form-control {
-    background: rgba(255, 255, 255, 0.9);
-  }
-  
-  /* Ensure forms wrap and align properly */
-  #forms-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 20px;
-    margin-top: 20px;
-  }
-  
+/* Form heading */
+h1 {
+  color: #fff;
+  padding: 20px; /* Added more padding */
+  text-align: center;
+  margin: 0 0 20px 0; /* Reduced margin at the top, added spacing below */
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.form-background p {
+  font-size: small;
+
+}
+/* Input fields */
+.form-floating {
+  margin-bottom: 20px; /* Increased spacing between input fields */
+  margin-top: 30px; /* Increased spacing between input fields */
+
+}
+
+/* Title Styling */
+.verdex-title {
+  font-family: 'Poppins', sans-serif; /* Poppins font */
+  font-weight: 600; /* Bold font weight */
+  font-size: 28px; /* Adjust size as needed */
+  text-align: center; /* Center the title */
+  color: black; /* White color for contrast */
+  margin: 20px 0; /* Add spacing above and below the title */
+  letter-spacing: 1.5px; /* Add some letter spacing for style */
+}
+
+
+.form-control:focus {
+  border-color: #ced4da;
+  box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between; /* Ensure buttons are on opposite sides */
+  gap: 10px; /* Add spacing between buttons */
+  margin-top: 20px; /* Space above the buttons */
+}
+
+/* Submit button */
+#submit-btn {
+  color: black;
+  background-color: #28f07d;
+  margin-top: 20px; /* Added spacing above the button */
+  padding: 12px; /* Increased padding for larger click area */
+  font-size: 16px; /* Slightly larger font */
+  border-radius: 5px; /* Rounded button edges */
+}
+
+#back-btn {
+  color: white;
+  background-color: #6453f3;
+  margin-top: 20px; /* Added spacing above the button */
+  padding: 12px; /* Increased padding for larger click area */
+  font-size: 16px; /* Slightly larger font */
+  border-radius: 5px; /* Rounded button edges */
+}
+
+/* Hover effects */
+#submit-btn:hover, #back-btn:hover {
+  opacity: 0.9;
+}
+
+/* Plus Icon below the submit button */
+.plus-icon-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* Added spacing above the plus icon */
+}
+
+.plus-icon-container i {
+  font-size: 24px;
+  color: #007bff;
+}
+
+/* Floating labels */
+.form-floating label {
+  font-size: 14px; /* Slightly smaller font for labels */
+}
+
+/* Checkbox styling */
+.form-check {
+  display: flex;
+  align-items: center;
+  margin-top: 15px; /* Added spacing above checkboxes */
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.form-check label {
+  font-size: 0.9em;
+}
+
+.form-check input {
+  margin-right: 10px; /* Increased space between checkbox and label */
+}
+
+/* Footer copyright */
+.copyright {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: 20px; /* Added spacing above footer */
+}
+
+/* Close button */
+.btn-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: rgba(255, 255, 255, 0.65);
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+/* Dropdown */
+select.form-control {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* Ensures form content remains spaced and aligned */
+form {
+  padding: 20px; /* Increased padding for larger form spacing */
+}

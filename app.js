@@ -18,16 +18,24 @@ const verifyToken = require("./Middleware/authMiddleware"); // Import the JWT ve
 const companycontroller = require("./Controllers/company");
 const inputcontroller = require("./Controllers/input");
 const leaderboardcontroller= require("./Controllers/leaderboard");
+const reportController = require('./Controllers/report');
+const chatbotController = require('./Controllers/chatbot');
 
+const aiSuggestionsController = require('./Controllers/ai-suggestions/aiSuggestionsController');
 
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 1433;
+const port = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors({ credentials: true, origin: 'http://localhost:1433' }));
+app.use(cors({ credentials: true, origin: 'http://127.0.0.1:3000' }));
 app.use(express.json());
+app.use(express.static("Public"));
+app.use(cors({ 
+    credentials: true, 
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'] 
+}));
 app.use(cookieParser());
 
 // Centralized authentication middleware
@@ -72,20 +80,37 @@ app.get('/api/test-db', async (req, res) => {
 });
 
 // Start server
+//ChatBot routes
+app.get("/chatbot/data", chatbotController.getAllSqlDetails);
+
 // Campaign routes
 app.get("/campaign/isParticipant/:id", companycontroller.checkIsParticipant);
 app.patch("/campaign/updateParticipationStatus/:id", companycontroller.updateCompanyParticipation);
 app.patch("/campaign/updateParticipationStatus/:id", companycontroller.updateCompanyParticipation);
 
 //input routes
-app.get("/input/getDeviceId/:device_name", inputcontroller.getDeviceIdByName);
-app.post('/input/updateRecycledDeviceQuantity', inputcontroller.updateRecycledDeviceQuantity);
+app.post('/input/addPost', inputcontroller.addPostUrl);
+app.get('/input/:id', inputcontroller.getCompanyName);
+
+// Endpoint for scraping Instagram post
+
 
 //Leaderboard routes
 app.get("/leaderboard/top3", leaderboardcontroller.displayTop3CompaniesForCurrentMonth);
+app.get("/leaderboard/proxy-image", leaderboardcontroller.proxyImage);
 
+// Report-related routes
+app.get("/api/report/emissions-by-sector", reportController.getEmissionsBySector);
+app.get("/api/report/energy-consumption-by-sector", reportController.getEnergyConsumptionBySector);
+app.get("/api/report/operational-cost-by-month", reportController.getOperationalCostByMonth);
+app.get("/api/report/yearly-emissions-by-sector", reportController.getYearlyEmissionsBySector);
 
-
+// AI Suggestions routes (protected by authentication)
+app.get("/api/suggestions", aiSuggestionsController.getSuggestions);
+app.get("/api/suggestions/:id/details", aiSuggestionsController.getSuggestionDetails);
+app.get("/api/sector-analysis", aiSuggestionsController.getSectorAnalysis);
+app.get("/api/equipment-health", aiSuggestionsController.getEquipmentHealth);
+app.get("/api/implementation-progress", aiSuggestionsController.getImplementationProgress);
 
 app.listen(port, async () => {
     try {
