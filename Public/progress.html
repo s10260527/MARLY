@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verdex | Dashboard</title>
+  <link rel="icon" type="image/x-icon" href="assets/brand/logo.png">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- External CSS -->
+  <link rel="stylesheet" href="styles/dashboard.css">
+  <link rel="stylesheet" href="styles/emissions-graph.css">
+  <link rel="stylesheet" href="styles/energy-consumption-graph.css">
+  <link rel="stylesheet" href="styles/operational-costs-graph.css">
+  <!-- Month Picker CSS -->
+  <link rel="stylesheet" href="styles/month-picker.css">
+  <link rel="stylesheet" href="styles/general-graph.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+  <link rel="stylesheet" href="styles/chatbot.css">
+  <a target="_blank" href="https://icons8.com/icon/38865/sent">Send</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+  <a href="https://www.flaticon.com/free-icons/chatbot" title="chatbot icons"></a>
+
+  <!-- Poppins Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <link href="styles/ai-suggestions.css" rel="stylesheet">
+
+</head>
+<style>
+
+.table th, .table td {
+    white-space: nowrap; /* Prevent text wrapping */
+    padding: 12px; /* Adjust padding */
+}
+
+.table th:first-child, .table td:first-child {
+    width: 30%; /* Set wider column for Category */
+}
+
+.table th:nth-child(2), .table td:nth-child(2) {
+    width: 50%; /* Adjust Description column */
+}
+
+.table th:last-child, .table td:last-child {
+    width: 20%; /* Keep Emissions compact */
+}
+.graph-container {
+    width: 50%; /* Match table width */
+    margin: 0 auto; /* Center the graph */
+}
+
+.graph-container canvas {
+    width: 100% !important; /* Ensure it fully fills the container */
+}
+.table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.table-container > div {
+    width: 50%; /* Same as the graph's width */
+    margin: 0 auto;
+}
+
+.table-container table {
+    margin: 0 auto;
+    width: 100%; /* Ensures the table fits its container */
+}
+
+/* Table Wrapper for Centering */
+.table-wrapper {
+    max-width: 70%; /* Matches the graph width */
+    margin: 0 auto; /* Horizontally center the table */
+    text-align: center;
+}
+
+.table-wrapper h4 {
+    text-align: center; /* Centers the header */
+}
+
+.table-wrapper table {
+    width: 100%; /* Make the table fill the container */
+    margin: 0 auto;
+}
+
+/* Parent Container for Vertical and Horizontal Centering */
+.mt-4.d-flex.justify-content-center.align-items-center {
+    flex-direction: column; /* Stack content vertically */
+    width: 100%;
+    text-align: center;
+}
+
+</style>
+<body>
+    <section class="chat-window" style="position: fixed;">
+        <button class="close">x close</button>
+        <div class="chat">
+          <div class="model">
+            <p>Hi, how can I help you?</p>
+          </div>
+        </div>
+        <div class="input-area">
+          <input placeholder="Ask me anything..." type="text">
+          <button>
+            <i class="bi bi-send"></i>
+          </button>
+        </div>
+      </section>
+
+      <div class="chat-button" style="position: fixed;">
+        <img src="assets/images/chatbot.png" alt="chat">
+      </div>
+        <!-- Button Section -->
+      <section class="button-section">
+      </section>
+
+  <div class="d-flex">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar-toggle">
+        <div class="sidebar-logo">
+            <img src="assets/brand/logo.png" alt="Verdex Logo" width="30" height="30">
+            <a href="#">Verdex</a>
+        </div>
+        <!-- Sidebar Navigation -->
+        <ul class="sidebar-nav p-0">
+            <div class="sidebar-header">
+                <hr>
+            </div>
+            <li class="sidebar-item">
+                <a href="dashboard.html" class="sidebar-link">
+                    <i class="bi bi-pie-chart-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="report.html" class="sidebar-link">
+                    <i class="bi bi-clipboard-data-fill"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="ai-suggestions-detailed.html" class="sidebar-link">
+                    <i class="bi bi-robot"></i>
+                    <span>AI Suggestions</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="campaign.html" class="sidebar-link">
+                  <i class="bi bi-megaphone-fill"></i>
+                  <span>Campaigns</span>
+              </a>
+            </li>
+            <div class="sidebar-header">
+              <hr>
+            </div>
+            <li class="sidebar-item user">
+              <a href="profile.html" class="sidebar-link user-profile">
+                  <div class="user-info">
+                      <img src="assets/images/apple-logo.jpeg" alt="User Avatar">
+                      <p>Apple Inc.</p>
+                  </div>
+              </a>
+            </li>
+            <li class="sidebar-item progress-net">
+                <a href="progress.html" class="sidebar-link" id="progressLink">
+                  <span><b>Progress to Net Zero</b></span>
+                  <i class="bi bi-globe-americas"></i>
+                  <p></p>
+                  <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                      <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 75%"></div>
+                  </div>
+                  <p></p>
+                  <p><b>75%</b> of goal reached</p>
+                </a>
+            </li>
+        </ul>
+        <!-- Sidebar Navigation Ends -->
+        <div class="sidebar-footer">
+            <a href="#" class="sidebar-link">
+                <i class="bi bi-person-raised-hand"></i>
+                <span>About Us</span>
+            </a>
+        </div>
+    </aside>
+    <!-- Sidebar Ends -->
+<!-- Main Content Container -->
+<div class="container mt-4" style="margin-left: 220px; max-width: calc(100% - 220px);">
+<!-- NET ZERO PROGRESS Section -->
+<h3 class="text-center">MONTHLY NET ZERO PROGRESS</h3>
+<!-- Goal Display -->
+<div class="text-center mb-3">
+    <h5><strong>Goal Toward Net Zero:</strong> <span id="netZeroGoal">500 MT</span></h5>
+</div>
+<div id="progressBarContainer">
+    <div class="progress mt-3" style="height: 30px;">
+        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+             role="progressbar" style="width: 75%;" 
+             aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+            75% Completed
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- Carbon Emissions Graph -->
+<!-- Carbon Emissions Graph -->
+<div class="mt-4 d-flex justify-content-center">
+    <div class="card p-3" style="width: 50%; height: 300px;">  <!-- ✅ Updated width to 50% -->
+        <h5 class="text-center">Carbon Emissions Trend</h5>
+        <canvas id="emissionsChart"></canvas>
+    </div>
+</div>
+
+
+    <!-- Carbon Emissions Table -->
+    <div class="mt-4 d-flex justify-content-center align-items-center">
+        <div class="table-wrapper">
+            <h4 class="text-center">Carbon Emissions Breakdown</h4>
+            <table class="table table-bordered text-center mt-3">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Emissions (Metric Tons CO₂e)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Category 1</td>
+                        <td>Direct emissions from owned or controlled sources.</td>
+                        <td id="cat1-emissions">320 MT</td>
+                    </tr>
+                    <tr>
+                        <td>Category 2</td>
+                        <td>Indirect emissions from purchased electricity, heating, and cooling.</td>
+                        <td id="cat2-emissions">210 MT</td>
+                    </tr>
+                    <tr>
+                        <td>Category 3</td>
+                        <td>All other indirect emissions from the value chain.</td>
+                        <td id="cat3-emissions">150 MT</td>
+                    </tr>
+                    <tr class="table-dark">
+                        <td colspan="2"><strong>Total Carbon Emissions</strong></td>
+                        <td id="total-emissions"><strong>680 MT</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+    
+            <!-- Update Button -->
+            <div class="text-center mt-4">
+                <button class="btn btn-primary px-4 py-2" id="openUpdateModal">
+                    <i class="bi bi-arrow-clockwise"></i> Update
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    
+</div>
+
+<!-- Chart.js Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Script to Initialize Chart -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize Chart
+        const ctx = document.getElementById('emissionsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Category 1", "Category 2", "Category 3"],
+                datasets: [{
+                    label: "Carbon Emissions (Metric Tons CO₂e)",
+                    data: [320, 210, 150],
+                    backgroundColor: ["#FF6B6B", "#4ECDC4", "#45B7D1"]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "Metric Tons CO₂e"
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+<!-- Update Emissions Modal -->
+<div class="modal fade" id="updateEmissionsModal" tabindex="-1" aria-labelledby="updateEmissionsLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateEmissionsLabel">Update Carbon Emissions</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="updateEmissionsForm">
+            <!-- Goal Toward Net Zero Input -->
+<div class="mb-3">
+    <label for="netZeroGoalInput" class="form-label"><strong>Set Goal Toward Net Zero (MT):</strong></label>
+    <input type="number" class="form-control" id="netZeroGoalInput" placeholder="Enter goal in metric tons CO₂e">
+</div>
+
+          <!-- Category 1 Input -->
+          <div class="mb-3">
+            <label for="category1" class="form-label"><strong>Category 1:</strong> Direct emissions from owned or controlled sources (e.g., fuel combustion, company vehicles).</label>
+            <input type="number" class="form-control" id="category1" placeholder="Enter emissions in metric tons CO₂e">
+          </div>
+          
+          <!-- Category 2 Input -->
+          <div class="mb-3">
+            <label for="category2" class="form-label"><strong>Category 2:</strong> Indirect emissions from purchased electricity, steam, heating, and cooling.</label>
+            <input type="number" class="form-control" id="category2" placeholder="Enter emissions in metric tons CO₂e">
+          </div>
+          
+          <!-- Category 3 Input -->
+          <div class="mb-3">
+            <label for="category3" class="form-label"><strong>Category 3:</strong> All other indirect emissions from the value chain, including suppliers and customers.</label>
+            <input type="number" class="form-control" id="category3" placeholder="Enter emissions in metric tons CO₂e">
+          </div>
+          
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("JavaScript loaded! ✅"); // Debugging
+    
+        // ✅ Ensure Modal Initialization
+        const updateModal = new bootstrap.Modal(document.getElementById("updateEmissionsModal"), { keyboard: false });
+    
+        // ✅ Get button and modal elements
+        const openUpdateModalBtn = document.getElementById("openUpdateModal");
+        const updateEmissionsForm = document.getElementById("updateEmissionsForm");
+    
+        if (!openUpdateModalBtn) {
+            console.error("❌ Update button not found!");
+            return;
+        }
+    
+        if (!updateEmissionsForm) {
+            console.error("❌ Update form not found!");
+            return;
+        }
+    
+        // ✅ Show modal when update button is clicked
+        openUpdateModalBtn.addEventListener("click", function () {
+            console.log("Update button clicked! ✅");
+            updateModal.show();
+        });
+    
+        // ✅ Define Chart Variable Globally
+        let emissionsChart;
+    
+        // ✅ Initialize Chart.js AFTER the DOM is loaded
+        function initializeChart() {
+            const ctx = document.getElementById('emissionsChart').getContext('2d');
+            emissionsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ["Category 1", "Category 2", "Category 3"],
+                    datasets: [{
+                        label: "Carbon Emissions (Metric Tons CO₂e)",
+                        data: [320, 210, 150], // Initial Data
+                        backgroundColor: ["#FF6B6B", "#4ECDC4", "#45B7D1"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: "Metric Tons CO₂e"
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    
+        // ✅ Initialize Chart on Page Load
+        initializeChart();
+    
+        // ✅ Function to Update Table
+        function updateTable(cat1, cat2, cat3) {
+            console.log("Updating table... ✅");
+            document.getElementById("cat1-emissions").textContent = `${cat1} MT`;
+            document.getElementById("cat2-emissions").textContent = `${cat2} MT`;
+            document.getElementById("cat3-emissions").textContent = `${cat3} MT`;
+    
+            // ✅ Calculate and update the total
+            let total = cat1 + cat2 + cat3;
+            document.getElementById("total-emissions").innerHTML = `<strong>${total} MT</strong>`;
+        }
+    
+        // ✅ Function to Update Graph
+        function updateGraph(cat1, cat2, cat3) {
+            console.log("Updating graph... ✅");
+            if (!emissionsChart) {
+                console.error("❌ emissionsChart is undefined!");
+                return;
+            }
+            emissionsChart.data.datasets[0].data = [cat1, cat2, cat3];
+            emissionsChart.update();
+        }
+    
+        // ✅ Handle form submission
+        updateEmissionsForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            console.log("Form submitted! ✅");
+    
+            // ✅ Get input values and ensure valid numbers
+            let cat1 = parseFloat(document.getElementById("category1").value) || 0;
+            let cat2 = parseFloat(document.getElementById("category2").value) || 0;
+            let cat3 = parseFloat(document.getElementById("category3").value) || 0;
+            let netZeroGoal = parseFloat(document.getElementById("netZeroGoalInput").value) || 0;
+    
+            // ✅ Debugging Output
+            console.log(`New Values: Category 1 = ${cat1}, Category 2 = ${cat2}, Category 3 = ${cat3}, Net Zero Goal = ${netZeroGoal} ✅`);
+    
+            // ✅ Update table
+            updateTable(cat1, cat2, cat3);
+    
+            // ✅ Update graph
+            updateGraph(cat1, cat2, cat3);
+    
+            // ✅ Update Net Zero Goal
+            if (netZeroGoal > 0) {
+                document.getElementById("netZeroGoal").textContent = `${netZeroGoal} MT`;
+            }
+    
+            // ✅ Close modal
+            updateModal.hide();
+        });
+    });
+    </script>
+    
+    
+    
+    
+    
+    
+    
+    
+<!-- Bootstrap Scripts (Move to the Bottom) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+
+</body>
+</html>
+

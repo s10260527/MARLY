@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Progress | Verdex</title>
+    <link rel="icon" type="image/x-icon" href="assets/brand/logo.png">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <style>
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s ease;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .modal-active {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar-toggle">
+            <div class="sidebar-logo">
+                <img src="assets/brand/logo.png" alt="Verdex Logo" width="30" height="30">
+                <a href="#">Verdex</a>
+            </div>
+            <ul class="sidebar-nav p-0">
+                <div class="sidebar-header"><hr></div>
+                <li class="sidebar-item"><a href="dashboard.html" class="sidebar-link"><i class="bi bi-pie-chart-fill"></i><span>Dashboard</span></a></li>
+                <li class="sidebar-item"><a href="report.html" class="sidebar-link"><i class="bi bi-clipboard-data-fill"></i><span>Reports</span></a></li>
+                <li class="sidebar-item"><a href="campaign.html" class="sidebar-link"><i class="bi bi-megaphone-fill"></i><span>Campaigns</span></a></li>
+                <div class="sidebar-header"><hr></div>
+                <li class="sidebar-item user"><a href="profile.html" class="sidebar-link user-profile"><div class="user-info"><img src="assets/images/apple-logo.jpeg" alt="User Avatar"><p>Apple Inc.</p></div></a></li>
+                <li class="sidebar-item progress-net"><div class="sidebar-link"><span><b>Progress to Net Zero</b></span><i class="bi bi-globe-americas"></i><p></p><div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 75%"></div></div><p></p><p><b>75%</b> of goal reached</p></div></li>
+            </ul>
+            <div class="sidebar-footer"><a href="#" class="sidebar-link"><i class="bi bi-person-raised-hand"></i><span>About Us</span></a></div>
+        </aside>
+        
+        <!-- Main Content -->
+        <div class="main container mt-4">
+            <h2>Progress Overview</h2>
+            <button class="btn btn-primary" id="openModal">Update Progress</button>
+        </div>
+    </div>
+    
+    <!-- Modal for Update Progress -->
+    <div class="modal-overlay" id="progressModal">
+        <div class="modal-content">
+            <h5>Update Your Carbon Emissions</h5>
+            <form id="carbonForm">
+                <div class="mb-3">
+                    <label class="form-label">Category 1: Direct Emissions</label>
+                    <input type="number" class="form-control" id="category1" placeholder="Enter emissions in metric tons">
+                    <small class="form-text text-muted">Direct emissions from owned sources, such as company vehicles and fuel combustion.</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Category 2: Indirect Emissions</label>
+                    <input type="number" class="form-control" id="category2" placeholder="Enter emissions in metric tons">
+                    <small class="form-text text-muted">Emissions from purchased electricity, steam, heating, and cooling.</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Category 3: Supply Chain & Other Indirect Emissions</label>
+                    <input type="number" class="form-control" id="category3" placeholder="Enter emissions in metric tons">
+                    <small class="form-text text-muted">Emissions from business travel, purchased goods, transportation, and waste.</small>
+                </div>
+                <div class="card mt-3 p-3">
+                    <h6>Total Carbon Emissions: <span id="totalEmissions">0</span> metric tons</h6>
+                </div>
+                <button type="submit" class="btn btn-success mt-3">Submit</button>
+                <button type="button" class="btn btn-secondary mt-3" id="closeModal">Cancel</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Bootstrap Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('carbonForm').addEventListener('input', function() {
+            const cat1 = parseFloat(document.getElementById('category1').value) || 0;
+            const cat2 = parseFloat(document.getElementById('category2').value) || 0;
+            const cat3 = parseFloat(document.getElementById('category3').value) || 0;
+            document.getElementById('totalEmissions').textContent = (cat1 + cat2 + cat3).toFixed(2);
+        });
+
+        document.getElementById('openModal').addEventListener('click', function() {
+            document.getElementById('progressModal').classList.add('modal-active');
+        });
+
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('progressModal').classList.remove('modal-active');
+        });
+    </script>
+</body>
+</html>
