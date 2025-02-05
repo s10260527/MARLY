@@ -1,11 +1,24 @@
 // server/database.js
-const sql = require('mssql');
-const config = require('../../dbConfig').database;
 
-// server/database.js
+const sql = require('mssql');
+
+// KEEP your old line but comment it out (DO NOT delete):
+// const config = require('../../dbConfig').database;
+
+// ADD a new line that imports the entire config object
+const fullDbConfig = require('../../dbConfig');
+
+
+// Now fix each function to use "fullDbConfig" instead of "config"
+
 async function getLatestEmissionsData() {
     try {
-        const pool = await sql.connect(config);
+        // old line (comment out):
+        // const pool = await sql.connect(config);
+
+        // new line:
+        const pool = await sql.connect(fullDbConfig);
+
         const result = await pool.request().query(`
             WITH LatestEmission AS (
                 SELECT 
@@ -52,7 +65,12 @@ async function getLatestEmissionsData() {
 
 async function getMaintenanceData() {
     try {
-        const pool = await sql.connect(config);
+        // old line (comment out):
+        // const pool = await sql.connect(config);
+
+        // new line:
+        const pool = await sql.connect(fullDbConfig);
+
         const result = await pool.request().query(`
             SELECT TOP 5
                 m.maintenance_date,
@@ -74,7 +92,12 @@ async function getMaintenanceData() {
 
 async function getUtilityCosts() {
     try {
-        const pool = await sql.connect(config);
+        // old:
+        // const pool = await sql.connect(config);
+
+        // new:
+        const pool = await sql.connect(fullDbConfig);
+
         const result = await pool.request().query(`
             SELECT TOP 5
                 utility_type,
@@ -91,14 +114,15 @@ async function getUtilityCosts() {
     }
 }
 
-// Add to your database.js file
-
-// Update getSectorAnalysisData in server/database.js
-
 // In database.js, update getSectorAnalysisData function
 async function getSectorAnalysisData() {
     try {
-        const pool = await sql.connect(config);
+        // old:
+        // const pool = await sql.connect(config);
+
+        // new:
+        const pool = await sql.connect(fullDbConfig);
+
         const result = await pool.request().query(`
             WITH LatestData AS (
                 SELECT 
@@ -127,9 +151,9 @@ async function getSectorAnalysisData() {
             )
             SELECT 
                 sector_type,
-                AVG(ISNULL(scope1_emissions, 0)) as scope1_emissions,  -- Using AVG instead of SUM
-                AVG(ISNULL(scope2_emissions, 0)) as scope2_emissions,  -- Using AVG instead of SUM
-                AVG(ISNULL(scope3_emissions, 0)) as scope3_emissions,  -- Using AVG instead of SUM
+                AVG(ISNULL(scope1_emissions, 0)) as scope1_emissions,  -- Using AVG
+                AVG(ISNULL(scope2_emissions, 0)) as scope2_emissions,  -- Using AVG
+                AVG(ISNULL(scope3_emissions, 0)) as scope3_emissions,  -- Using AVG
                 SUM(ISNULL(total_costs, 0)) as total_costs,           -- Keep SUM for costs
                 AVG(ISNULL(efficiency_metrics, 0)) as efficiency_metrics
             FROM LatestData
@@ -146,7 +170,12 @@ async function getSectorAnalysisData() {
 
 async function getFacilityRankings() {
     try {
-        const pool = await sql.connect(config);
+        // old:
+        // const pool = await sql.connect(config);
+
+        // new:
+        const pool = await sql.connect(fullDbConfig);
+
         const result = await pool.request().query(`
             WITH LatestData AS (
                 SELECT 
@@ -188,7 +217,12 @@ async function getFacilityRankings() {
 
 async function getEquipmentHealthData() {
     try {
-        const pool = await sql.connect(config);
+        // old:
+        // const pool = await sql.connect(config);
+
+        // new:
+        const pool = await sql.connect(fullDbConfig);
+
         const result = await pool.request().query(`
             SELECT TOP 5
                 e.equipment_id,
@@ -209,7 +243,6 @@ async function getEquipmentHealthData() {
             ORDER BY e.efficiency_rating DESC;
         `);
         
-        // Ensure we have at least some data
         if (result.recordset.length === 0) {
             return [{
                 equipment_id: 1,
@@ -228,7 +261,12 @@ async function getEquipmentHealthData() {
 
 async function getImplementationProgress() {
     try {
-        const pool = await sql.connect(config);
+        // old:
+        // const pool = await sql.connect(config);
+
+        // new:
+        const pool = await sql.connect(fullDbConfig);
+
         const result = await pool.request().query(`
             SELECT 
                 COUNT(CASE WHEN initiative_status = 'Completed' THEN 1 END) as completed_count,
@@ -237,7 +275,6 @@ async function getImplementationProgress() {
             FROM Sustainability_Goals;
         `);
 
-        // If no data exists, return default values
         if (!result.recordset[0] || result.recordset[0].total_count === 0) {
             return {
                 completed_count: 0,
@@ -256,7 +293,6 @@ async function getImplementationProgress() {
         throw err;
     }
 }
-
 
 module.exports = {
     getLatestEmissionsData,
