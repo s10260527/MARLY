@@ -68,7 +68,7 @@ use companyId as 1 and retrieve other tables accordingly when prompted
     The company's current total operational cost is 4.46 billion. For more details such as the different sectors contributing to the operational cost, you can toggle operational costs in the dashboard
 
     18. What is the current campaign about?
-    The current campaign is about raising awareness about ways to achieve net zero
+    The current campaign is about raising awareness about ways to achieve net zero by encouraging companies to creating instagram posts
 
 
     Instructions for Tone:
