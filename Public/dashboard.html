@@ -1,60 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Verdex | Dashboard</title>
-  <link rel="icon" type="image/x-icon" href="assets/brand/logo.png">
+  <link rel="icon" type="image/x-icon" href="assets/brand/logo.png" />
 
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
   <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
   <!-- External CSS -->
-  <link rel="stylesheet" href="styles/dashboard.css">
-  <link rel="stylesheet" href="styles/emissions-graph.css">
-  <link rel="stylesheet" href="styles/energy-consumption-graph.css">
-  <link rel="stylesheet" href="styles/operational-costs-graph.css">
-  <!-- Month Picker CSS -->
-  <link rel="stylesheet" href="styles/month-picker.css">
-  <link rel="stylesheet" href="styles/general-graph.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+  <link rel="stylesheet" href="styles/dashboard.css" />
+  <link rel="stylesheet" href="styles/emissions-graph.css" />
+  <link rel="stylesheet" href="styles/energy-consumption-graph.css" />
+  <link rel="stylesheet" href="styles/operational-costs-graph.css" />
+  <link rel="stylesheet" href="styles/month-picker.css" />
+  <link rel="stylesheet" href="styles/general-graph.css" />
+
+  <!-- Chart.js (for graphs) -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js">
+  </script>
+  <!-- jQuery -->
+  <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js">
+  </script>
   <link rel="stylesheet" href="styles/chatbot.css">
   <a target="_blank" href="https://icons8.com/icon/38865/sent">Send</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
   <a href="https://www.flaticon.com/free-icons/chatbot" title="chatbot icons"></a>
 
   <!-- Poppins Font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
 
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
   <link href="styles/ai-suggestions.css" rel="stylesheet">
 
 </head>
-<body>
-    <section class="chat-window" style="position: fixed;">
-        <button class="close">x close</button>
-        <div class="chat">
-          <div class="model">
-            <p>Hi, how can I help you?</p>
-          </div>
-        </div>
-        <div class="input-area">
-          <input placeholder="Ask me anything..." type="text">
-          <button>
-            <i class="bi bi-send"></i>
-          </button>
-        </div>
-      </section>
 
-      <div class="chat-button" style="position: fixed;">
-        <img src="assets/images/chatbot.png" alt="chat">
+<body>
+  <section class="chat-window" style="position: fixed;">
+    <button class="close">x close</button>
+    <div class="chat">
+      <div class="model">
+        <p>Hi, how can I help you?</p>
       </div>
-        <!-- Button Section -->
-      <section class="button-section">
-      </section>
+    </div>
+    <div class="input-area">
+      <input placeholder="Ask me anything..." type="text">
+      <button>
+        <i class="bi bi-send"></i>
+      </button>
+    </div>
+  </section>
+
+  <div class="chat-button" style="position: fixed;">
+    <img src="assets/images/chatbot.png" alt="chat">
+  </div>
+  <!-- Button Section -->
+  <section class="button-section">
+  </section>
 
   <div class="d-flex">
     <!-- Sidebar -->
@@ -104,7 +120,7 @@
               </a>
             </li>
             <li class="sidebar-item progress-net">
-              <div class="sidebar-link">
+                <a href="progress.html" class="sidebar-link" id="progressLink">
                   <span><b>Progress to Net Zero</b></span>
                   <i class="bi bi-globe-americas"></i>
                   <p></p>
@@ -113,7 +129,7 @@
                   </div>
                   <p></p>
                   <p><b>75%</b> of goal reached</p>
-              </div>
+                </a>
             </li>
         </ul>
         <!-- Sidebar Navigation Ends -->
@@ -124,267 +140,396 @@
             </a>
         </div>
     </aside>
-    <!-- Sidebar Ends -->
-
-
-
-
-
     <!-- Main Component -->
     <div class="main">
-        <!-- Month Picker Here -->
-        <div class="picker-container">
-          <div class="date-input-container">
-              <i class="bi bi-calendar3 calendar-icon"></i>
-              <input type="text" class="date-input" id="monthRange" 
-                    placeholder="MM/YYYY - MM/YYYY">
+      <!-- Month Picker -->
+      <div class="picker-container">
+        <div class="date-input-container">
+          <i class="bi bi-calendar3 calendar-icon"></i>
+          <input
+            type="text"
+            class="date-input"
+            id="monthRange"
+            placeholder="MM/YYYY - MM/YYYY"
+          />
+        </div>
+
+        <div class="overlay" id="overlay"></div>
+
+        <div class="picker-dropdown" id="pickerDropdown">
+          <div class="picker-header">
+            <i class="bi bi-calendar3"></i>
+            <span id="selectedRange">Select date range</span>
           </div>
-
-          <div class="overlay" id="overlay"></div>
-          
-          <div class="picker-dropdown" id="pickerDropdown">
-              <div class="picker-header">
-                  <i class="bi bi-calendar3"></i>
-                  <span id="selectedRange">Select date range</span>
+          <div class="picker-content">
+            <div class="calendar-section">
+              <div class="years-container">
+                <!-- Left year grid -->
+                <div class="year-grid">
+                  <div class="year-header">
+                    <button class="year-nav-btn" id="prevYearLeft">
+                      <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <span id="leftYearLabel">2024</span>
+                    <button class="year-nav-btn" id="nextYearLeft">
+                      <i class="bi bi-chevron-right"></i>
+                    </button>
+                  </div>
+                  <div class="month-grid" id="monthGridLeft"></div>
+                </div>
+                <!-- Right year grid -->
+                <div class="year-grid">
+                  <div class="year-header">
+                    <button class="year-nav-btn" id="prevYearRight">
+                      <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <span id="rightYearLabel">2025</span>
+                    <button class="year-nav-btn" id="nextYearRight">
+                      <i class="bi bi-chevron-right"></i>
+                    </button>
+                  </div>
+                  <div class="month-grid" id="monthGridRight"></div>
+                </div>
               </div>
+            </div>
 
-              <div class="picker-content">
-                  <div class="calendar-section">
-                      <div class="years-container">
-                          <div class="year-grid">
-                              <div class="year-header">
-                                  <button class="year-nav-btn" id="prevYear2024">
-                                      <i class="bi bi-chevron-left"></i>
-                                  </button>
-                                  <span>2024</span>
-                                  <button class="year-nav-btn" id="nextYear2024">
-                                      <i class="bi bi-chevron-right"></i>
-                                  </button>
-                              </div>
-                              <div class="month-grid" id="monthGrid2024"></div>
-                          </div>
-                          
-                          <div class="year-grid">
-                              <div class="year-header">
-                                  <button class="year-nav-btn" id="prevYear2025">
-                                      <i class="bi bi-chevron-left"></i>
-                                  </button>
-                                  <span>2025</span>
-                                  <button class="year-nav-btn" id="nextYear2025">
-                                      <i class="bi bi-chevron-right"></i>
-                                  </button>
-                              </div>
-                              <div class="month-grid" id="monthGrid2025"></div>
-                          </div>
-                      </div>
+            <div class="presets-section">
+              <div class="preset-label">Quick Select</div>
+              <div class="presets-list">
+                <button class="preset-btn" data-range="this-year">
+                  This year
+                </button>
+                <button class="preset-btn" data-range="last-year">
+                  Last year
+                </button>
+                <button class="preset-btn" data-range="last-6">
+                  Last 6 months
+                </button>
+                <button class="preset-btn" data-range="last-12">
+                  Last 12 months
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="picker-footer">
+            <button class="confirm-btn btn btn-primary" id="confirmSelection">
+              Confirm Selection
+            </button>
+            <!-- Reset to Default button styled to fit the design -->
+            <button class="btn btn-secondary" id="resetDefault">
+              Reset to Default
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Month Picker Ends -->
+
+      <!-- Data Glance -->
+      <div class="data-glance">
+        <div class="card" style="width: 15rem;" id="carbon-emissions-card">
+          <div class="card-body">
+            <h5 class="card-title">
+              <div id="carbonEmissionsValue">0</div> t
+            </h5>
+            <p class="card-text">Total Carbon Emissions</p>
+            <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+            <p class="card-text">This month</p>
+            <h6 class="card-subtitle mb-2 text-body-secondary">
+              <i class="bi"></i>
+            </h6>
+          </div>
+        </div>
+
+        <div class="card" style="width: 15rem;" id="energy-consumption-card">
+          <div class="card-body">
+            <h5 class="card-title">
+              <div id="energyConsumptionValue">0</div> kWh
+            </h5>
+            <p class="card-text">Total Energy Consumption</p>
+            <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+            <p class="card-text">This month</p>
+            <h6 class="card-subtitle mb-2 text-body-secondary">
+              <i class="bi"></i>
+            </h6>
+          </div>
+        </div>
+
+        <div class="card" style="width: 15rem;" id="operational-costs-card">
+          <div class="card-body">
+            <h5 class="card-title">
+              $<div id="operationalCostsValue">0</div>
+              <span></span>
+            </h5>
+            <p class="card-text">Total Operational Costs</p>
+            <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+            <p class="card-text">This month</p>
+            <h6 class="card-subtitle mb-2 text-body-secondary">
+              <i class="bi"></i>
+            </h6>
+          </div>
+        </div>
+      </div>
+      <!-- Data Glance Ends -->
+
+      <!-- Suggestions Facts -->
+      <div class="suggest-facts">
+        <h6>🔍 Data Insights</h6>
+        <div class="card">
+          <div class="card-body">
+            <p class="card-text">
+              Your <br /><b>Total Carbon Emissions</b>
+              <br />is equivalent to
+            </p>
+            <p class="card-text multiply">
+              <img
+                src="assets/images/car.png"
+                alt="Car Icon"
+                height="40"
+                width="40"
+              />
+              <span id="car-equivalent"></span>
+            </p>
+            <p class="card-text multiply-info">
+              <em>(4-seater car driven for 100 km)</em>
+            </p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <p class="card-text">
+              Your <br /><b>Total Energy Consumption</b>
+              <br />is equivalent to
+            </p>
+            <p class="card-text multiply">
+              <img
+                src="assets/images/house.png"
+                alt="House Icon"
+                height="40"
+                width="40"
+              />
+              <span id="hdb-equivalent"></span>
+            </p>
+            <p class="card-text multiply-info">
+              <em>(4-room HDB flat powered for 1 year 24/7)</em>
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- Suggestions Facts Ends -->
+
+      <!-- General Graph -->
+      <div class="general-graph">
+        <h6>General Graph</h6>
+        <div class="card">
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="general-graph"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- General Graph Ends -->
+
+      <!-- Detailed Graph -->
+      <div class="detailed-graph">
+        <h6>Detailed Graph</h6>
+        <ul class="nav nav-tabs" id="detailedGraphTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="carbon-tab" data-bs-toggle="tab" data-bs-target="#carbon" type="button" role="tab" aria-controls="carbon" aria-selected="true">
+              Carbon Emissions
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="energy-tab" data-bs-toggle="tab" data-bs-target="#energy" type="button" role="tab" aria-controls="energy" aria-selected="false">
+              Energy Consumption
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="costs-tab" data-bs-toggle="tab" data-bs-target="#costs" type="button" role="tab" aria-controls="costs" aria-selected="false">
+              Operational Costs
+            </button>
+          </li>
+        </ul>
+        <div class="card">
+          <div class="card-body">
+            <div class="tab-content" id="detailedGraphContent">
+              <!-- Carbon Emissions Tab -->
+              <div class="tab-pane fade show active" id="carbon" role="tabpanel" aria-labelledby="carbon-tab">
+                <div class="detailed-graph-carbon">
+                  <!-- 
+                    We create a new row for the Back button & the "viewIndicator"
+                    so it’s higher & visible with a purple background. 
+                  -->
+                  <div class="d-flex align-items-center mb-3" style="gap: 1rem;">
+                    <button id="backButton" 
+                            class="btn" 
+                            style="background-color: #7d70f5; color: #fff;">
+                      <i class="bi bi-arrow-left"></i> Back
+                    </button>
+                    <span id="viewIndicator" 
+                          class="view-indicator" 
+                          style="margin: 0; font-weight: 500;">
+                    </span>
                   </div>
 
-                  <div class="presets-section">
-                      <div class="preset-label">Quick Select</div>
-                      <div class="presets-list">
-                          <button class="preset-btn" data-range="this-year">This year</button>
-                          <button class="preset-btn" data-range="last-year">Last year</button>
-                          <button class="preset-btn" data-range="last-6">Last 6 months</button>
-                          <button class="preset-btn" data-range="last-12">Last 12 months</button>
-                      </div>
+                  <!-- The original controls-row with a backButton (hidden) remains -->
+                  <div class="controls-row" style="display:none;">
+                    <div class="controls-left">
+                      <button id="backButton" class="btn btn-secondary back-button">
+                        <i class="bi bi-arrow-left"></i> Back
+                      </button>
+                    </div>
+                    <span id="viewIndicator" class="view-indicator"></span>
+                    <div class="controls-right">
+                      <button id="netEmissionsToggle" class="btn btn-outline-primary">
+                        Show Net Emissions
+                      </button>
+                    </div>
                   </div>
-              </div>
 
-              <div class="picker-footer">
-                  <button class="confirm-btn" id="confirmSelection">Confirm Selection</button>
+                  <div class="controls-right text-end">
+                    <!-- Moved Net Emissions Toggle here so it’s still accessible -->
+                    <button id="netEmissionsToggle" class="btn btn-outline-primary">
+                      Show Net Emissions
+                    </button>
+                  </div>
+
+                  <!-- Charts Row -->
+                  <div class="row charts-row">
+                    <!-- Line Graph Section -->
+                    <div class="col-lg-8">
+                      <h5 class="chart-title" id="lineChartTitle">
+                        Carbon Emissions Over Time
+                      </h5>
+                      <div class="chart-container">
+                        <canvas id="emissionsLineChart"></canvas>
+                      </div>
+                    </div>
+                    <!-- Pie Chart Section -->
+                    <div class="col-lg-4">
+                      <h5 class="chart-title" id="pieChartTitle">
+                        Emissions by Sector
+                      </h5>
+                      <div class="chart-container">
+                        <canvas id="sectorPieChart"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
+              <!-- Energy Consumption Tab -->
+              <div class="tab-pane fade" id="energy" role="tabpanel" aria-labelledby="energy-tab">
+                <div class="detailed-graph-energy">
+                  <!-- 
+                    New row for the Energy back button & its viewIndicator 
+                  -->
+                  <div class="d-flex align-items-center mb-3" style="gap: 1rem;">
+                    <button id="energyBackButton" 
+                            class="btn" 
+                            style="background-color: #7d70f5; color: #fff;">
+                      <i class="bi bi-arrow-left"></i> Back
+                    </button>
+                    <span id="energyViewIndicator" 
+                          class="view-indicator" 
+                          style="margin: 0; font-weight: 500;">
+                    </span>
+                  </div>
+
+                  <!-- Original controls-row with a hidden back button remains -->
+                  <div class="controls-row" style="display:none;">
+                    <div class="controls-left">
+                      <button id="energyBackButton" class="btn btn-secondary back-button">
+                        <i class="bi bi-arrow-left"></i> Back
+                      </button>
+                    </div>
+                    <span id="energyViewIndicator" class="view-indicator"></span>
+                  </div>
+
+                  <!-- Charts Row -->
+                  <div class="row charts-row">
+                    <!-- Line Graph Section -->
+                    <div class="col-lg-8">
+                      <h5 class="chart-title" id="energyLineChartTitle">
+                        Energy Consumption Over Time
+                      </h5>
+                      <div class="chart-container">
+                        <canvas id="energyLineChart"></canvas>
+                      </div>
+                    </div>
+                    <!-- Pie Chart Section -->
+                    <div class="col-lg-4">
+                      <h5 class="chart-title" id="energyPieChartTitle">
+                        Energy Consumption by Sector
+                      </h5>
+                      <div class="chart-container">
+                        <canvas id="energySectorPieChart"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Operational Costs Tab -->
+              <div class="tab-pane fade" id="costs" role="tabpanel" aria-labelledby="costs-tab">
+                <div class="detailed-graph-costs">
+                  <!-- 
+                    New row for the Costs back button & its viewIndicator 
+                  -->
+                  <div class="d-flex align-items-center mb-3" style="gap: 1rem;">
+                    <button id="costsBackButton" 
+                            class="btn" 
+                            style="background-color: #7d70f5; color: #fff;">
+                      <i class="bi bi-arrow-left"></i> Back
+                    </button>
+                    <span id="costsViewIndicator" 
+                          class="view-indicator" 
+                          style="margin: 0; font-weight: 500;">
+                    </span>
+                  </div>
+
+                  <!-- Original hidden lines (kept intact) -->
+                  <div class="controls-left" style="display:none;">
+                    <button id="costsBackButton" class="btn btn-secondary back-button">
+                      <i class="bi bi-arrow-left"></i> Back
+                    </button>
+                  </div>
+                  <span id="costsViewIndicator" class="view-indicator" style="display:none;"></span>
+
+                  <!-- Charts Row -->
+                  <div class="row charts-row">
+                    <!-- Vertical Bar Graph Section -->
+                    <div class="col-lg-8">
+                      <h5 class="chart-title" id="costsVerticalBarChartTitle">
+                        Operational Costs Over Time
+                      </h5>
+                      <div class="chart-container">
+                        <canvas id="costsVerticalBarChart"></canvas>
+                      </div>
+                    </div>
+                    <!-- Pie Chart Section -->
+                    <div class="col-lg-4">
+                      <h5 class="chart-title" id="costsHorizontalBarChartTitle">
+                        Operational Costs by Sector
+                      </h5>
+                      <div class="chart-container">
+                        <canvas id="costsHorizontalBarChart"></canvas>
+                      </div>
+                      <div class="text-center mt-3">
+                        <p class="h5">
+                          Total: $<span id="costsHorizontalChartTotal">0</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Operational Costs Tab Ends -->
+            </div>
           </div>
-        </div>
-        <!-- Data Glance Here -->
-        <div class="data-glance">
-            <div class="card" style="width: 15rem;" id="carbon-emissions-card">
-                <div class="card-body">
-                    <h5 class="card-title"><div></div>t</h5>
-                    <p class="card-text">Total Carbon Emissions</p>
-                    <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
-                    <p class="card-text">This month</p>
-                    <h6 class="card-subtitle mb-2 text-body-secondary"><i class="bi"></i></h6>
-                </div>
-            </div>
-            <div class="card" style="width: 15rem;" id="energy-consumption-card">
-                <div class="card-body">
-                    <h5 class="card-title"><div></div>kWh</h5>
-                    <p class="card-text">Total Energy Consumption</p>
-                    <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
-                    <p class="card-text">This month</p>
-                    <h6 class="card-subtitle mb-2 text-body-secondary"><i class="bi"></i></h6>
-                </div>
-            </div>
-            <div class="card" style="width: 15rem;" id="operational-costs-card">
-                <div class="card-body">
-                    <h5 class="card-title">$<div></div><span></span></h5>
-                    <p class="card-text">Total Operational Costs</p>
-                    <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
-                    <p class="card-text">This month</p>
-                    <h6 class="card-subtitle mb-2 text-body-secondary"><i class="bi"></i></h6>
-                </div>
-            </div>
-        </div>
-        <!-- Suggestions Facts -->
-         <div class="suggest-facts">
-            <h6>🔍 Data Insights</h6>
-            <div class="card">
-                <div class="card-body">
-                    <p class="card-text">Your
-                    <br><b>Total Carbon Emissions</b>
-                    <br>is equivalent to</p>
-                    <p class="card-text multiply"><img src="assets/images/car.png" alt="Car Icon" height="40" width="40"> <span id="car-equivalent"></span></p>
-                    <p class="card-text multiply-info"><em>(4-seater car driven for 100 km)</em></p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <p class="card-text">Your
-                    <br><b>Total Energy Consumption</b>
-                    <br>is equivalent to</p>
-                    <p class="card-text multiply"><img src="assets/images/house.png" alt="House Icon" height="40" width="40"> <span id="hdb-equivalent"></span></p>
-                    <p class="card-text multiply-info"><em>(4-room HDB flat powered for 1 year 24/7)</em></p>
-                </div>
-            </div>
-         </div>
-         <!-- General Graph -->
-        <div class="general-graph">
-            <h6>General Graph</h6>
-            <div class="card">
-                <div class="card-body">
-                    <div class="chart-container">
-                        <canvas id="general-graph"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Detailed Graph -->
-        <div class="detailed-graph">
-            <h6>Detailed Graph</h6>
-            <ul class="nav nav-tabs" id="detailedGraphTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="carbon-tab" data-bs-toggle="tab" data-bs-target="#carbon" type="button" role="tab" aria-controls="carbon" aria-selected="true">Carbon Emissions</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="energy-tab" data-bs-toggle="tab" data-bs-target="#energy" type="button" role="tab" aria-controls="energy" aria-selected="false">Energy Consumption</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="costs-tab" data-bs-toggle="tab" data-bs-target="#costs" type="button" role="tab" aria-controls="costs" aria-selected="false">Operational Costs</button>
-                </li>
-            </ul>
-            <div class="card">
-                <div class="card-body">
-                    <div class="tab-content" id="detailedGraphContent">
-                        <div class="tab-pane fade show active" id="carbon" role="tabpanel" aria-labelledby="carbon-tab">
-                            <div class="detailed-graph-carbon">
-                                <!-- Controls Row -->
-                                <div class="controls-row">
-                                    <div class="controls-left">
-                                        <button id="backButton" class="btn btn-secondary back-button">
-                                            <i class="bi bi-arrow-left"></i> Back
-                                        </button>
-                                    </div>
-                                    <span id="viewIndicator" class="view-indicator"></span>
-                                    <div class="controls-right">
-                                        <button id="netEmissionsToggle" class="btn btn-outline-primary">
-                                            Show Net Emissions
-                                        </button>
-                                    </div>
-                                </div>
+          <!-- Detailed Graph Ends -->
 
-                                <!-- Charts Row -->
-                                <div class="row charts-row">
-                                    <!-- Line Graph Section -->
-                                    <div class="col-lg-8">
-                                        <h5 class="chart-title" id="lineChartTitle">Carbon Emissions Over Time</h5>
-                                        <div class="chart-container">
-                                            <canvas id="emissionsLineChart"></canvas>
-                                        </div>
-                                    </div>
-
-                                    <!-- Pie Chart Section -->
-                                    <div class="col-lg-4">
-                                        <h5 class="chart-title" id="pieChartTitle">Emissions by Sector</h5>
-                                        <div class="chart-container">
-                                            <canvas id="sectorPieChart"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="energy" role="tabpanel" aria-labelledby="energy-tab">
-                            <div class="detailed-graph-energy">
-                                <!-- Controls Row -->
-                                <div class="controls-row">
-                                    <div class="controls-left">
-                                        <button id="energyBackButton" class="btn btn-secondary back-button">
-                                            <i class="bi bi-arrow-left"></i> Back
-                                        </button>
-                                    </div>
-                                    <span id="energyViewIndicator" class="view-indicator"></span>
-                                </div>
-
-                                <!-- Charts Row -->
-                                <div class="row charts-row">
-                                    <!-- Line Graph Section -->
-                                    <div class="col-lg-8">
-                                        <h5 class="chart-title" id="energyLineChartTitle">Energy Consumption Over Time</h5>
-                                        <div class="chart-container">
-                                            <canvas id="energyLineChart"></canvas>
-                                        </div>
-                                    </div>
-
-                                    <!-- Pie Chart Section -->
-                                    <div class="col-lg-4">
-                                        <h5 class="chart-title" id="energyPieChartTitle">Energy Consumption by Sector</h5>
-                                        <div class="chart-container">
-                                            <canvas id="energySectorPieChart"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="costs" role="tabpanel" aria-labelledby="costs-tab">
-                            <div class="detailed-graph-costs">
-                                <!-- Controls Row -->
-                                <div class="controls-row">
-                                    <div class="controls-left">
-                                        <button id="costsBackButton" class="btn btn-secondary back-button">
-                                            <i class="bi bi-arrow-left"></i> Back
-                                        </button>
-                                    </div>
-                                    <span id="costsViewIndicator" class="view-indicator"></span>
-                                </div>
-
-                                <!-- Charts Row -->
-                                <div class="row charts-row">
-                                    <!-- Vertical Bar Graph Section -->
-                                    <div class="col-lg-8">
-                                        <h5 class="chart-title" id="costsVerticalBarChartTitle">Operational Costs Over Time</h5>
-                                        <div class="chart-container">
-                                            <canvas id="costsVerticalBarChart"></canvas>
-                                        </div>
-                                    </div>
-
-                                    <!-- Horizontal Bar Graph Section -->
-                                    <div class="col-lg-4">
-                                        <h5 class="chart-title" id="costsHorizontalBarChartTitle">Operational Costs by Sector</h5>
-                                        <div class="chart-container">
-                                            <canvas id="costsHorizontalBarChart"></canvas>
-                                        </div>
-                                        <div class="text-center mt-3">
-                                            <p class="h5">Total: $<span id="costsHorizontalChartTotal">0</span></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- AI Suggestions Widget -->
-        <div class="ai-widget competing-company">
+          <!-- Competing Company -->
+          <!-- AI Suggestions Widget -->
+          <div class="ai-widget competing-company">
             <div class="card">
                 <div class="ai-header d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
@@ -424,57 +569,288 @@
                     </div>
                 </div>
             </div>
-        </div>
+          </div>
+          <!-- End Competing Company -->
+        </div> <!-- End .main -->
+      </div> <!-- End .d-flex -->
+      <!-- End AI Suggestions Widget -->
 
-        <!-- Card Template -->
-        <template id="cardTemplate">
-            <div class="suggestion-card card mb-3">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <span class="badge me-2"></span>
-                            <h6 class="mb-2"></h6>
-                            <p class="mb-2 text-muted small description"></p>
-                            <div class="d-flex align-items-center">
-                                <span class="trend me-2"></span>
-                                <span class="impact text-success"></span>
-                            </div>
-                            <div class="mt-2 timeline text-muted small"></div>
-                        </div>
-                        <div class="progress-ring d-flex align-items-center justify-content-center">
-                            <span class="completion"></span>
-                        </div>
-                    </div>
-                    <div class="mt-3">
-                        <a href="ai-suggestions-detailed.html" class="btn btn-sm btn-link">View Details</a>
-                    </div>
+      <!-- Bootstrap Bundle JS -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+      <!-- External Scripts (Month Picker, Graphs, etc.) -->
+      <script src="scripts/month-picker.js"></script>
+      <script src="scripts/general-graph.js"></script>
+      <script src="scripts/emissions-graph.js"></script>
+      <script src="scripts/energy-consumption-graph.js"></script>
+      <script src="scripts/operational-costs-graph.js"></script>
+
+      <!-- The main dashboard script that fetches data from the server -->
+      <script>
+        // 1) Helper to parse JWT tokens (if needed)
+        function parseJwt(token) {
+          try {
+            const base64Url = token.split(".")[1];
+            const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+            return JSON.parse(window.atob(base64));
+          } catch (e) {
+            console.error("Error parsing JWT:", e);
+            return null;
+          }
+        }
+
+        // 2) On document ready
+        $(document).ready(function () {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            alert("No token found. Please log in.");
+            window.location.href = "login.html";
+            return;
+          }
+
+          // Optionally decode token for debugging
+          const decoded = parseJwt(token);
+          console.log("Decoded JWT:", decoded);
+
+          // ---- 2.1) Fetch top-level data for the 3 cards ----
+          $.ajax({
+            type: "GET",
+            url: "/api/dashboard/data",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            success: function (response) {
+              console.log("Top-level data:", response);
+
+              // Sidebar company name
+              $("#sidebarCompanyName").text(response.companyName);
+
+              // For Carbon Emissions (kg -> tonnes)
+              const emissionsInTonnes = parseFloat(response.totalEmissions || 0) / 1000;
+              $("#carbonEmissionsValue").text(emissionsInTonnes.toFixed(2));
+
+              // For Energy (Wh -> kWh)
+              const energyInKWh = parseFloat(response.totalEnergyConsumption || 0) / 1000;
+              $("#energyConsumptionValue").text(energyInKWh.toFixed(2));
+
+              // For Costs (cents -> dollars)
+              const costsInDollars = parseFloat(response.totalOperationalCosts || 0) / 100;
+              $("#operationalCostsValue").text(costsInDollars.toFixed(2));
+
+              // Simple "Insights"
+              const carEquivalent = Math.round(emissionsInTonnes * 3.5) || 0;
+              $("#car-equivalent").text(`${carEquivalent} cars`);
+
+              const hdbEquivalent = Math.round(energyInKWh * 0.0005) || 0;
+              $("#hdb-equivalent").text(`${hdbEquivalent} HDB flats`);
+            },
+            error: function (xhr) {
+              console.error("Error fetching top-level data:", xhr);
+              if (xhr.status === 401) {
+                window.location.href = "login.html";
+              } else {
+                alert("Error loading dashboard data. Please try again.");
+              }
+            },
+          });
+
+          // ---- 2.2) Fetch paginated data for charts, if needed ----
+          fetchPaginatedDataForCharts(token);
+        });
+
+        // Example function
+        function fetchPaginatedDataForCharts(token) {
+          const limit = 50; 
+          const offset = 0;
+
+          $.ajax({
+            type: "GET",
+            url: `/api/dashboard/data/paginated?limit=${limit}&offset=${offset}`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (response) => {
+              console.log("Paginated data for charts:", response.data);
+              // ...
+              // update your charts if needed
+            },
+            error: (xhr) => {
+              console.error("Error fetching paginated data:", xhr);
+            },
+          });
+        }
+
+        // Stub chart updates
+        function updateCarbonEmissionsLineChart(labels, data) {
+          console.log("Should update Carbon Emissions chart with:", labels, data);
+        }
+        function updateEnergyConsumptionLineChart(labels, data) {
+          console.log("Should update Energy chart with:", labels, data);
+        }
+        function updateOperationalCostsBarChart(labels, data) {
+          console.log("Should update Costs chart with:", labels, data);
+        }
+      </script>
+      
+      <!-- Listener for Month Picker range changes -->
+      <script>
+        // When the month range changes, re-fetch graph data with the selected date range.
+        document.addEventListener('monthRangeChanged', (e) => {
+          const { startDate, endDate } = e.detail;
+          const start = startDate.toISOString();
+          const end = endDate.toISOString();
+          console.log("Month range changed:", start, end);
+          
+          const token = localStorage.getItem("token");
+
+          // 1) Costs
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/costs?start=${start}&end=${end}`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshCostsData(res); 
+            },
+            error: (xhr) => {
+              console.error("Error updating costs data:", xhr);
+            }
+          });
+
+          // 2) Energy
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/energy?start=${start}&end=${end}`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshEnergyData(res);
+            },
+            error: (xhr) => {
+              console.error("Error updating energy data:", xhr);
+            }
+          });
+
+          // 3) Emissions
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/emissions?start=${start}&end=${end}`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshEmissionsData(res);
+            },
+            error: (xhr) => {
+              console.error("Error updating emissions data:", xhr);
+            }
+          });
+
+          // 4) General
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/general?start=${start}&end=${end}`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshGeneralGraphData(res.emissions, res.energy, res.costs);
+            },
+            error: (xhr) => {
+              console.error("Error updating general graph data:", xhr);
+            }
+          });
+        });
+      </script>
+      
+      <!-- Listener for Reset to Default button -->
+      <script>
+        document.getElementById('resetDefault').addEventListener('click', () => {
+          document.getElementById('monthRange').value = '';
+          console.log("Reset to default triggered");
+          const token = localStorage.getItem("token");
+          
+          // Re-fetch default data
+          // Costs
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/costs`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshCostsData(res);
+            },
+            error: (xhr) => {
+              console.error("Error resetting costs data:", xhr);
+            }
+          });
+          
+          // Energy
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/energy`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshEnergyData(res);
+            },
+            error: (xhr) => {
+              console.error("Error resetting energy data:", xhr);
+            }
+          });
+          
+          // Emissions
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/emissions`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshEmissionsData(res);
+            },
+            error: (xhr) => {
+              console.error("Error resetting emissions data:", xhr);
+            }
+          });
+          
+          // General
+          $.ajax({
+            type: 'GET',
+            url: `/api/dashboard/general`,
+            headers: { Authorization: `Bearer ${token}` },
+            success: (res) => {
+              refreshGeneralGraphData(res.emissions, res.energy, res.costs);
+            },
+            error: (xhr) => {
+              console.error("Error resetting general graph data:", xhr);
+            }
+          });
+        });
+      </script>
+
+      <!-- Card Template -->
+      <template id="cardTemplate">
+        <div class="suggestion-card card mb-3">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <span class="badge me-2"></span>
+                <h6 class="mb-2"></h6>
+                <p class="mb-2 text-muted small description"></p>
+                <div class="d-flex align-items-center">
+                  <span class="trend me-2"></span>
+                  <span class="impact text-success"></span>
                 </div>
+                <div class="mt-2 timeline text-muted small"></div>
+              </div>
+              <div class="progress-ring d-flex align-items-center justify-content-center">
+                <span class="completion"></span>
+              </div>
             </div>
-        </template>
+            <div class="mt-3">
+              <a href="ai-suggestions-detailed.html" class="btn btn-sm btn-link">View Details</a>
+            </div>
+          </div>
+        </div>
+      </template>
     </div>
   </div>
 
-
-
-  
-  <!-- Boostrap Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5pNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-  <!-- External Scripts -->
-  <script src="scripts/dashboard.js"></script>
-  <script src="scripts/emissions-graph.js"></script>
-  <script src="scripts/energy-consumption-graph.js"></script>
-  <script src="scripts/operational-costs-graph.js"></script>
-  <!-- Month Picker Script -->
-  <script src="scripts/month-picker.js"></script>
-  <script src="scripts/general-graph.js"></script>
   <script type="importmap">
-    {
-      "imports": {
-        "@google/generative-ai": "https://esm.run/@google/generative-ai"
-      }
+  {
+    "imports": {
+      "@google/generative-ai": "https://esm.run/@google/generative-ai"
     }
+  }
   </script>
   <script type="module" src="scripts/chatbot.js"></script>
   <script src="scripts/ai-suggestions.js"></script>
