@@ -1,0 +1,258 @@
+/* General body styles */
+body {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: #1c160c;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Navigation Bar */
+  .navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e9dfce;
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #1c160c;
+    text-decoration: none;
+  }
+  
+  .navbar-menu {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar-menu li {
+    margin: 0;
+  }
+  
+  .navbar-menu a {
+    text-decoration: none;
+    font-size: 1rem;
+    color: #1c160c;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+  }
+  
+  .navbar-menu a:hover,
+  .navbar-menu a.active {
+    background-color: #f4efe6;
+    color: #019863;
+    font-weight: 700;
+  }
+  
+  /* Header Section */
+  .header-section {
+    display: flex;
+    flex-wrap: wrap; /* Ensures responsiveness */
+    gap: 2rem;
+    padding: 2rem 1rem;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Header Image */
+  .header-image {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 1rem;
+    flex: 1 1 400px; /* Grow and shrink based on screen size */
+    width: 100%; /* Full width */
+    max-width: 800px; /* Set a maximum width */
+    height: 450px; /* Height of the image */
+    margin: 0 auto; /* Center the image */
+  }
+  
+  /* Header Text */
+  .header-text {
+    flex: 1 1 400px; /* Allow resizing with screen size */
+    text-align: left;
+  }
+  
+  /* Header Title */
+  .header-title {
+    color: #1c160c;
+    font-size: 2.8rem; /* Adjust font size */
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Header Subtitle */
+  .header-subtitle {
+    color: #1c160c;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Button Group */
+  .button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  /* Primary Button */
+  .btn-primary {
+    background-color: #019863;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn-primary:hover {
+    background-color: #017c51; /* Slightly darker green on hover */
+  }
+  
+  /* Secondary Button */
+  .btn-secondary {
+    background-color: #f4efe6;
+    color: #1c160c;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #e5e1d7; /* Slightly darker beige on hover */
+  }
+  
+  /* Metrics Section */
+  .metrics-section {
+    display: flex;
+    gap: 1.5rem;
+    margin: 2rem 0;
+    padding: 0 1rem;
+    justify-content: center;
+  }
+  
+  .metric {
+    flex: 1;
+    border: 1px solid #e9dfce;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    text-align: center;
+    background-color: #ffffff;
+  }
+  
+  .metric-title {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #1c160c;
+    margin-bottom: 0.5rem;
+  }
+  
+  .metric-value {
+    font-weight: bold;
+    font-size: 2rem;
+    color: #1c160c;
+  }
+  
+  .metric-change.positive {
+    color: #019863;
+    font-size: 1rem;
+  }
+  
+  .metric-change.negative {
+    color: #c12929;
+    font-size: 1rem;
+  }
+  
+  /* Why Choose Us Section */
+  .why-us-section {
+    padding: 2rem 1rem;
+  }
+  
+  .why-us-title {
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+  }
+  
+  .why-us-description {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .feature {
+    border: 1px solid #e9dfce;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    background-color: #ffffff;
+  }
+  
+  .feature-icon {
+    margin-bottom: 1rem;
+  }
+  
+  .feature-title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #1c160c;
+  }
+  
+  .feature-description {
+    font-size: 0.9rem;
+    color: #a18249;
+  }
+  
+  /* Footer */
+  .footer {
+    padding: 2rem 1rem;
+    text-align: center;
+    background-color: #f4efe6;
+  }
+  
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-link {
+    color: #a18249;
+    font-size: 1rem;
+    font-weight: normal;
+  }
+  
+  .footer-copyright {
+    color: #a18249;
+    font-size: 1rem;
+  }
+  
