@@ -6,7 +6,8 @@ const energyState = {
   view: 'overview',
   currentSector: null,
   currentMonth: null,
-  navStack: []
+  navStack: [],
+  showingNetEnergy: false  // Added flag for net energy toggle
 };
 
 let energyLineChart = null;
@@ -32,6 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Listen for the "Back" button in the energy tab
   document.getElementById('energyBackButton')?.addEventListener('click', handleEnergyBack);
+  // Added event listener for Net Energy Consumption toggle
+  document.getElementById('netEnergyToggle')?.addEventListener('click', toggleNetEnergy);
 });
 
 function refreshEnergyData(newData) {
@@ -105,19 +108,37 @@ function updateEnergyCharts() {
   const ds = isDaily ? d.dailyData[dataKey] : d.monthlyData[dataKey];
   if (!ds) return;
 
-  const lineData = {
-    labels: ds.total.map(x => x.date),
-    datasets: [
-      {
-        label: 'Total Energy Consumption',
-        data: ds.total.map(x => x.value),
-        borderColor: '#0c45c0',
-        backgroundColor: 'rgba(12,69,192,0.1)',
-        tension: 0.4,
-        fill: true
-      }
-    ]
-  };
+  let lineData;
+  if (energyState.showingNetEnergy) {
+    const netVals = computeNetEnergy(ds);
+    lineData = {
+      labels: ds.total.map(x => x.date),
+      datasets: [
+        {
+          label: 'Net Energy Consumption',
+          data: netVals,
+          borderColor: '#0c45c0',
+          backgroundColor: 'rgba(12,69,192,0.1)',
+          tension: 0.4,
+          fill: true
+        }
+      ]
+    };
+  } else {
+    lineData = {
+      labels: ds.total.map(x => x.date),
+      datasets: [
+        {
+          label: 'Total Energy Consumption',
+          data: ds.total.map(x => x.value),
+          borderColor: '#0c45c0',
+          backgroundColor: 'rgba(12,69,192,0.1)',
+          tension: 0.4,
+          fill: true
+        }
+      ]
+    };
+  }
   energyLineChart.data = lineData;
   energyLineChart.update();
 
@@ -163,6 +184,16 @@ function handleEnergyBack() {
   }
 }
 
+function computeNetEnergy(ds) {
+  if (!ds || !ds.total) return [];
+  // If renewable data exists, subtract it from total; otherwise, return total values.
+  if (!ds.renewable) return ds.total.map(x => x.value);
+  return ds.total.map((item, i) => {
+    const renewable = ds.renewable[i]?.value || 0;
+    return Math.max(0, item.value - renewable);
+  });
+}
+
 function buildEnergyPieData(d, monthIndex) {
   const labs = [], vals = [], cols = [];
   if (!energyState.currentSector) {
@@ -183,4 +214,9 @@ function buildEnergyPieData(d, monthIndex) {
     // Additional sub-sector handling can be added here if needed
   }
   return { labels: labs, datasets: [{ data: vals, backgroundColor: cols }] };
+}
+
+function toggleNetEnergy() {
+  energyState.showingNetEnergy = !energyState.showingNetEnergy;
+  updateEnergyCharts();
 }

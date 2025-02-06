@@ -6,7 +6,8 @@ const costsState = {
   view: 'overview',
   currentSector: null,
   currentMonth: null,
-  navStack: []
+  navStack: [],
+  showingNetCosts: false  // Added flag for net costs toggle
 };
 
 let verticalBarChart = null;
@@ -34,6 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // The back button for reverting from drill-down
   document.getElementById('costsBackButton')?.addEventListener('click', handleCostsBack);
+  // Added event listener for Net Operational Costs toggle
+  document.getElementById('netCostsToggle')?.addEventListener('click', toggleNetCosts);
 });
 
 // Called when new data from month picker arrives
@@ -107,19 +110,23 @@ function updateCostsCharts() {
   const ds = d.monthlyData[dataKey];
   if (!ds) return;
 
-  // Vertical bar chart
+  // Determine vertical bar chart data, applying net toggle if enabled
+  const vLabels = ds.total.map(x => x.date);
+  const vValues = costsState.showingNetCosts ? computeNetCosts(ds) : ds.total.map(x => x.value);
+  const vLabelText = costsState.showingNetCosts ? 'Net Operational Costs' : 'Costs';
+
   const vData = {
-    labels: ds.total.map(x => x.date),
+    labels: vLabels,
     datasets: [{
-      label: 'Costs',
-      data: ds.total.map(x => x.value),
+      label: vLabelText,
+      data: vValues,
       backgroundColor: '#7d70f5'
     }]
   };
   verticalBarChart.data = vData;
   verticalBarChart.update();
 
-  // Horizontal bar chart
+  // Horizontal bar chart data
   let monthIndex = null;
   if (d.monthlyData.overview && d.monthlyData.overview.total && costsState.currentMonth) {
     monthIndex = d.monthlyData.overview.total.findIndex(x => x.isoDate === costsState.currentMonth);
@@ -171,26 +178,49 @@ function handleCostsBack() {
   }
 }
 
+function computeNetCosts(ds) {
+  if (!ds || !ds.total) return [];
+  // If offset data exists, subtract it from total; otherwise, return total values.
+  if (!ds.offset) return ds.total.map(x => x.value);
+  return ds.total.map((item, i) => {
+    const offset = ds.offset[i]?.value || 0;
+    return Math.max(0, item.value - offset);
+  });
+}
+
 function buildCostsHorizontalData(d, monthIndex) {
-  const labs=[], vals=[], cols=[];
-  const sectorKeys = Object.keys(d.monthlyData).filter(k => k!=='overview' && !k.includes('-'));
+  const labs = [], vals = [], cols = [];
+  const sectorKeys = Object.keys(d.monthlyData).filter(k => k !== 'overview' && !k.includes('-'));
   sectorKeys.forEach(sec => {
     const arr = d.monthlyData[sec].total;
-    let val=0;
-    if (monthIndex!==null && monthIndex>=0) {
-      val=arr[monthIndex].value;
+    let val = 0;
+    if (monthIndex !== null && monthIndex >= 0) {
+      if (costsState.showingNetCosts && d.monthlyData[sec].offset) {
+        val = arr[monthIndex].value - d.monthlyData[sec].offset[monthIndex].value;
+      } else {
+        val = arr[monthIndex].value;
+      }
     } else {
-      val=arr.reduce((acc,x)=>acc+x.value,0);
+      if (costsState.showingNetCosts && d.monthlyData[sec].offset) {
+        val = arr.reduce((acc, x, i) => acc + (x.value - d.monthlyData[sec].offset[i].value), 0);
+      } else {
+        val = arr.reduce((acc, x) => acc + x.value, 0);
+      }
     }
     labs.push(sec);
     vals.push(val);
-    cols.push('#'+Math.floor(Math.random()*16777215).toString(16));
+    cols.push('#' + Math.floor(Math.random() * 16777215).toString(16));
   });
   return { labels: labs, datasets: [{ data: vals, backgroundColor: cols }] };
 }
 
 function updateCostsTotal() {
   if (!horizontalBarChart.data.datasets[0]) return;
-  const sum = horizontalBarChart.data.datasets[0].data.reduce((a,v)=>a+v,0);
+  const sum = horizontalBarChart.data.datasets[0].data.reduce((a, v) => a + v, 0);
   document.getElementById('costsHorizontalChartTotal').textContent = sum.toFixed(2);
+}
+
+function toggleNetCosts() {
+  costsState.showingNetCosts = !costsState.showingNetCosts;
+  updateCostsCharts();
 }

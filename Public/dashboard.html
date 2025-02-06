@@ -356,10 +356,6 @@
               <!-- Carbon Emissions Tab -->
               <div class="tab-pane fade show active" id="carbon" role="tabpanel" aria-labelledby="carbon-tab">
                 <div class="detailed-graph-carbon">
-                  <!-- 
-                    We create a new row for the Back button & the "viewIndicator"
-                    so it’s higher & visible with a purple background. 
-                  -->
                   <div class="d-flex align-items-center mb-3" style="gap: 1rem;">
                     <button id="backButton" 
                             class="btn" 
@@ -371,29 +367,11 @@
                           style="margin: 0; font-weight: 500;">
                     </span>
                   </div>
-
-                  <!-- The original controls-row with a backButton (hidden) remains -->
-                  <div class="controls-row" style="display:none;">
-                    <div class="controls-left">
-                      <button id="backButton" class="btn btn-secondary back-button">
-                        <i class="bi bi-arrow-left"></i> Back
-                      </button>
-                    </div>
-                    <span id="viewIndicator" class="view-indicator"></span>
-                    <div class="controls-right">
-                      <button id="netEmissionsToggle" class="btn btn-outline-primary">
-                        Show Net Emissions
-                      </button>
-                    </div>
-                  </div>
-
                   <div class="controls-right text-end">
-                    <!-- Moved Net Emissions Toggle here so it’s still accessible -->
                     <button id="netEmissionsToggle" class="btn btn-outline-primary">
                       Show Net Emissions
                     </button>
                   </div>
-
                   <!-- Charts Row -->
                   <div class="row charts-row">
                     <!-- Line Graph Section -->
@@ -420,9 +398,6 @@
               <!-- Energy Consumption Tab -->
               <div class="tab-pane fade" id="energy" role="tabpanel" aria-labelledby="energy-tab">
                 <div class="detailed-graph-energy">
-                  <!-- 
-                    New row for the Energy back button & its viewIndicator 
-                  -->
                   <div class="d-flex align-items-center mb-3" style="gap: 1rem;">
                     <button id="energyBackButton" 
                             class="btn" 
@@ -434,17 +409,12 @@
                           style="margin: 0; font-weight: 500;">
                     </span>
                   </div>
-
-                  <!-- Original controls-row with a hidden back button remains -->
-                  <div class="controls-row" style="display:none;">
-                    <div class="controls-left">
-                      <button id="energyBackButton" class="btn btn-secondary back-button">
-                        <i class="bi bi-arrow-left"></i> Back
-                      </button>
-                    </div>
-                    <span id="energyViewIndicator" class="view-indicator"></span>
+                  <!-- Added Net Energy Consumption Toggle Button -->
+                  <div class="controls-right text-end">
+                    <button id="netEnergyToggle" class="btn btn-outline-primary">
+                      Show Net Energy Consumption
+                    </button>
                   </div>
-
                   <!-- Charts Row -->
                   <div class="row charts-row">
                     <!-- Line Graph Section -->
@@ -471,9 +441,6 @@
               <!-- Operational Costs Tab -->
               <div class="tab-pane fade" id="costs" role="tabpanel" aria-labelledby="costs-tab">
                 <div class="detailed-graph-costs">
-                  <!-- 
-                    New row for the Costs back button & its viewIndicator 
-                  -->
                   <div class="d-flex align-items-center mb-3" style="gap: 1rem;">
                     <button id="costsBackButton" 
                             class="btn" 
@@ -485,15 +452,12 @@
                           style="margin: 0; font-weight: 500;">
                     </span>
                   </div>
-
-                  <!-- Original hidden lines (kept intact) -->
-                  <div class="controls-left" style="display:none;">
-                    <button id="costsBackButton" class="btn btn-secondary back-button">
-                      <i class="bi bi-arrow-left"></i> Back
+                  <!-- Added Net Operational Costs Toggle Button -->
+                  <div class="controls-right text-end">
+                    <button id="netCostsToggle" class="btn btn-outline-primary">
+                      Show Net Operational Costs
                     </button>
                   </div>
-                  <span id="costsViewIndicator" class="view-indicator" style="display:none;"></span>
-
                   <!-- Charts Row -->
                   <div class="row charts-row">
                     <!-- Vertical Bar Graph Section -->

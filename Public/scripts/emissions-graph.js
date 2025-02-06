@@ -218,22 +218,22 @@ function computeNet(ds) {
 }
 
 function buildPieData(d, monthIndex) {
-  const labs=[],vals=[],cols=[];
+  const labs = [], vals = [], cols = [];
   // if not in sector view
   if (!emissionsState.currentSector) {
-    const sectorKeys = Object.keys(d.monthlyData).filter(k => k!=='overview' && !k.includes('-'));
+    const sectorKeys = Object.keys(d.monthlyData).filter(k => k !== 'overview' && !k.includes('-'));
     sectorKeys.forEach(se => {
       const arr = d.monthlyData[se].total;
-      let val=0;
+      let val = 0;
       if (monthIndex !== null && monthIndex >= 0) {
-        val=arr[monthIndex].value;
+        val = arr[monthIndex].value;
       } else {
         // Summation for all months
-        val=arr.reduce((acc,x)=>acc+x.value,0);
+        val = arr.reduce((acc, x) => acc + x.value, 0);
       }
       labs.push(se);
       vals.push(val);
-      cols.push('#'+Math.floor(Math.random()*16777215).toString(16));
+      cols.push('#' + Math.floor(Math.random() * 16777215).toString(16));
     });
   } else {
     // If we want to handle sub-sectors or detailed sub-breakdowns, do so here
